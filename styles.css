@@ -1,18 +1,23 @@
-/* BASIC RESET / GLOBAL */
+/* GENERAL RESET / GLOBAL */
 * {
     box-sizing: border-box;
   }
   
-  /* 1. BODY */
   body {
     margin: 0;
     font-family: 'Montserrat', sans-serif;
     line-height: 1.6;
     color: #333;
-    background: #f9f9f9; /* Light background color */
+  
+    /* Full-page background (YOUR Background.png) */
+    background-image: url('images/Background.png');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed; /* If you want parallax effect on desktop */
   }
   
-  /* 2. NAVBAR */
+  /* NAVBAR */
   .navbar {
     position: fixed;
     top: 0;
@@ -31,7 +36,7 @@
     list-style: none;
     margin: 0;
     padding: 0;
-    flex-wrap: wrap; /* So items don't overflow on smaller screens */
+    flex-wrap: wrap;
   }
   
   .navbar li {
@@ -50,46 +55,41 @@
     color: rgb(186, 154, 86);
   }
   
-  /* 3. HEADER (Hero) */
+  /* HEADER */
   .header {
     position: relative;
     width: 100%;
     height: 100vh;
-    margin-top: 0; /* We rely on padding-top inside for spacing below navbar */
+    margin-top: 0;
     display: flex;
     align-items: center;
     justify-content: center;
     text-align: center;
     color: #fff;
-    background-image: url('images/HeaderPhoto.jpg');
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
+    /* Remove separate background so we see body’s background instead */
   }
   
-  /* Dark overlay inside header */
   .overlay {
     position: absolute;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    background: rgba(0,0,0,0.4);
+    background: rgba(0, 0, 0, 0.4);
     z-index: 1;
   }
   
-  /* Hero Content on top of overlay */
   .hero-content {
     position: relative;
     z-index: 2;
     max-width: 800px;
     padding: 20px;
-    padding-top: 80px; /* pushes content below fixed navbar */
+    padding-top: 80px; /* Ensures content below navbar */
   }
   
-  /* LOGO */
+  /* LOGO SIZE */
   .logo-container {
-    max-width: 150px; /* Control logo size */
+    max-width: 150px; /* Adjust to make the logo smaller or bigger */
     margin: 0 auto 20px;
   }
   
@@ -99,7 +99,6 @@
     display: block;
   }
   
-  /* HEADINGS */
   .hero-content h1 {
     font-size: 3rem;
     margin-bottom: 15px;
@@ -110,7 +109,7 @@
     margin-bottom: 25px;
   }
   
-  /* 4. OFFERINGS (in the hero) */
+  /* OFFERINGS CONTAINER */
   .offerings-container {
     display: flex;
     flex-wrap: wrap;
@@ -129,11 +128,11 @@
     padding: 15px;
     border-radius: 15px;
     text-align: center;
-    color: white;
+    color: #fff;
     backdrop-filter: blur(10px);
     transition: transform 0.3s ease, background 0.3s ease;
     min-width: 150px;
-    flex: 0 1 150px; /* Boxes can grow but have min size */
+    flex: 0 1 150px;
   }
   
   .offering-box:hover {
@@ -148,7 +147,8 @@
   }
   
   /* BUTTONS */
-  .btn-primary, .btn-secondary {
+  .btn-primary,
+  .btn-secondary {
     padding: 12px 24px;
     font-size: 1rem;
     border-radius: 5px;
@@ -161,7 +161,7 @@
   
   .btn-primary {
     background-color: rgb(186, 154, 86);
-    color: white;
+    color: #fff;
   }
   
   .btn-primary:hover {
@@ -169,20 +169,20 @@
   }
   
   .btn-secondary {
-    background-color: white;
+    background-color: #fff;
     color: rgb(186, 154, 86);
     border: 1px solid rgb(186, 154, 86);
   }
   
   .btn-secondary:hover {
     background-color: rgb(186, 154, 86);
-    color: white;
+    color: #fff;
   }
   
-  /* 5. SECTIONS (ABOUT, SERVICES, PRICING, CONTACT) */
+  /* SECTIONS (ABOUT, SERVICES, PRICING, CONTACT) */
   .section {
     padding: 60px 20px;
-    background-color: #fff;
+    background-color: rgba(255, 255, 255, 0.9); /* White panel for readability */
     color: #333;
     max-width: 1100px;
     margin: 40px auto;
@@ -201,7 +201,7 @@
     margin: 0 auto;
   }
   
-  /* SERVICE LISTS / PRICING LISTS */
+  /* SERVICE LISTS / PRICING */
   .service-list {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
@@ -224,7 +224,8 @@
   }
   
   /* CONTACT FORM */
-  form input, form textarea {
+  form input,
+  form textarea {
     width: 100%;
     padding: 10px;
     margin-bottom: 15px;
@@ -258,17 +259,18 @@
     font-size: 0.9rem;
   }
   
-  /* 6. RESPONSIVE ADJUSTMENTS */
+  /* RESPONSIVE ADJUSTMENTS */
   @media (max-width: 768px) {
-    /* Reduce hero text for smaller screens */
+    /* Make hero text smaller */
     .hero-content h1 {
       font-size: 2.2rem;
     }
+  
     .hero-content p {
       font-size: 1rem;
     }
   
-    /* Make nav items wrap more easily */
+    /* Navbar spacing */
     .navbar ul {
       flex-wrap: wrap;
     }
@@ -276,24 +278,27 @@
       margin: 5px 10px;
     }
   
-    .btn-primary, .btn-secondary {
+    .btn-primary,
+    .btn-secondary {
       font-size: 0.9rem;
       padding: 10px 16px;
     }
   
-    /* Offerings stack more naturally */
+    /* Offerings: 2 columns max on mid screens */
     .offering-box {
-      flex: 0 1 40%;
+      flex: 0 1 45%;
+      margin-bottom: 15px;
     }
   }
   
   @media (max-width: 480px) {
-    .hero-content h1 {
-      font-size: 1.8rem;
-    }
-    /* Offerings in 1 column if narrower screens */
+    /* Offerings: 1 column on small screens */
     .offering-box {
       flex: 0 1 100%;
+    }
+  
+    .hero-content h1 {
+      font-size: 1.8rem;
     }
   }
   
