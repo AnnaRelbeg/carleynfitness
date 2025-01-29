@@ -260,17 +260,12 @@
   ---------------------------------- */
   @media (max-width: 768px) {
    
-        body {
-            /* Use the mobile-specific image */
-            background-image: url('images/IMG_4290.JPG');
-    
-            /* Adjust for a better fit on mobile */
-        }
-        .responsive-img {
-            max-width: 100%; /* Prevents overflow on small screens */
-            height: auto;    /* Keeps the aspect ratio correct */
-            display: block;  /* Removes inline spacing (optional) */
-          }
+    .my-background {
+        background-image: url('images/IMG_4290.JPG');
+        background-repeat: no-repeat;
+        background-position: center;
+        background-size: cover; /* or "contain", depending on your goal */
+      }
               
     .navbar ul {
       flex-wrap: wrap;
@@ -304,4 +299,9 @@
       font-size: 2rem;
     }
   }
-  
+  @media (max-width: 480px) {
+    .my-background {
+      background-size: contain;       /* to see the entire image */
+      background-attachment: scroll;  /* avoid parallax issues on mobile */
+    }
+  }
