@@ -265,9 +265,13 @@
             background-image: url('images/IMG_4290.JPG');
     
             /* Adjust for a better fit on mobile */
-
         }
-   
+        .responsive-img {
+            max-width: 100%; /* Prevents overflow on small screens */
+            height: auto;    /* Keeps the aspect ratio correct */
+            display: block;  /* Removes inline spacing (optional) */
+          }
+              
     .navbar ul {
       flex-wrap: wrap;
       justify-content: center;
