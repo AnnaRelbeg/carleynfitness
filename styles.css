@@ -345,49 +345,6 @@ form button:hover {
     font-size: 0.9rem;
 }
 
-/* Responsive Styles */
-@media (max-width: 768px) {
-    .hero-content h1 {
-        font-size: 2.5rem;
-    }
-
-    .hero-content p {
-        font-size: 1rem;
-    }
-
-    .btn-primary {
-        font-size: 0.9rem;
-        padding: 8px 16px;
-    }
-
-    .section {
-        padding: 20px;
-        width: 95%;
-    }
-}
-
-@media (max-width: 480px) {
-    .hero-content h1 {
-        font-size: 2rem;
-    }
-
-    .hero-content p {
-        font-size: 0.9rem;
-    }
-
-    .btn-primary {
-        font-size: 0.8rem;
-    }
-
-    .logo-container {
-        max-width: 100px;
-    }
-
-    .section {
-        padding: 15px;
-    }
-}
-
 /* Remove underline and ensure the whole box is clickable */
 .offering-link {
     text-decoration: none;
@@ -395,3 +352,31 @@ form button:hover {
     display: block;
 }
 
+/* Improve Background for Mobile */
+@media (max-width: 768px) {
+    body {
+        background-size: contain; /* Ensures full image is visible */
+        background-position: top center; /* Centers background better */
+        background-attachment: scroll; /* Prevents mobile scrolling issues */
+    }
+
+    .header {
+        height: auto; /* Allows the content to adjust dynamically */
+        min-height: 100vh; /* Ensures full-screen height */
+        padding: 60px 20px; /* Prevents overlap with navbar */
+        text-align: center;
+    }
+
+    .hero-content h1 {
+        font-size: 2rem; /* Smaller font for better mobile readability */
+    }
+
+    .hero-content p {
+        font-size: 1rem;
+    }
+
+    .btn-primary, .btn-secondary {
+        font-size: 0.9rem;
+        padding: 10px 20px;
+    }
+}
