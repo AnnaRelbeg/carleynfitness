@@ -259,6 +259,13 @@
      7) Responsive Adjustments
   ---------------------------------- */
   @media (max-width: 768px) {
+   
+    body {
+        background-size: contain;
+        background-position: center top;
+        background-attachment: scroll;
+    }
+   
     .navbar ul {
       flex-wrap: wrap;
       justify-content: center;
