@@ -4,51 +4,46 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>CarleyNFitness</title>
-  <link rel="stylesheet" href="styles.css" />
+
+  <!-- Google Fonts -->
   <link
     href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&display=swap"
     rel="stylesheet"
   />
-  <!-- Include AOS Library -->
+
+  <!-- Link to YOUR external CSS -->
+  <link rel="stylesheet" href="styles.css" />
+
+  <!-- AOS Library (Animate on Scroll) -->
   <link
     rel="stylesheet"
     href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css"
   />
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
 </head>
 <body>
 
-  <!-- Navbar Section -->
-  <nav class="navbar">
-    <ul>
-      <li><a href="#about">About</a></li>
-      <li><a href="#services">Services</a></li>
-      <li><a href="#pricing">Pricing</a></li>
-      <li><a href="#contact">Contact</a></li>
-      <li><a href="blog.html">Blog</a></li>
-    </ul>
-  </nav>
-
   <!-- Header Section -->
   <header class="header">
-    <div class="overlay"></div> <!-- Dark overlay -->
+    <!-- Dark overlay inside header -->
+    <div class="overlay"></div>
 
     <div class="hero-content" data-aos="fade-up">
-      <!-- Logo Section -->
+      <!-- LOGO (smaller) -->
       <div class="logo-container">
-        <a href="index.html" class="logo">
+        <a href="index.html">
           <img src="images/logo.png" alt="CarleyNFitness Logo" />
         </a>
       </div>
 
-      <h1>Transform Your Fitness Journey</h1>
-      <p data-aos-delay="200">
-        Personalised Training & Nutrition Coaching in
-        <strong>Milton Keynes & Hereford</strong>
+      <h1 data-aos="fade-up" data-aos-delay="100">
+        Transform Your Fitness Journey
+      </h1>
+      <p data-aos="fade-up" data-aos-delay="200">
+        Personalised Training &amp; Nutrition Coaching in Milton Keynes &amp; Hereford
       </p>
 
       <!-- Offerings Boxes -->
-      <div class="offerings-container">
+      <div class="offerings-container" data-aos="fade-up" data-aos-delay="300">
         <a href="#personal-training" class="offering-link">
           <div class="offering-box">
             <span class="emoji">🏋️</span>
@@ -85,33 +80,41 @@
         </a>
       </div>
 
-      <a href="#services" class="btn-primary" data-aos-delay="400">
+      <a href="#services" class="btn-primary" data-aos="fade-up" data-aos-delay="400">
         Explore Services
       </a>
-      <a href="#contact" class="btn-secondary" data-aos-delay="500">
+      <a href="#contact" class="btn-secondary" data-aos="fade-up" data-aos-delay="500">
         Book Your Free Consultation
       </a>
     </div>
   </header>
+
+  <!-- Navbar Section -->
+  <nav class="navbar">
+    <ul>
+      <li><a href="#about">About</a></li>
+      <li><a href="#services">Services</a></li>
+      <li><a href="#pricing">Pricing</a></li>
+      <li><a href="#contact">Contact</a></li>
+      <li><a href="blog.html">Blog</a></li>
+    </ul>
+  </nav>
 
   <!-- About Section -->
   <section id="about" class="section about" data-aos="fade-left">
     <div class="container">
       <h2>About Me</h2>
       <p>
-        Hi👋, <br />
-        I’m Carley! With years of experience in fitness coaching, I specialise
-        in helping clients achieve their goals sustainably and confidently. I
-        hold certifications in Strength &amp; Conditioning, Nutrition Coaching,
-        and Pre/Postnatal Training.
+        Hi, I’m Carley! With years of experience in fitness coaching, 
+        I specialise in helping clients achieve their goals sustainably 
+        and confidently. I hold certifications in Strength &amp; Conditioning, 
+        Nutrition Coaching, and Pre/Postnatal Training.
       </p>
       <p>
-        I work with individuals in
-        <strong>Milton Keynes</strong> and <strong>Hereford</strong>, offering
-        tailored fitness programmes that fit your lifestyle, whether you're a
-        busy professional 💼, a new parent 🤰, or just beginning your fitness
-        journey 💪. Together, we’ll build a plan that prioritises your goals,
-        health, and well-being.
+        I work with individuals in Milton Keynes and Hereford, offering 
+        tailored fitness programmes that fit your lifestyle, whether you're 
+        a busy professional, a new parent, or just beginning your fitness journey. 
+        Together, we’ll build a plan that prioritises your goals, health, and well-being.
       </p>
       <p>Key Values:</p>
       <ul>
@@ -125,51 +128,36 @@
   <!-- Services Section -->
   <section id="services" class="section services">
     <div class="container">
-      <h2>Services</h2>
+      <h2 data-aos="fade-up">Services</h2>
       <div class="service-list">
-        <div class="service-item" id="personal-training" data-aos="fade-up" data-aos-delay="200">
+        <div class="service-item" id="personal-training" data-aos="fade-up" data-aos-delay="100">
           <h3>🏋️ 1:1 Personal Training</h3>
           <p>
-            Strength &amp; conditioning sessions designed to help you build
-            muscle, improve endurance, and stay motivated. Every session is
-            tailored to your goals, fitness level, and lifestyle.
+            Strength &amp; conditioning sessions tailored to your goals...
           </p>
         </div>
-
-        <div class="service-item" id="online-coaching" data-aos="fade-up" data-aos-delay="300">
+        <div class="service-item" id="online-coaching" data-aos="fade-up" data-aos-delay="200">
           <h3>💻 Online Coaching</h3>
           <p>
-            Get a fully customised training plan, ongoing support, and
-            accountability – all from the comfort of your home or gym. Includes
-            weekly check-ins and adjustments to keep you progressing.
+            Fully customised training plan, weekly check-ins, accountability...
           </p>
         </div>
-
-        <div class="service-item" id="nutrition-coaching" data-aos="fade-up" data-aos-delay="400">
-          <h3>🥗 Nutrition Coaching &amp; Meal Plans</h3>
+        <div class="service-item" id="nutrition-coaching" data-aos="fade-up" data-aos-delay="300">
+          <h3>🥗 Nutrition Coaching</h3>
           <p>
-            Bespoke meal plans and expert nutrition advice to fuel your goals.
-            Includes personalised meal guides, recipes, and tailored strategies
-            for sustainable eating habits.
+            Expert advice, meal plans, and sustainable eating habits...
           </p>
         </div>
-
-        <div class="service-item" id="pre-postnatal-training" data-aos="fade-up" data-aos-delay="600">
+        <div class="service-item" id="pre-postnatal-training" data-aos="fade-up" data-aos-delay="400">
           <h3>🤰 Pre/Postnatal Training</h3>
           <p>
-            Specialised training for pregnancy and postpartum recovery, focusing
-            on strength, mobility, and confidence. Safe, expert-led workouts to
-            help you feel your best during every stage of motherhood.
+            Safe workouts for every stage of motherhood...
           </p>
         </div>
-
-        <div class="service-item" id="progress-tracking" data-aos="fade-up" data-aos-delay="800">
+        <div class="service-item" id="progress-tracking" data-aos="fade-up" data-aos-delay="500">
           <h3>📊 Progress Tracking</h3>
           <p>
-            Stay accountable and track your journey with the
-            <strong>Body Dashboard Report</strong> – a data-driven progress tool
-            that helps you measure strength gains, body composition, and key
-            milestones.
+            Data-driven Body Dashboard to measure gains, composition, milestones...
           </p>
         </div>
       </div>
@@ -177,20 +165,17 @@
   </section>
 
   <!-- Pricing Section -->
-  <section id="pricing" class="section pricing">
+  <section id="pricing" class="section pricing" data-aos="fade-up">
     <div class="container">
       <h2>Pricing</h2>
       <div class="service-list">
-        <!-- Pay As You Go -->
         <div class="service-item">
           <h3>💰 Pay As You Go</h3>
           <p>
-            - 1:1 Personal Training: from £45 per hour <br />
-            - Personalised Meal Plan: £70 one-time
+            1:1 Personal Training: from £45 per hour <br />
+            Personalised Meal Plan: £70 one-time
           </p>
         </div>
-
-        <!-- Online Coaching -->
         <div class="service-item">
           <h3>💻 Online Coaching</h3>
           <p>
@@ -202,8 +187,6 @@
             - Progress tracking
           </p>
         </div>
-
-        <!-- Silver PT Package -->
         <div class="service-item">
           <h3>🥈 Silver PT Package</h3>
           <p>
@@ -216,13 +199,11 @@
             - Progress tracking
           </p>
         </div>
-
-        <!-- Gold PT Package -->
         <div class="service-item">
           <h3>🥇 Gold PT Package</h3>
           <p>
             <strong>£300 per month</strong> <br />
-            - 8 PT sessions (2x per week)<br />
+            - 8 PT sessions (2x per week) <br />
             - Bespoke Nutritional Advice <br />
             - Weekly check-ins &amp; amendments <br />
             - 24-hour support <br />
@@ -235,7 +216,7 @@
   </section>
 
   <!-- Contact Section -->
-  <section id="contact" class="section contact">
+  <section id="contact" class="section contact" data-aos="fade-up">
     <div class="container">
       <h2>Contact</h2>
       <p>Have questions or ready to get started? Let’s talk!</p>
@@ -249,15 +230,16 @@
   </section>
 
   <!-- Footer Section -->
-  <footer class="footer">
+  <footer class="footer" data-aos="fade-up">
     <p>&copy; 2025 CarleyNFitness. All rights reserved.</p>
   </footer>
 
-  <!-- AOS Initialization -->
+  <!-- AOS Scripts (Animate on Scroll) -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
   <script>
     AOS.init({
       duration: 1000, /* Animation duration */
-      once: true,     /* Animations run only once */
+      once: true,     /* Run animations only once */
     });
   </script>
 </body>

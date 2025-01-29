@@ -1,154 +1,99 @@
-/* GENERAL RESET / GLOBAL */
+/* 1) Global Resets + Body */
 * {
     box-sizing: border-box;
   }
-  
   body {
     margin: 0;
     font-family: 'Montserrat', sans-serif;
     line-height: 1.6;
     color: #333;
-  
-    /* Full-page background (YOUR Background.png) */
-    background-image: url('images/Background.png');
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
-    background-attachment: fixed; /* If you want parallax effect on desktop */
   }
   
-  /* NAVBAR */
-  .navbar {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    z-index: 1000;
-    background-color: rgba(255, 255, 255, 0.95);
-    padding: 10px 20px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  }
-  
-  .navbar ul {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    list-style: none;
-    margin: 0;
-    padding: 0;
-    flex-wrap: wrap;
-  }
-  
-  .navbar li {
-    margin: 0 15px;
-  }
-  
-  .navbar a {
-    text-decoration: none;
-    color: #333;
-    font-weight: 600;
-    transition: color 0.3s ease;
-    font-size: 1rem;
-  }
-  
-  .navbar a:hover {
-    color: rgb(186, 154, 86);
-  }
-  
-  /* HEADER */
+  /* 2) HEADER (Hero) with FULL PAGE BACKGROUND */
   .header {
     position: relative;
-    width: 100%;
-    height: 100vh;
-    margin-top: 0;
+    height: 100vh; /* Full screen height */
+    /* Your hero background image
+       Ensure you have `images/Background.png` */
+    background: url("images/Background.png") center center/cover no-repeat;
     display: flex;
-    align-items: center;
     justify-content: center;
+    align-items: center;
     text-align: center;
     color: #fff;
-    /* Remove separate background so we see body’s background instead */
   }
   
+  /* Dark overlay on top of the hero background */
   .overlay {
     position: absolute;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    background: rgba(0, 0, 0, 0.4);
+    background: rgba(0, 0, 0, 0.5);
     z-index: 1;
   }
   
+  /* Hero content above overlay */
   .hero-content {
     position: relative;
     z-index: 2;
     max-width: 800px;
     padding: 20px;
-    padding-top: 80px; /* Ensures content below navbar */
+  }
+  .hero-content h1 {
+    font-size: 3rem;
+    margin-bottom: 20px;
+  }
+  .hero-content p {
+    font-size: 1.2rem;
+    margin-bottom: 20px;
   }
   
-  /* LOGO SIZE */
+  /* LOGO Container (smaller) */
   .logo-container {
-    max-width: 150px; /* Adjust to make the logo smaller or bigger */
+    max-width: 120px; 
     margin: 0 auto 20px;
   }
-  
   .logo-container img {
     width: 100%;
     height: auto;
     display: block;
   }
   
-  .hero-content h1 {
-    font-size: 3rem;
-    margin-bottom: 15px;
-  }
-  
-  .hero-content p {
-    font-size: 1.2rem;
-    margin-bottom: 25px;
-  }
-  
-  /* OFFERINGS CONTAINER */
+  /* Offerings in the Hero */
   .offerings-container {
     display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
     gap: 15px;
-    margin-bottom: 25px;
+    justify-content: center;
+    flex-wrap: wrap; /* Wrap on smaller screens */
+    margin-bottom: 30px;
   }
-  
   .offering-link {
     text-decoration: none;
     color: inherit;
   }
-  
   .offering-box {
-    background: rgba(255, 255, 255, 0.15);
+    background: rgba(255,255,255,0.15);
     padding: 15px;
     border-radius: 15px;
     text-align: center;
     color: #fff;
     backdrop-filter: blur(10px);
     transition: transform 0.3s ease, background 0.3s ease;
-    min-width: 150px;
-    flex: 0 1 150px;
   }
-  
   .offering-box:hover {
     transform: scale(1.05);
-    background: rgba(255, 255, 255, 0.25);
+    background: rgba(255,255,255,0.25);
   }
-  
-  .emoji {
+  .offering-box .emoji {
     font-size: 2rem;
     display: block;
-    margin-bottom: 10px;
+    margin-bottom: 5px;
   }
   
-  /* BUTTONS */
-  .btn-primary,
-  .btn-secondary {
+  /* 3) Buttons */
+  .btn-primary, .btn-secondary {
     padding: 12px 24px;
     font-size: 1rem;
     border-radius: 5px;
@@ -158,74 +103,89 @@
     margin: 5px;
     display: inline-block;
   }
-  
   .btn-primary {
     background-color: rgb(186, 154, 86);
     color: #fff;
   }
-  
   .btn-primary:hover {
-    background-color: rgb(160, 130, 70);
+    background-color: rgb(160,130,70);
   }
-  
   .btn-secondary {
     background-color: #fff;
-    color: rgb(186, 154, 86);
-    border: 1px solid rgb(186, 154, 86);
+    color: rgb(186,154,86);
+    border: 1px solid rgb(186,154,86);
   }
-  
   .btn-secondary:hover {
-    background-color: rgb(186, 154, 86);
+    background-color: rgb(186,154,86);
     color: #fff;
   }
   
-  /* SECTIONS (ABOUT, SERVICES, PRICING, CONTACT) */
-  .section {
-    padding: 60px 20px;
-    background-color: rgba(255, 255, 255, 0.9); /* White panel for readability */
-    color: #333;
-    max-width: 1100px;
-    margin: 40px auto;
-    border-radius: 10px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  /* 4) NAVBAR (Placed after hero in HTML) */
+  .navbar {
+    background-color: #fff;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    padding: 10px 20px;
   }
   
+  .navbar ul {
+    list-style: none;
+    display: flex;
+    justify-content: center;
+    margin: 0;
+    padding: 0;
+  }
+  .navbar li {
+    margin: 0 15px;
+  }
+  .navbar a {
+    text-decoration: none;
+    color: #333;
+    font-weight: 600;
+    transition: color 0.3s ease;
+  }
+  .navbar a:hover {
+    color: rgb(186,154,86);
+  }
+  
+  /* 5) SECTIONS (ABOUT, SERVICES, PRICING, CONTACT) */
+  .section {
+    padding: 60px 20px;
+    background: #f9f9f9;
+    color: #333;
+  }
+  .section .container {
+    max-width: 1000px;
+    margin: 0 auto;
+    text-align: left;
+  }
   .section h2 {
     font-size: 2rem;
     margin-bottom: 20px;
-    color: rgb(186, 154, 86);
+    color: rgb(186,154,86);
   }
   
-  .section .container {
-    max-width: 900px;
-    margin: 0 auto;
-  }
-  
-  /* SERVICE LISTS / PRICING */
+  /* Service/ Pricing Lists */
   .service-list {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
     gap: 20px;
     margin-top: 30px;
   }
-  
   .service-item {
     background-color: rgba(255, 255, 255, 0.9);
     padding: 20px;
     border-radius: 10px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
     text-align: center;
   }
-  
   .service-item h3 {
     margin-bottom: 10px;
     font-size: 1.5rem;
-    color: rgb(186, 154, 86);
+    color: rgb(186,154,86);
   }
   
-  /* CONTACT FORM */
-  form input,
-  form textarea {
+  /* 6) Contact Form */
+  form input, form textarea {
     width: 100%;
     padding: 10px;
     margin-bottom: 15px;
@@ -233,11 +193,10 @@
     border-radius: 5px;
     font-size: 1rem;
   }
-  
   form button {
     width: 100%;
     padding: 10px;
-    background-color: rgb(186, 154, 86);
+    background-color: rgb(186,154,86);
     color: #fff;
     border: none;
     border-radius: 5px;
@@ -245,60 +204,40 @@
     cursor: pointer;
     transition: background-color 0.3s ease;
   }
-  
   form button:hover {
-    background-color: rgb(160, 130, 70);
+    background-color: rgb(160,130,70);
   }
   
-  /* FOOTER */
+  /* 7) FOOTER */
   .footer {
-    background-color: rgba(0, 0, 0, 0.8);
+    background-color: rgba(0,0,0,0.8);
     color: #fff;
     text-align: center;
     padding: 20px;
     font-size: 0.9rem;
   }
   
-  /* RESPONSIVE ADJUSTMENTS */
+  /* 8) RESPONSIVE ADJUSTMENTS */
   @media (max-width: 768px) {
-    /* Make hero text smaller */
     .hero-content h1 {
-      font-size: 2.2rem;
+      font-size: 2.4rem;
     }
-  
     .hero-content p {
       font-size: 1rem;
-    }
-  
-    /* Navbar spacing */
-    .navbar ul {
-      flex-wrap: wrap;
     }
     .navbar li {
       margin: 5px 10px;
     }
-  
-    .btn-primary,
-    .btn-secondary {
+    .btn-primary, .btn-secondary {
       font-size: 0.9rem;
-      padding: 10px 16px;
     }
-  
-    /* Offerings: 2 columns max on mid screens */
-    .offering-box {
-      flex: 0 1 45%;
-      margin-bottom: 15px;
+    .logo-container {
+      max-width: 100px; 
     }
   }
-  
   @media (max-width: 480px) {
-    /* Offerings: 1 column on small screens */
-    .offering-box {
-      flex: 0 1 100%;
-    }
-  
     .hero-content h1 {
-      font-size: 1.8rem;
+      font-size: 2rem;
     }
   }
   
