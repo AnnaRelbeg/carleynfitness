@@ -265,9 +265,7 @@
             background-image: url('images/IMG_4290.JPG');
     
             /* Adjust for a better fit on mobile */
-            background-size: cover;  /* or "contain", depending on your preference */
-            background-position: center center;
-            background-attachment: scroll; /* Avoid "fixed" parallax on mobile */
+
         }
    
     .navbar ul {
