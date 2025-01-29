@@ -11,8 +11,8 @@
     rel="stylesheet"
   />
 
-  <!-- Link to YOUR external CSS -->
-  <link rel="stylesheet" href="styles.css" />
+  <!-- Link to External CSS -->
+  <link rel="stylesheet" href="styles.css"/>
 
   <!-- AOS Library (Animate on Scroll) -->
   <link
@@ -22,74 +22,7 @@
 </head>
 <body>
 
-  <!-- Header Section -->
-  <header class="header">
-    <!-- Dark overlay inside header -->
-    <div class="overlay"></div>
-
-    <div class="hero-content" data-aos="fade-up">
-      <!-- LOGO (smaller) -->
-      <div class="logo-container">
-        <a href="index.html">
-          <img src="images/logo.png" alt="CarleyNFitness Logo" />
-        </a>
-      </div>
-
-      <h1 data-aos="fade-up" data-aos-delay="100">
-        Transform Your Fitness Journey
-      </h1>
-      <p data-aos="fade-up" data-aos-delay="200">
-        Personalised Training &amp; Nutrition Coaching in Milton Keynes &amp; Hereford
-      </p>
-
-      <!-- Offerings Boxes -->
-      <div class="offerings-container" data-aos="fade-up" data-aos-delay="300">
-        <a href="#personal-training" class="offering-link">
-          <div class="offering-box">
-            <span class="emoji">🏋️</span>
-            <h3>1:1 Personal Training</h3>
-          </div>
-        </a>
-
-        <a href="#online-coaching" class="offering-link">
-          <div class="offering-box">
-            <span class="emoji">💻</span>
-            <h3>Online Coaching</h3>
-          </div>
-        </a>
-
-        <a href="#nutrition-coaching" class="offering-link">
-          <div class="offering-box">
-            <span class="emoji">🥗</span>
-            <h3>Nutrition Coaching</h3>
-          </div>
-        </a>
-
-        <a href="#pre-postnatal-training" class="offering-link">
-          <div class="offering-box">
-            <span class="emoji">🤰</span>
-            <h3>Pre/Postnatal Training</h3>
-          </div>
-        </a>
-
-        <a href="#progress-tracking" class="offering-link">
-          <div class="offering-box">
-            <span class="emoji">📊</span>
-            <h3>Progress Tracking</h3>
-          </div>
-        </a>
-      </div>
-
-      <a href="#services" class="btn-primary" data-aos="fade-up" data-aos-delay="400">
-        Explore Services
-      </a>
-      <a href="#contact" class="btn-secondary" data-aos="fade-up" data-aos-delay="500">
-        Book Your Free Consultation
-      </a>
-    </div>
-  </header>
-
-  <!-- Navbar Section -->
+  <!-- Navbar (Fixed at the Top) -->
   <nav class="navbar">
     <ul>
       <li><a href="#about">About</a></li>
@@ -100,28 +33,78 @@
     </ul>
   </nav>
 
+  <!-- Hero / Header Section -->
+  <header class="header" data-aos="fade-up">
+    <!-- Optional overlay if you want a darker hero area -->
+    <div class="hero-overlay"></div>
+
+    <div class="hero-content">
+      <!-- Logo (smaller) -->
+      <div class="logo-container">
+        <a href="index.html">
+          <img src="images/logo.png" alt="CarleyNFitness Logo"/>
+        </a>
+      </div>
+
+      <h1 data-aos="fade-up" data-aos-delay="100">
+        Transform Your Fitness Journey
+      </h1>
+      <p data-aos="fade-up" data-aos-delay="200">
+        Personalised Training &amp; Nutrition Coaching <br/>
+        in Milton Keynes &amp; Hereford
+      </p>
+
+      <!-- Offerings Boxes -->
+      <div class="offerings-container" data-aos="fade-up" data-aos-delay="300">
+        <a href="#personal-training" class="offering-link">
+          <div class="offering-box">
+            <span class="emoji">🏋️</span>
+            <h3>1:1 Personal Training</h3>
+          </div>
+        </a>
+        <a href="#online-coaching" class="offering-link">
+          <div class="offering-box">
+            <span class="emoji">💻</span>
+            <h3>Online Coaching</h3>
+          </div>
+        </a>
+        <a href="#nutrition-coaching" class="offering-link">
+          <div class="offering-box">
+            <span class="emoji">🥗</span>
+            <h3>Nutrition Coaching</h3>
+          </div>
+        </a>
+        <a href="#pre-postnatal-training" class="offering-link">
+          <div class="offering-box">
+            <span class="emoji">🤰</span>
+            <h3>Pre/Postnatal Training</h3>
+          </div>
+        </a>
+        <a href="#progress-tracking" class="offering-link">
+          <div class="offering-box">
+            <span class="emoji">📊</span>
+            <h3>Progress Tracking</h3>
+          </div>
+        </a>
+      </div>
+
+      <!-- Buttons -->
+      <div class="hero-buttons" data-aos="fade-up" data-aos-delay="400">
+        <a href="#services" class="btn-primary">Explore Services</a>
+        <a href="#contact" class="btn-secondary">Book Your Free Consultation</a>
+      </div>
+    </div>
+  </header>
+
   <!-- About Section -->
-  <section id="about" class="section about" data-aos="fade-left">
+  <section id="about" class="section about" data-aos="fade-up">
     <div class="container">
       <h2>About Me</h2>
       <p>
-        Hi, I’m Carley! With years of experience in fitness coaching, 
-        I specialise in helping clients achieve their goals sustainably 
-        and confidently. I hold certifications in Strength &amp; Conditioning, 
-        Nutrition Coaching, and Pre/Postnatal Training.
+        Hi, I’m Carley! With years of experience in fitness coaching, I specialise 
+        in helping clients achieve their goals sustainably and confidently...
       </p>
-      <p>
-        I work with individuals in Milton Keynes and Hereford, offering 
-        tailored fitness programmes that fit your lifestyle, whether you're 
-        a busy professional, a new parent, or just beginning your fitness journey. 
-        Together, we’ll build a plan that prioritises your goals, health, and well-being.
-      </p>
-      <p>Key Values:</p>
-      <ul>
-        <li>Results driven by sustainability.</li>
-        <li>Programmes tailored to your individual needs.</li>
-        <li>A supportive and empowering environment.</li>
-      </ul>
+      <!-- More about content here -->
     </div>
   </section>
 
@@ -132,33 +115,23 @@
       <div class="service-list">
         <div class="service-item" id="personal-training" data-aos="fade-up" data-aos-delay="100">
           <h3>🏋️ 1:1 Personal Training</h3>
-          <p>
-            Strength &amp; conditioning sessions tailored to your goals...
-          </p>
+          <p>Strength &amp; conditioning sessions tailored to your goals...</p>
         </div>
         <div class="service-item" id="online-coaching" data-aos="fade-up" data-aos-delay="200">
           <h3>💻 Online Coaching</h3>
-          <p>
-            Fully customised training plan, weekly check-ins, accountability...
-          </p>
+          <p>Fully customised training plan, weekly check-ins, accountability...</p>
         </div>
         <div class="service-item" id="nutrition-coaching" data-aos="fade-up" data-aos-delay="300">
           <h3>🥗 Nutrition Coaching</h3>
-          <p>
-            Expert advice, meal plans, and sustainable eating habits...
-          </p>
+          <p>Expert advice, meal plans, and sustainable eating habits...</p>
         </div>
         <div class="service-item" id="pre-postnatal-training" data-aos="fade-up" data-aos-delay="400">
           <h3>🤰 Pre/Postnatal Training</h3>
-          <p>
-            Safe workouts for every stage of motherhood...
-          </p>
+          <p>Safe workouts for every stage of motherhood...</p>
         </div>
         <div class="service-item" id="progress-tracking" data-aos="fade-up" data-aos-delay="500">
           <h3>📊 Progress Tracking</h3>
-          <p>
-            Data-driven Body Dashboard to measure gains, composition, milestones...
-          </p>
+          <p>Body Dashboard for data-driven progress updates...</p>
         </div>
       </div>
     </div>
@@ -171,43 +144,40 @@
       <div class="service-list">
         <div class="service-item">
           <h3>💰 Pay As You Go</h3>
-          <p>
-            1:1 Personal Training: from £45 per hour <br />
-            Personalised Meal Plan: £70 one-time
-          </p>
+          <p>1:1 PT from £45/hour, Meal Plan £70 one-time</p>
         </div>
         <div class="service-item">
           <h3>💻 Online Coaching</h3>
           <p>
-            <strong>£100 per month</strong> <br />
-            - Bespoke training plan <br />
-            - Weekly check-ins &amp; amendments <br />
-            - 24-hour support <br />
-            - Free consultation <br />
+            <strong>£100/month</strong><br/>
+            - Bespoke training plan<br/>
+            - Weekly check-ins &amp; amendments<br/>
+            - 24-hour support<br/>
+            - Free consultation<br/>
             - Progress tracking
           </p>
         </div>
         <div class="service-item">
           <h3>🥈 Silver PT Package</h3>
           <p>
-            <strong>£180 per month</strong> <br />
-            - 4 PT sessions (1x per week) <br />
-            - Bespoke Nutritional Advice <br />
-            - Weekly check-ins &amp; amendments <br />
-            - 24-hour support <br />
-            - Free consultation <br />
+            <strong>£180/month</strong><br/>
+            - 4 PT sessions<br/>
+            - Nutritional Advice<br/>
+            - Weekly check-ins<br/>
+            - 24-hour support<br/>
+            - Free consultation<br/>
             - Progress tracking
           </p>
         </div>
         <div class="service-item">
           <h3>🥇 Gold PT Package</h3>
           <p>
-            <strong>£300 per month</strong> <br />
-            - 8 PT sessions (2x per week) <br />
-            - Bespoke Nutritional Advice <br />
-            - Weekly check-ins &amp; amendments <br />
-            - 24-hour support <br />
-            - Free consultation <br />
+            <strong>£300/month</strong><br/>
+            - 8 PT sessions<br/>
+            - Nutritional Advice<br/>
+            - Weekly check-ins<br/>
+            - 24-hour support<br/>
+            - Free consultation<br/>
             - Progress tracking
           </p>
         </div>
@@ -221,26 +191,27 @@
       <h2>Contact</h2>
       <p>Have questions or ready to get started? Let’s talk!</p>
       <form>
-        <input type="text" placeholder="Your Name" required />
-        <input type="email" placeholder="Your Email" required />
+        <input type="text" placeholder="Your Name" required/>
+        <input type="email" placeholder="Your Email" required/>
         <textarea placeholder="Your Message" required></textarea>
         <button type="submit" class="btn-primary">Send Message</button>
       </form>
     </div>
   </section>
 
-  <!-- Footer Section -->
+  <!-- Footer -->
   <footer class="footer" data-aos="fade-up">
     <p>&copy; 2025 CarleyNFitness. All rights reserved.</p>
   </footer>
 
-  <!-- AOS Scripts (Animate on Scroll) -->
+  <!-- AOS Scripts -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
   <script>
     AOS.init({
-      duration: 1000, /* Animation duration */
-      once: true,     /* Run animations only once */
+      duration: 1000,
+      once: true
     });
   </script>
+
 </body>
 </html>
