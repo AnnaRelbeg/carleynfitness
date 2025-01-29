@@ -303,5 +303,17 @@
     .my-background {
       background-size: contain;       /* to see the entire image */
       background-attachment: scroll;  /* avoid parallax issues on mobile */
+
+      .iphone-fix-img {
+        max-width: 100% !important;
+        height: auto !important;
+        display: block; /* optional but helps remove whitespace below inline imgs */
     }
+    
+    .hero {
+        background-size: contain !important; 
+        background-position: center !important;
+        background-attachment: scroll !important; /* iOS often ignores 'fixed' */
+    }
+}
   }
