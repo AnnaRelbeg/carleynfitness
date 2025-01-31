@@ -12,7 +12,6 @@
     color: #333;
     /* Full-page background covering the entire site */
     background: url("images/Background.png") center center/cover no-repeat fixed;
-    min-height: 100vh;
   }
   
   /* ---------------------------------
@@ -109,12 +108,16 @@
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
+    align-items: stretch;
     gap: 15px;
     margin: 30px 0;
   }
   .offering-link {
     text-decoration: none;
     color: inherit;
+    flex: 1;
+    min-width: 120px;
+    max-width: 200px;
   }
   .offering-box {
     background: rgba(255,255,255,0.15);
@@ -241,6 +244,28 @@
     background-color: rgb(160,130,70);
   }
   
+/*--------------------------------------
+| 8) Social Media 
+----------------------------------------*/
+
+.social-media {
+    display: flex;        /* puts icons in a row */
+    gap: 10px;            /* spacing between icons */
+    justify-content: center;  /* center them, optional */
+    margin: 20px 0;       /* space above/below section */
+}
+
+.social-media a img {
+    width: 24px;      /* icon width */
+    height: 24px;     /* icon height */
+    object-fit: cover; /* ensures the icon doesn’t distort */
+    transition: transform 0.3s ease; /* for a hover effect if you like */
+}
+
+.social-media {
+    transform: scale(1.2);
+}
+
   /* ---------------------------------
      6) Footer
   ---------------------------------- */
