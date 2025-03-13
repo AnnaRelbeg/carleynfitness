@@ -102,7 +102,7 @@
     <div class="container">
       <h2>About Me</h2>
       <p>
-        Hi👋, <br />
+        Hi👋, <br> <br>
         I’m Carley! With 4+ years of experience in fitness coaching, I specialise
         in helping clients achieve their goals sustainably and confidently. I
         hold certifications in Strength &amp; Conditioning, Nutrition Coaching,
@@ -248,6 +248,23 @@
     </div>
   </section>
 
+  <section id="free-consultation" class="section consultation" data-aos="fade-up">
+    <h2 id="calendar-header">March 2025</h2>
+    <div id="calendar" class="calendar"></div>
+    <div id="booking-form" style="display: none;">
+        <h3>Book Your Consultation</h3>
+        <form id="form">
+            <label for="name">Name:</label>
+            <input type="text" id="name" required><br><br>
+            <label for="email">Email:</label>
+            <input type="email" id="email" required><br><br>
+            <label for="time">Time:</label>
+            <input type="time" id="time" required><br><br>
+            <input type="hidden" id="booking-date">
+            <input type="submit" value="Book Now">
+        </form>
+    </div>
+</section>
   <!-- Footer -->
   <footer class="footer" data-aos="fade-up">
     <p>&copy; 2025 CarleyNFitness. All rights reserved.</p>
@@ -261,5 +278,8 @@
       once: true
     });
   </script>
+  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js"></script>  
+  <script src="script.js"></script>
 </body>
 </html>

@@ -200,6 +200,10 @@
     color: rgb(186,154,86);
   }
   
+  #about {
+    text-align: justify;
+  }
+
   /* Service / Pricing Lists */
   .service-list {
     display: grid;
@@ -244,6 +248,33 @@
     background-color: rgb(160,130,70);
   }
   
+ /* Calendar layout */
+.calendar { 
+  display: grid; 
+  grid-template-columns: repeat(7, 1fr); 
+  gap: 5px; 
+}
+
+/* Styling each date cell */
+.calendar div { 
+  padding: 10px; 
+  text-align: center; 
+  cursor: pointer; 
+  font-size: 16px; 
+}
+
+/* Mark booked dates */
+.booked { 
+  background-color: #f00; 
+  color: white; 
+  pointer-events: none; 
+}
+
+/* Highlight today's date */
+.today { 
+  background-color: #ffcc00; 
+}
+
 /*--------------------------------------
 | 8) Social Media 
 ----------------------------------------*/
