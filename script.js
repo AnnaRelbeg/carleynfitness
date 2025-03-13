@@ -120,3 +120,32 @@ document.addEventListener('DOMContentLoaded', function () {
     createCalendar();
     fetchBookings();  // Fetch bookings to mark dates as booked
 });
+
+document.addEventListener('DOMContentLoaded', function() {
+    const calendarElement = document.getElementById('calendar');
+    const currentMonth = new Date(2025, 2); // March 2025 (month is 0-indexed)
+  
+    const monthHeader = document.getElementById('month');
+    monthHeader.textContent = currentMonth.toLocaleString('default', { month: 'long' }) + ' ' + currentMonth.getFullYear();
+  
+    // Clear previous calendar if any
+    calendarElement.innerHTML = '';
+  
+    const daysInMonth = new Date(currentMonth.getFullYear(), currentMonth.getMonth() + 1, 0).getDate();
+    const firstDayOfMonth = new Date(currentMonth.getFullYear(), currentMonth.getMonth(), 1).getDay();
+    
+    // Create empty slots for the days before the 1st day of the month
+    for (let i = 0; i < firstDayOfMonth; i++) {
+      const emptyCell = document.createElement('div');
+      calendarElement.appendChild(emptyCell);
+    }
+  
+    // Add each day of the month to the calendar
+    for (let i = 1; i <= daysInMonth; i++) {
+      const dateCell = document.createElement('div');
+      dateCell.classList.add('date');
+      dateCell.textContent = i;
+      calendarElement.appendChild(dateCell);
+    }
+  });
+  
