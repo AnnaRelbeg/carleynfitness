@@ -5,19 +5,19 @@ import { getFirestore, collection, getDocs, addDoc } from "firebase/firestore";
 
 // Firebase configuration
 const firebaseConfig = {
-  apiKey: "AIzaSyDpju8JIedURVxBJgmZ1yBuRzd4CEdFDVY",
-  authDomain: "carleynfitnesscalendar.firebaseapp.com",
-  projectId: "carleynfitnesscalendar",
-  storageBucket: "carleynfitnesscalendar.firebasestorage.app",
-  messagingSenderId: "1013642078015",
-  appId: "1:1013642078015:web:e8bcff9d1559f1c1d5158a",
-  measurementId: "G-VJSQ9P5NLW"
-};
-
-// Initialize Firebase and Firestore
-const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);  // Initialize Firestore
-const analytics = getAnalytics(app);
+    apiKey: "AIzaSyDpju8JIedURVxBJgmZ1yBuRzd4CEdFDVY",
+    authDomain: "carleynfitnesscalendar.firebaseapp.com",
+    projectId: "carleynfitnesscalendar",
+    storageBucket: "carleynfitnesscalendar.firebasestorage.app",
+    messagingSenderId: "1013642078015",
+    appId: "1:1013642078015:web:e8bcff9d1559f1c1d5158a",
+    measurementId: "G-VJSQ9P5NLW"
+  };
+  
+  // Initialize Firebase
+  const app = firebase.initializeApp(firebaseConfig);
+  const db = firebase.firestore(app);  // Initialize Firestore
+  
 
 document.addEventListener('DOMContentLoaded', function () {
     const calendarElement = document.getElementById('calendar');
