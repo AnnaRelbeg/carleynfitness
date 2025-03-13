@@ -252,7 +252,8 @@
 .calendar { 
   display: grid; 
   grid-template-columns: repeat(7, 1fr); 
-  gap: 5px; 
+  gap: 5px;
+  height: 500px; /* Adjust this to fit the desired height */
 }
 
 /* Styling each date cell */

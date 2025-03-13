@@ -1,11 +1,9 @@
-// Import the functions you need from the SDKs you need
+// Import the necessary functions from Firebase SDK
 import { initializeApp } from "firebase/app";
 import { getAnalytics } from "firebase/analytics";
-// TODO: Add SDKs for Firebase products that you want to use
-// https://firebase.google.com/docs/web/setup#available-libraries
+import { getFirestore, collection, getDocs, addDoc } from "firebase/firestore";
 
-// Your web app's Firebase configuration
-// For Firebase JS SDK v7.20.0 and later, measurementId is optional
+// Firebase configuration
 const firebaseConfig = {
   apiKey: "AIzaSyDpju8JIedURVxBJgmZ1yBuRzd4CEdFDVY",
   authDomain: "carleynfitnesscalendar.firebaseapp.com",
@@ -16,17 +14,18 @@ const firebaseConfig = {
   measurementId: "G-VJSQ9P5NLW"
 };
 
-// Initialize Firebase
+// Initialize Firebase and Firestore
 const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);  // Initialize Firestore
 const analytics = getAnalytics(app);
 
+// Wait for the DOM to be loaded
 document.addEventListener('DOMContentLoaded', function () {
-    // Get current month and year
     const currentDate = new Date();
-    const currentMonth = currentDate.getMonth(); // Get current month (0-11)
-    const currentYear = currentDate.getFullYear(); // Get current year
-    const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate(); // Get number of days in current month
-    const firstDayOfMonth = new Date(currentYear, currentMonth, 1).getDay(); // Get first day of the month (0-6)
+    const currentMonth = currentDate.getMonth();
+    const currentYear = currentDate.getFullYear();
+    const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
+    const firstDayOfMonth = new Date(currentYear, currentMonth, 1).getDay();
 
     // Create the calendar
     function createCalendar() {
@@ -34,7 +33,7 @@ document.addEventListener('DOMContentLoaded', function () {
         const header = document.getElementById('calendar-header');
         header.innerText = `${currentDate.toLocaleString('default', { month: 'long' })} ${currentYear}`;
 
-        // Clear previous calendar
+        // Clear previous calendar content
         calendar.innerHTML = '';
 
         // Create empty spaces for days before the 1st of the month
@@ -50,7 +49,7 @@ document.addEventListener('DOMContentLoaded', function () {
             dayCell.classList.add('date');
             dayCell.dataset.date = `${currentYear}-${(currentMonth + 1).toString().padStart(2, '0')}-${day.toString().padStart(2, '0')}`;
             if (day === currentDate.getDate()) {
-                dayCell.classList.add('today'); // Highlight today's date
+                dayCell.classList.add('today');  // Highlight today's date
             }
             calendar.appendChild(dayCell);
         }
@@ -80,47 +79,41 @@ document.addEventListener('DOMContentLoaded', function () {
         const date = document.getElementById('booking-date').value;
 
         // Save booking to Firestore
-        db.collection('bookings').add({
+        addDoc(collection(db, 'bookings'), {
             name: name,
             email: email,
             date: date,
             time: time,
-            status: 'pending'  // Update status when confirmed
+            status: 'pending'
         })
-            .then(() => {
-                alert(`Booking Confirmed! \nName: ${name} \nEmail: ${email} \nDate: ${date} \nTime: ${time}`);
-                document.getElementById('form').reset();
-                document.getElementById('booking-form').style.display = 'none';
+        .then(() => {
+            alert(`Booking Confirmed! \nName: ${name} \nEmail: ${email} \nDate: ${date} \nTime: ${time}`);
+            document.getElementById('form').reset();
+            document.getElementById('booking-form').style.display = 'none';
 
-                // Mark the date as booked
-                const dayCell = document.querySelector(`[data-date="${date}"]`);
-                if (dayCell) {
-                    dayCell.classList.add('booked');
-                }
-            })
-            .catch((error) => {
-                console.error("Error adding document: ", error);
-            });
+            // Mark the date as booked
+            const dayCell = document.querySelector(`[data-date="${date}"]`);
+            if (dayCell) {
+                dayCell.classList.add('booked');
+            }
+        })
+        .catch((error) => {
+            console.error("Error adding document: ", error);
+        });
     });
 
     // Fetch existing bookings and mark dates as booked
-    function fetchBookings() {
-        db.collection('bookings')
-            .get()
-            .then((querySnapshot) => {
-                querySnapshot.forEach((doc) => {
-                    const bookingData = doc.data();
-                    const bookedDate = bookingData.date;
-                    const bookedCell = document.querySelector(`[data-date="${bookedDate}"]`);
-                    if (bookedCell) {
-                        bookedCell.classList.add('booked');
-                        bookedCell.style.pointerEvents = 'none';  // Disable booking for these dates
-                    }
-                });
-            })
-            .catch((error) => {
-                console.error("Error getting documents: ", error);
-            });
+    async function fetchBookings() {
+        const querySnapshot = await getDocs(collection(db, 'bookings'));
+        querySnapshot.forEach((doc) => {
+            const bookingData = doc.data();
+            const bookedDate = bookingData.date;
+            const bookedCell = document.querySelector(`[data-date="${bookedDate}"]`);
+            if (bookedCell) {
+                bookedCell.classList.add('booked');
+                bookedCell.style.pointerEvents = 'none';  // Disable booking for these dates
+            }
+        });
     }
 
     // Initialize the calendar and fetch existing bookings
