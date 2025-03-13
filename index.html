@@ -252,7 +252,7 @@
   </section>
 
   <section id="free-consultation" class="section consultation" data-aos="fade-up">
-    <h2 id="calendar-header">March 2025</h2>
+    <div id="calendar-header"></div> <!-- This will be dynamically populated -->
     <div id="calendar" class="calendar"></div>
     <div id="booking-form" style="display: none;">
         <h3>Book Your Consultation</h3>
@@ -282,8 +282,11 @@
       once: true
     });
   </script>
-  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js"></script>  
-  <script src="script.js"></script>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.2/main.min.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.1.3/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.1.3/firebase-analytics.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.1.3/firebase-firestore.js"></script>  
+  <script type="module" src="script.js"></script>
 </body>
 </html>
