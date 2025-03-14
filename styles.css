@@ -313,7 +313,7 @@
   ---------------------------------- */
   .section {
     
-    padding: 30px 5px;
+    padding: 30px 20px;
     background: rgba(255,255,255,0.9);
     color: #333;
     max-width: 1100px;
@@ -330,6 +330,10 @@
     font-size: 2rem;
     margin-bottom: 20px;
     color: rgb(186,154,86);
+  }
+
+  #about ul {
+    list-style: none; /* Removes bullet points */
   }
   
   /* Service / Pricing Lists */
