@@ -248,24 +248,45 @@
     background-color: rgb(160,130,70);
   }
   
- /* Calendar layout */
+ /*--------------------------- 
+ Calendar layout 
+ ----------------------------*/
 .calendar { 
   display: grid; 
   grid-template-columns: repeat(7, 1fr); 
   gap: 5px;
-  height: 200px; /* Adjust this to fit the desired height */
+  height: 500px; /* Adjust this to fit the desired height */
 }
 
 /* Styling each date cell */
 .calendar div { 
-  padding: 10px; 
+  padding: 5%; 
   text-align: center; 
   cursor: pointer; 
   font-size: 16px; 
 }
 
+#calendar-header {
+  text-align: center;
+  font-size: 25px;
+  text-decoration: underline;
+}
+
 /* Mark booked dates */
-.booked { 
+.date {
+  padding: 10px;
+  margin: 5px;
+  border: 1px solid #ccc;
+  display: inline-block;
+  cursor: pointer;
+}
+
+.date.highlight {
+  background-color: #4BB78F; /* Highlight color */
+  color: white; /* Optional: Text color when highlighted */
+}
+
+.booked {  
   background-color: #f00; 
   color: white; 
   pointer-events: none; 
@@ -274,6 +295,13 @@
 /* Highlight today's date */
 .today { 
   background-color: #ffcc00; 
+}
+
+.date.disabled {
+  background-color: #f2f2f2; /* Grey out disabled dates */
+  color: #aaa; /* Faded text */
+  pointer-events: none; /* Prevent any interaction */
+  cursor: not-allowed; /* Show "not allowed" cursor */
 }
 
 /*--------------------------------------

@@ -55,6 +55,13 @@ document.addEventListener('DOMContentLoaded', function () {
     // Handle date click events
     calendarElement.addEventListener('click', function (event) {
         if (event.target.classList.contains('date')) {
+            // Remove the highlight class from all other dates
+            document.querySelectorAll('.date').forEach(d => d.classList.remove('highlight'));
+    
+            // Add the highlight class to the clicked date
+            event.target.classList.add('highlight');
+    
+            // Your existing logic for showing the booking form
             const selectedDate = event.target.dataset.date;
             if (!event.target.classList.contains('booked')) {
                 bookingForm.style.display = 'block';
@@ -62,6 +69,7 @@ document.addEventListener('DOMContentLoaded', function () {
             }
         }
     });
+    
 
     // Handle form submissions
     document.getElementById('form').addEventListener('submit', function (event) {
@@ -99,3 +107,4 @@ document.addEventListener('DOMContentLoaded', function () {
 
     fetchBookings();
 });
+
