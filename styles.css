@@ -422,8 +422,8 @@
 
 /* Individual Reel Styling */
 .reel {
-  width: 350px; /* Adjust width as needed */
-  max-width: 100%;
+  width: 400px; /* Adjust width as needed */
+  margin: 0 auto;
 }
 
 .reel iframe {
@@ -438,6 +438,13 @@
       flex-direction: column;
   }
 }
+
+@media (max-width: 600px) {
+  .reel iframe {
+      height: 400px; /* Adjusts for mobile screens */
+  }
+}
+
 
 /*------------------------------------
        Testimonials
