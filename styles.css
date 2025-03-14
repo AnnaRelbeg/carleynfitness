@@ -11,32 +11,17 @@
     line-height: 1.6;
     color: #333;
     /* Full-page background covering the entire site */
-    background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), 
-    url("images/Background.png") no-repeat center center fixed;
-    background-size: cover;
+    background: linear-gradient(135deg, #1c1c1c, #333, #4d4d4d); /* Metallic gradient */
+    background-size: 400% 400%; /* Allows for subtle shimmer effect */
+    animation: metallic-shimmer 8s ease infinite; /* Shimmer animation */
+    color: #fff; /* For text readability */
+}
 
-  }
+@keyframes metallic-shimmer {
+    0% { background-position: 0% 50%; }
+    100% { background-position: 100% 50%; }
+}
   
-/* For small screens */
-@media (max-width: 768px) {
-  body {
-      background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), 
-      url("images/Background_small.png") center center / cover no-repeat;
-      background-size: cover;
-      background-attachment: fixed;
-  }
-}
-
-/* For very small devices (like iPhones) */
-@media (max-width: 480px) {
-  body {
-    background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), 
-    url("images/Background_small.png") center center no-repeat;
-    background-size: contain; /* Ensures full image visibility */
-    background-attachment: scroll; /* Resolves parallax issues on mobile */
-  }
-}
-
   /* ---------------------------------
      2) Navbar - Fixed at Top
   ---------------------------------- */
@@ -80,8 +65,11 @@
      3) Header (Hero)
   ---------------------------------- */
   .header {
+    background-image: url(images/Background.png);
+    background-size: cover;
+    display: flex;
     position: relative;
-    margin-top: 80px; /* Push content below fixed navbar */
+    margin-top: 70px; /* Push content below fixed navbar */
     padding: 60px 20px; /* Enough space for offerings + buttons */
     text-align: center;
     color: #fff;
@@ -251,6 +239,7 @@
      5) Sections (About, Services, Pricing, Contact)
   ---------------------------------- */
   .section {
+    
     padding: 60px 20px;
     background: rgba(255,255,255,0.9);
     color: #333;
@@ -270,10 +259,6 @@
     color: rgb(186,154,86);
   }
   
-  #about {
-    text-align: justify;
-  }
-
   /* Service / Pricing Lists */
   .service-list {
     display: grid;
