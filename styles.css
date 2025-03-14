@@ -67,7 +67,6 @@
   .header {
     background-image: url(images/Background.png);
     background-size: cover;
-    display: flex;
     position: relative;
     margin-top: 70px; /* Push content below fixed navbar */
     padding: 60px 20px; /* Enough space for offerings + buttons */
