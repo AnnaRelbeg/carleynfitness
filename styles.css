@@ -65,15 +65,23 @@
      3) Header (Hero)
   ---------------------------------- */
   .header {
-    background-image: url(images/Background.png);
-    background-size: cover;
+    background: url("images/Background.png") no-repeat center center;
+    background-size: cover; /* Fills the screen while maintaining proportions */
     position: relative;
     margin-top: 70px; /* Push content below fixed navbar */
     padding: 60px 20px; /* Enough space for offerings + buttons */
     text-align: center;
     color: #fff;
   }
-  
+    /* Adjust for smaller devices */
+@media (max-width: 768px) {
+  body {
+      background: url("images/Background.png") no-repeat center top;
+      background-size: contain; /* Ensures the full image is visible */
+      background-attachment: scroll; /* Prevents issues with 'fixed' on iPhones */
+ 
+  }
+}
   /* Optional additional overlay for hero */
   .hero-overlay {
     position: absolute;
