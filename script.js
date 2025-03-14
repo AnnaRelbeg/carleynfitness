@@ -41,16 +41,28 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     // Populate calendar days
-    for (let day = 1; day <= daysInMonth; day++) {
-        const dayCell = document.createElement('div');
-        dayCell.innerText = day;
-        dayCell.classList.add('date');
-        dayCell.dataset.date = `${currentYear}-${(currentMonth + 1).toString().padStart(2, '0')}-${day.toString().padStart(2, '0')}`;
-        if (day === currentDate.getDate()) {
-            dayCell.classList.add('today');
-        }
-        calendarElement.appendChild(dayCell);
+for (let day = 1; day <= daysInMonth; day++) {
+    const dayCell = document.createElement('div');
+    dayCell.innerText = day;
+    dayCell.classList.add('date');
+
+    // Create date string for comparison
+    const dateString = `${currentYear}-${(currentMonth + 1).toString().padStart(2, '0')}-${day.toString().padStart(2, '0')}`;
+    dayCell.dataset.date = dateString;
+
+    // Disable dates before today
+    const selectedDate = new Date(dateString);
+    if (selectedDate < currentDate) {
+        dayCell.classList.add('disabled'); // Add a "disabled" class
+        dayCell.style.pointerEvents = 'none'; // Prevent clicking
     }
+
+    if (day === currentDate.getDate()) {
+        dayCell.classList.add('today'); // Mark today's date
+    }
+
+    calendarElement.appendChild(dayCell);
+}
 
     // Handle date click events
     calendarElement.addEventListener('click', function (event) {

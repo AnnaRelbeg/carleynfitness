@@ -11,18 +11,28 @@
     line-height: 1.6;
     color: #333;
     /* Full-page background covering the entire site */
-    background: url("images/Background_big.png") center center/cover no-repeat fixed;
-    -webkit-background-size: cover; /* Ensure background scales properly */
+    background: url("images/Background_big.png") center center/cover no-repeat;
+    background-size: cover;
+
   }
   
 /* For small screens */
 @media (max-width: 768px) {
   body {
       background: url("images/Background_small.png") center center / cover no-repeat;
+      background-size: contain;
       background-attachment: scroll;
   }
 }
 
+/* For very small devices (like iPhones) */
+@media (max-width: 480px) {
+  body {
+    background: url("images/Background_small.png") center center no-repeat;
+    background-size: contain; /* Ensures full image visibility */
+    background-attachment: scroll; /* Resolves parallax issues on mobile */
+  }
+}
 
   /* ---------------------------------
      2) Navbar - Fixed at Top
