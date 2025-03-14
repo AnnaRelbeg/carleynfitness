@@ -142,19 +142,18 @@ function showSlides() {
 //Navbar for mobiles
 
 document.addEventListener("DOMContentLoaded", function () {
-    console.log("JavaScript Loaded"); // Check if script is running
+    const menuToggle = document.querySelector(".menu-button"); // Matches the HTML
+    const navMenu = document.querySelector(".navbar ul");
 
-    const menuButton = document.querySelector(".menu-button"); 
-    const navMenu = document.querySelector("#nav-menu"); 
-
-    if (!menuButton || !navMenu) {
-      console.error("Menu button or nav menu not found!");
-      return;
+    if (!menuToggle || !navMenu) {
+        console.error("Menu button or nav menu not found!");
+        return;
     }
 
-    menuButton.addEventListener("click", function () {
-        console.log("Button clicked!"); // Check if button is being clicked
-        navMenu.classList.toggle("active"); 
+    menuToggle.addEventListener("click", function () {
+        console.log("Menu button clicked!"); // Debugging
+        navMenu.classList.toggle("active");
     });
-  });
+});
+
 
