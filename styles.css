@@ -11,9 +11,19 @@
     line-height: 1.6;
     color: #333;
     /* Full-page background covering the entire site */
-    background: url("images/Background.png") center center/cover no-repeat fixed;
+    background: url("images/Background.png") center center/cover no-repeat;
+    background-attachment: scroll;
+    -webkit-background-size: cover; /* iOS-specific fix */
+    background-size: cover;
   }
   
+  @media (max-width: 480px) {
+    body {
+        background-size: contain; /* Alternative for small screens */
+        background-position: center;
+    }
+}
+
   /* ---------------------------------
      2) Navbar - Fixed at Top
   ---------------------------------- */
@@ -107,7 +117,7 @@
   .offerings-container {
     display: flex;
     flex-wrap: wrap;
-    justify-content: center;
+    justify-content: space-evenly;
     align-items: stretch;
     gap: 15px;
     margin: 30px 0;
@@ -121,13 +131,16 @@
   }
   .offering-box {
     background: rgba(255,255,255,0.15);
-    padding: 15px;
+    padding: 20px;
     border-radius: 15px;
     text-align: center;
     color: #fff;
     backdrop-filter: blur(10px);
     transition: transform 0.3s ease, background 0.3s ease;
+    flex: 1 1 calc(33.333% - 30px); /* Three boxes per row on large screens */
+    box-sizing: border-box;
     min-width: 120px;
+    max-width: 300px;
   }
   .offering-box:hover {
     transform: scale(1.05);
@@ -139,6 +152,18 @@
     margin-bottom: 5px;
   }
   
+  @media (max-width: 768px) {
+    .offering-box {
+        flex: 1 1 calc(50% - 15px); /* Two boxes per row on tablets */
+    }
+}
+
+@media (max-width: 480px) {
+    .offering-box {
+        flex: 1 1 100%; /* Full width on mobile devices */
+    }
+}
+
   /* Buttons under hero offerings */
   .hero-buttons {
     display: flex;
@@ -177,6 +202,38 @@
     color: #fff;
   }
   
+  @media (max-width: 768px) {
+    .hero-content h1 {
+        font-size: 2.2rem;
+        margin-bottom: 15px;
+    }
+
+    .hero-content p {
+        font-size: 1rem;
+        margin-bottom: 15px;
+    }
+
+    .btn-primary, .btn-secondary {
+        padding: 10px 15px;
+        font-size: 0.9rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .hero-content h1 {
+        font-size: 2rem;
+    }
+
+    .hero-content p {
+        font-size: 0.9rem;
+    }
+
+    .btn-primary, .btn-secondary {
+        padding: 8px 12px;
+        font-size: 0.8rem;
+    }
+}
+
   /* ---------------------------------
      5) Sections (About, Services, Pricing, Contact)
   ---------------------------------- */
