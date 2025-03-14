@@ -141,13 +141,20 @@ function showSlides() {
 
 //Navbar for mobiles
 
-  document.addEventListener("DOMContentLoaded", function () {
-    const menuButton = document.querySelector(".menu-button"); // Correct selector
-    const navMenu = document.querySelector("#nav-menu"); // Use ID for better selection
+document.addEventListener("DOMContentLoaded", function () {
+    console.log("JavaScript Loaded"); // Check if script is running
+
+    const menuButton = document.querySelector(".menu-button"); 
+    const navMenu = document.querySelector("#nav-menu"); 
+
+    if (!menuButton || !navMenu) {
+      console.error("Menu button or nav menu not found!");
+      return;
+    }
 
     menuButton.addEventListener("click", function () {
-        navMenu.classList.toggle("active"); // Ensure CSS has styles for .active
+        console.log("Button clicked!"); // Check if button is being clicked
+        navMenu.classList.toggle("active"); 
     });
   });
-
 
