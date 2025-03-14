@@ -107,11 +107,7 @@
     padding: 60px 20px; /* Enough space for offerings + buttons */
     text-align: center;
     color: #fff;
-    height: 100vh;
-    width: 100%;
     overflow: hidden;
-    justify-content: center;
-    align-items: center;
   }
     /* Adjust for smaller devices */
 @media (max-width: 768px) {
