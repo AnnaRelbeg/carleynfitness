@@ -120,6 +120,8 @@ for (let day = 1; day <= daysInMonth; day++) {
     fetchBookings();
 });
 
+// Slideshow background
+
 let slideIndex = 0;
 showSlides();
 
@@ -136,3 +138,16 @@ function showSlides() {
     slides[slideIndex - 1].style.display = "block";
     setTimeout(showSlides, 200000); // Change image every 2 seconds (adjust as needed)
 }
+
+//Navbar for mobiles
+
+  document.addEventListener("DOMContentLoaded", function () {
+    const menuButton = document.querySelector(".menu-button"); // Correct selector
+    const navMenu = document.querySelector("#nav-menu"); // Use ID for better selection
+
+    menuButton.addEventListener("click", function () {
+        navMenu.classList.toggle("active"); // Ensure CSS has styles for .active
+    });
+  });
+
+
