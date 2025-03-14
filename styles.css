@@ -102,17 +102,7 @@
     color: #fff;
     overflow: hidden;
   }
-    /* Adjust for smaller devices */
-@media (max-width: 768px) {
-  body {
-      background: url("images/Background.png") no-repeat center top;
-      background-size: contain; /* Ensures the full image is visible */
-      background-attachment: scroll; /* Prevents issues with 'fixed' on iPhones */
-      height: auto;
-      padding: 40px 10px; /* Slightly smaller padding for mobile*/
- 
-  }
-}
+
   /* Optional additional overlay for hero */
   .hero-overlay {
     position: absolute;
@@ -278,11 +268,11 @@
   ---------------------------------- */
   .section {
     
-    padding: 60px 20px;
+    padding: 30px 5px;
     background: rgba(255,255,255,0.9);
     color: #333;
     max-width: 1100px;
-    margin: 40px auto;
+    margin: 30px auto;
     border-radius: 10px;
     box-shadow: 0 4px 6px rgba(0,0,0,0.1);
   }
@@ -317,6 +307,14 @@
     color: rgb(186,154,86);
   }
   
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+
+
   /* Contact Form */
   form input, form textarea {
     width: 100%;
