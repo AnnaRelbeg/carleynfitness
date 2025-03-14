@@ -142,17 +142,25 @@ function showSlides() {
 //Navbar for mobiles
 
 document.addEventListener("DOMContentLoaded", function () {
-    const menuToggle = document.querySelector(".menu-button"); // Matches the HTML
+    const menuToggle = document.querySelector(".menu-button");
     const navMenu = document.querySelector(".navbar ul");
+    const menuLinks = document.querySelectorAll(".navbar ul li a");
 
     if (!menuToggle || !navMenu) {
         console.error("Menu button or nav menu not found!");
         return;
     }
 
+    // Toggle menu on button click
     menuToggle.addEventListener("click", function () {
-        console.log("Menu button clicked!"); // Debugging
         navMenu.classList.toggle("active");
+    });
+
+    // Close menu when a link is clicked
+    menuLinks.forEach(link => {
+        link.addEventListener("click", function () {
+            navMenu.classList.remove("active");
+        });
     });
 });
 
