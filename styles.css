@@ -456,6 +456,7 @@
   text-align: center;
   border-radius: 10px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  margin: 0 auto; /* Centers the section */
 }
 
 /* Reels Container */
@@ -469,28 +470,33 @@
 
 /* Individual Reel Styling */
 .reel {
-  width: 400px; /* Adjust width as needed */
-  margin: 0 auto;
+  max-width: 100%;
+  width: 400px;
+  justify-content: center;
 }
 
 .reel iframe {
   width: 100%;
-  height: 600px; /* Adjust as needed */
+  height: 500px; /* Adjusted height */
   border: none;
+  justify-content: center;
 }
 
 /* Responsive Design */
 @media (max-width: 768px) {
   .reels-container {
-      flex-direction: column;
+    flex-direction: column;
+    justify-content: center;
   }
 }
 
 @media (max-width: 600px) {
   .reel iframe {
-      height: 400px; /* Adjusts for mobile screens */
+    height: 400px; /* Adjusts for mobile screens */
+    justify-content: center;
   }
 }
+
 
 
 /*------------------------------------
