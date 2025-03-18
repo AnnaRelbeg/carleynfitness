@@ -1,44 +1,73 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <title>CarleyNFitness Blog</title>
-    <link rel="stylesheet" href="styles.css">
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&display=swap" rel="stylesheet">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <link rel="icon" href="images/logoG.jpg" type="image/png">
+    <!-- Google Fonts -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&display=swap"
+      rel="stylesheet"
+    />
+    <!-- Link to YOUR external CSS -->
+    <link rel="stylesheet" href="styles.css" />
+    <!-- AOS Library (Animate on Scroll) -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css"
+    />
+    <link href="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.2/main.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@3.0.0/dist/fullcalendar.min.js"></script>
 </head>
 <body>
 
     <!-- Navbar Section -->
     <nav class="navbar">
+        <button class="menu-button" onclick="toggleMenu()">☰</button>
         <ul>
             <li><a href="index.html">Home</a></li>
             <li><a href="index.html#about">About</a></li>
-            <li><a href="index.html#services">Services</a></li>
-            <li><a href="index.html#pricing">Pricing</a></li>
-            <li><a href="index.html#contact">Contact</a></li>
+            <li><a href="index.html#services">Services & Pricing</a></li>
+            <li><a href="index.html#social-media">Let's Connect</a></li>
+            <li><a href="index.html#testimonials">Client Stories</a></li>
+            <li><a href="index.html#free-consultation">Contact</a></li>
             <li><a href="blog.html">Blog</a></li>
         </ul>
     </nav>
 
+      <!-- Move the slideshow-container outside of the main section -->
+  <div class="slideshow-container">
+    <!-- Slides for the image slideshow -->
+    <div class="mySlides fade">
+        <img src="images/Background_big.png" alt="Slideshow Image 1">
+    </div>
+    <div class="mySlides fade">
+        <img src="images/BackgroundCNF.jpeg" alt="Slideshow Image 2">
+    </div>
+    <!-- Add more slides as needed -->
+    </div>
+
+
     <!-- Blog Header -->
-    <header class="header">
+    <header class="header" data-aos="fade-up" >
         <h1>CarleyNFitness Blog</h1>
         <p>Fitness tips, nutrition advice, and personal stories.</p>
     </header>
 
     <!-- Blog Section -->
     <section id="blog" class="section blog">
-        <div class="container">
+        <div class="container" data-aos="fade-up">
             <h2>Latest Articles</h2>
             <div class="blog-list">
-                <article class="blog-post">
+                <article class="blog-post" data-aos="fade-up">
                     <h3>5 Effective Strength Training Tips</h3>
                     <p>Strength training is essential for long-term fitness. Here’s how to do it right...</p>
                     <a href="#" class="btn-secondary">Read More</a>
                 </article>
 
-                <article class="blog-post">
+                <article class="blog-post" data-aos="fade-up">
                     <h3>Pre/Postnatal Training Myths</h3>
                     <p>Let’s bust some common myths about training before and after pregnancy...</p>
                     <a href="#" class="btn-secondary">Read More</a>
@@ -47,9 +76,17 @@
         </div>
     </section>
     <!-- Footer -->
-    <footer class="footer">
+    <footer class="footer" data-aos="fade-up">
         <p>&copy; 2025 CarleyNFitness. All rights reserved.</p>
     </footer>
-
+  <!-- AOS Scripts -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
+  <script>
+    AOS.init({
+      duration: 1000,
+      once: true
+    });
+  </script>
+  <script type="module" src="script.js"></script>
 </body>
 </html>
