@@ -165,3 +165,24 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 
+    // Get current page URL
+    const pageUrl = encodeURIComponent(window.location.href);
+    const pageTitle = encodeURIComponent(document.title);
+
+    function shareToFacebook() {
+        window.open(`https://www.facebook.com/sharer/sharer.php?u=${pageUrl}`, '_blank');
+    }
+
+    function shareToTwitter() {
+        window.open(`https://twitter.com/intent/tweet?url=${pageUrl}&text=${pageTitle}`, '_blank');
+    }
+
+    function shareToLinkedIn() {
+        window.open(`https://www.linkedin.com/sharing/share-offsite/?url=${pageUrl}`, '_blank');
+    }
+
+    function shareToWhatsApp() {
+        window.open(`https://api.whatsapp.com/send?text=${pageTitle} - ${pageUrl}`, '_blank');
+    }
+
+
