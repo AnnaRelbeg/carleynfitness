@@ -397,6 +397,49 @@
     background-color: rgb(160,130,70);
   }
   
+/* Social Links Styling */
+#socialLinks {
+  text-align: center;
+  margin-top: 20px;
+}
+
+#socialLinks p {
+  font-size: 1.2rem;
+  color: #333;
+  margin-bottom: 10px;
+  font-weight: 600;
+}
+
+#socialLinks a {
+  text-decoration: none;
+  color: #fff;
+  background-color: #3b5998;
+  font-size: 1rem;
+  font-weight: 600;
+  transition: color 0.3s ease, background-color 0.3s ease;
+  display: inline-block;
+  padding: 8px 15px;
+  border-radius: 5px;
+  margin: 5px;
+}
+
+#socialLinks a:hover {
+  color: #fff;
+  background-color: rgb(186, 154, 86); /* Matches primary button color */
+}
+
+#socialLinks a:active {
+  background-color: rgb(160, 130, 70); /* Slightly darker on click */
+}
+
+#responseMessage {
+  text-align: center; /* This will center the text horizontally */
+  margin: 20px 0; /* Optional: Adjust the space above and below */
+  font-size: 16px; /* Optional: Set the font size */
+  color: green; /* Optional: Change the color for success message */
+}
+
+
  /*--------------------------- 
  Calendar layout 
  ----------------------------*/

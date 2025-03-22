@@ -132,8 +132,16 @@ contactForm.addEventListener("submit", async function (e) {
     const message = document.getElementById("contact-message").value;
 
     try {
+        // Add the message to Firestore
         await addDoc(collection(db, "contactMessages"), { name, email, message, timestamp: new Date() });
-        document.getElementById("responseMessage").textContent = "Message sent successfully!";
+
+        // Display the success message
+        document.getElementById("responseMessage").textContent = "Message sent successfully!😊";
+
+        // Show the social media links
+        document.getElementById("socialLinks").style.display = "block";
+
+        // Reset the form
         contactForm.reset();
     } catch (error) {
         console.error("Error sending message:", error);
@@ -158,11 +166,23 @@ showSlides();
 document.addEventListener("DOMContentLoaded", function () {
     const menuToggle = document.querySelector(".menu-button");
     const navMenu = document.querySelector(".navbar ul");
+    const navLinks = document.querySelectorAll(".navbar ul li a");
 
+    // Ensure both menuToggle and navMenu are available before adding the event listener
     if (menuToggle && navMenu) {
-        menuToggle.addEventListener("click", () => navMenu.classList.toggle("active"));
+        menuToggle.addEventListener("click", () => {
+            navMenu.classList.toggle("active");
+        });
+
+        // Close the menu when a link is clicked
+        navLinks.forEach(link => {
+            link.addEventListener("click", () => {
+                navMenu.classList.remove("active");
+            });
+        });
     }
 });
+
 
 // Blog Read More
 document.addEventListener("DOMContentLoaded", function () {
