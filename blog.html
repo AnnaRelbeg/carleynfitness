@@ -172,5 +172,25 @@
     <!-- External JS -->
     <script type="module" src="script.js"></script>
 
+    <!--Hide article & expand article-->
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+    const readMoreButtons = document.querySelectorAll(".read-more-btn");
+
+    readMoreButtons.forEach(button => {
+        button.addEventListener("click", function () {
+            const fullArticle = this.nextElementSibling;
+            if (fullArticle.style.display === "none" || fullArticle.style.display === "") {
+                fullArticle.style.display = "block";
+                this.textContent = "Read Less";
+            } else {
+                fullArticle.style.display = "none";
+                this.textContent = "Read More";
+            }
+        });
+    });
+});
+    </script>
+
 </body>
 </html>

@@ -14,16 +14,21 @@ const firebaseConfig = {
     measurementId: "G-VJSQ9P5NLW"
 };
 
-// Initialize Firebase
+// Initialize Firebase only once
 const app = initializeApp(firebaseConfig);
 const analytics = getAnalytics(app);
-const db = getFirestore(app); // Firestore initialization
+const db = getFirestore(app);
 
-document.addEventListener('DOMContentLoaded', function () {
-    const calendarElement = document.getElementById('calendar');
-    const calendarHeader = document.getElementById('calendar-header');
-    const bookingForm = document.getElementById('booking-form');
-    const bookingDateInput = document.getElementById('booking-date');
+// DOM Elements
+const calendarElement = document.getElementById('calendar');
+const calendarHeader = document.getElementById('calendar-header');
+const bookingForm = document.getElementById('booking-form');
+const bookingDateInput = document.getElementById('booking-date');
+const form = document.getElementById('form');
+const contactForm = document.getElementById("contactForm");
+
+// Calendar Initialization
+document.addEventListener('DOMContentLoaded', async function () {
     const currentDate = new Date();
     const currentMonth = currentDate.getMonth();
     const currentYear = currentDate.getFullYear();
@@ -41,71 +46,70 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     // Populate calendar days
-for (let day = 1; day <= daysInMonth; day++) {
-    const dayCell = document.createElement('div');
-    dayCell.innerText = day;
-    dayCell.classList.add('date');
+    for (let day = 1; day <= daysInMonth; day++) {
+        const dayCell = document.createElement('div');
+        dayCell.innerText = day;
+        dayCell.classList.add('date');
 
-    // Create date string for comparison
-    const dateString = `${currentYear}-${(currentMonth + 1).toString().padStart(2, '0')}-${day.toString().padStart(2, '0')}`;
-    dayCell.dataset.date = dateString;
+        const dateString = `${currentYear}-${(currentMonth + 1).toString().padStart(2, '0')}-${day.toString().padStart(2, '0')}`;
+        dayCell.dataset.date = dateString;
 
-    // Disable dates before today
-    const selectedDate = new Date(dateString);
-    if (selectedDate < currentDate) {
-        dayCell.classList.add('disabled'); // Add a "disabled" class
-        dayCell.style.pointerEvents = 'none'; // Prevent clicking
-    }
-
-    if (day === currentDate.getDate()) {
-        dayCell.classList.add('today'); // Mark today's date
-    }
-
-    calendarElement.appendChild(dayCell);
-}
-
-    // Handle date click events
-    calendarElement.addEventListener('click', function (event) {
-        if (event.target.classList.contains('date')) {
-            // Remove the highlight class from all other dates
-            document.querySelectorAll('.date').forEach(d => d.classList.remove('highlight'));
-    
-            // Add the highlight class to the clicked date
-            event.target.classList.add('highlight');
-    
-            // Your existing logic for showing the booking form
-            const selectedDate = event.target.dataset.date;
-            if (!event.target.classList.contains('booked')) {
-                bookingForm.style.display = 'block';
-                bookingDateInput.value = selectedDate;
-            }
+        // Disable past dates
+        if (new Date(dateString) < currentDate) {
+            dayCell.classList.add('disabled');
+            dayCell.style.pointerEvents = 'none';
         }
-    });
-    
 
-    // Handle form submissions
-    document.getElementById('form').addEventListener('submit', function (event) {
-        event.preventDefault();
-        const name = document.getElementById('name').value;
-        const email = document.getElementById('email').value;
-        const time = document.getElementById('time').value;
-        const date = document.getElementById('booking-date').value;
+        if (day === currentDate.getDate()) {
+            dayCell.classList.add('today');
+        }
 
-        addDoc(collection(db, 'bookings'), { name, email, date, time, status: 'pending' })
-            .then(() => {
-                alert(`Booking Confirmed! Name: ${name}, Email: ${email}, Date: ${date}, Time: ${time}`);
-                document.getElementById('form').reset();
-                bookingForm.style.display = 'none';
-                const dayCell = document.querySelector(`[data-date="${date}"]`);
-                if (dayCell) {
-                    dayCell.classList.add('booked');
-                }
-            })
-            .catch((error) => console.error("Error adding document: ", error));
-    });
+        calendarElement.appendChild(dayCell);
+    }
 
-    // Fetch and mark booked dates
-    async function fetchBookings() {
+    // Fetch bookings from Firestore and update UI
+    await fetchBookings();
+});
+
+// Handle date click events using event delegation
+calendarElement.addEventListener('click', function (event) {
+    if (event.target.classList.contains('date') && !event.target.classList.contains('booked')) {
+        document.querySelectorAll('.date').forEach(d => d.classList.remove('highlight'));
+        event.target.classList.add('highlight');
+
+        bookingForm.style.display = 'block';
+        bookingDateInput.value = event.target.dataset.date;
+    }
+});
+
+// Handle booking form submission
+form.addEventListener('submit', async function (event) {
+    event.preventDefault();
+    const name = document.getElementById('name').value;
+    const email = document.getElementById('email').value;
+    const time = document.getElementById('time').value;
+    const date = bookingDateInput.value;
+
+    try {
+        await addDoc(collection(db, 'bookings'), { name, email, date, time, status: 'pending' });
+        alert(`Booking Confirmed! Name: ${name}, Email: ${email}, Date: ${date}, Time: ${time}`);
+        form.reset();
+        bookingForm.style.display = 'none';
+
+        // Mark the booked date
+        const dayCell = document.querySelector(`[data-date="${date}"]`);
+        if (dayCell) {
+            dayCell.classList.add('booked');
+            dayCell.style.pointerEvents = 'none';
+        }
+    } catch (error) {
+        console.error("Error adding booking: ", error);
+    }
+});
+
+// Fetch and mark booked dates
+async function fetchBookings() {
+    try {
         const querySnapshot = await getDocs(collection(db, 'bookings'));
         querySnapshot.forEach((doc) => {
             const { date } = doc.data();
@@ -115,90 +119,75 @@ for (let day = 1; day <= daysInMonth; day++) {
                 bookedCell.style.pointerEvents = 'none';
             }
         });
+    } catch (error) {
+        console.error("Error fetching bookings:", error);
     }
-
-    fetchBookings();
-});
-
-// Slideshow background
-
-let slideIndex = 0;
-showSlides();
-
-function showSlides() {
-    let i;
-    const slides = document.getElementsByClassName("mySlides");
-    for (i = 0; i < slides.length; i++) {
-        slides[i].style.display = "none";
-    }
-    slideIndex++;
-    if (slideIndex > slides.length) {
-        slideIndex = 1;
-    }
-    slides[slideIndex - 1].style.display = "block";
-    setTimeout(showSlides, 200000); // Change image every 2 seconds (adjust as needed)
 }
 
-//Navbar for mobiles
+// Handle contact form submission
+contactForm.addEventListener("submit", async function (e) {
+    e.preventDefault();
+    const name = document.getElementById("contact-name").value;
+    const email = document.getElementById("contact-email").value;
+    const message = document.getElementById("contact-message").value;
 
+    try {
+        await addDoc(collection(db, "contactMessages"), { name, email, message, timestamp: new Date() });
+        document.getElementById("responseMessage").textContent = "Message sent successfully!";
+        contactForm.reset();
+    } catch (error) {
+        console.error("Error sending message:", error);
+        document.getElementById("responseMessage").textContent = "Failed to send message. Try again!";
+    }
+});
+
+// Slideshow
+let slideIndex = 0;
+function showSlides() {
+    const slides = document.getElementsByClassName("mySlides");
+    for (let i = 0; i < slides.length; i++) {
+        slides[i].style.display = "none";
+    }
+    slideIndex = (slideIndex + 1) % slides.length;
+    slides[slideIndex].style.display = "block";
+    setTimeout(showSlides, 2000);
+}
+showSlides();
+
+// Mobile Navbar
 document.addEventListener("DOMContentLoaded", function () {
     const menuToggle = document.querySelector(".menu-button");
     const navMenu = document.querySelector(".navbar ul");
-    const menuLinks = document.querySelectorAll(".navbar ul li a");
 
-    if (!menuToggle || !navMenu) {
-        console.error("Menu button or nav menu not found!");
-        return;
+    if (menuToggle && navMenu) {
+        menuToggle.addEventListener("click", () => navMenu.classList.toggle("active"));
     }
-
-    // Toggle menu on button click
-    menuToggle.addEventListener("click", function () {
-        navMenu.classList.toggle("active");
-    });
-
-    // Close menu when a link is clicked
-    menuLinks.forEach(link => {
-        link.addEventListener("click", function () {
-            navMenu.classList.remove("active");
-        });
-    });
 });
 
-// blog
+// Blog Read More
 document.addEventListener("DOMContentLoaded", function () {
     const readMoreBtn = document.querySelector(".read-more-btn");
     const fullArticle = document.querySelector(".full-article");
 
     readMoreBtn.addEventListener("click", function () {
-        if (fullArticle.style.display === "none" || fullArticle.style.display === "") {
-            fullArticle.style.display = "block";
-            readMoreBtn.textContent = "Read Less";
-        } else {
-            fullArticle.style.display = "none";
-            readMoreBtn.textContent = "Read More";
-        }
+        fullArticle.style.display = fullArticle.style.display === "none" ? "block" : "none";
+        readMoreBtn.textContent = fullArticle.style.display === "block" ? "Read Less" : "Read More";
     });
+});
 
-    function shareTo(platform) {
-        const pageUrl = encodeURIComponent(window.location.href);
-        const pageTitle = encodeURIComponent(document.title);
+// Social Share
+function shareTo(platform) {
+    const pageUrl = encodeURIComponent(window.location.href);
+    const pageTitle = encodeURIComponent(document.title);
+    const shareUrls = {
+        facebook: `https://www.facebook.com/sharer/sharer.php?u=${pageUrl}`,
+        twitter: `https://twitter.com/intent/tweet?url=${pageUrl}&text=${pageTitle}`,
+        linkedin: `https://www.linkedin.com/sharing/share-offsite/?url=${pageUrl}`,
+        whatsapp: `https://api.whatsapp.com/send?text=${pageTitle}%20-%20${pageUrl}`
+    };
+    window.open(shareUrls[platform], "_blank");
+}
 
-        let shareUrl = "";
-        if (platform === "facebook") {
-            shareUrl = `https://www.facebook.com/sharer/sharer.php?u=${pageUrl}`;
-        } else if (platform === "twitter") {
-            shareUrl = `https://twitter.com/intent/tweet?url=${pageUrl}&text=${pageTitle}`;
-        } else if (platform === "linkedin") {
-            shareUrl = `https://www.linkedin.com/sharing/share-offsite/?url=${pageUrl}`;
-        } else if (platform === "whatsapp") {
-            shareUrl = `https://api.whatsapp.com/send?text=${pageTitle}%20-%20${pageUrl}`;
-        }
-
-        window.open(shareUrl, "_blank");
-    }
-
-    document.querySelector(".facebook").addEventListener("click", () => shareTo("facebook"));
-    document.querySelector(".twitter").addEventListener("click", () => shareTo("twitter"));
-    document.querySelector(".linkedin").addEventListener("click", () => shareTo("linkedin"));
-    document.querySelector(".whatsapp").addEventListener("click", () => shareTo("whatsapp"));
+document.querySelectorAll(".social-share").forEach(btn => {
+    btn.addEventListener("click", () => shareTo(btn.dataset.platform));
 });

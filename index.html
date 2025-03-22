@@ -347,12 +347,13 @@
     <div class="container">
       <h2>Contact</h2>
       <p>Have questions or ready to get started? Let’s talk!</p>
-      <form>
-        <input type="text" placeholder="Your Name" required/>
-        <input type="email" placeholder="Your Email" required/>
-        <textarea placeholder="Your Message" required></textarea>
+      <form id="contactForm">
+        <input type="text" id="name" placeholder="Your Name" required />
+        <input type="email" id="email" placeholder="Your Email" required />
+        <textarea id="message" placeholder="Your Message" required></textarea>
         <button type="submit" class="btn-primary">Send Message</button>
       </form>
+      <p id="responseMessage"></p>
     </div>
   </section>
 
