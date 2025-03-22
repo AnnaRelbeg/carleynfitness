@@ -208,14 +208,18 @@ document.addEventListener('DOMContentLoaded', function() {
         };
 
         if (shareUrls[platform]) {
+            // Open the share URL in a new tab
             window.open(shareUrls[platform], "_blank");
         }
     }
 
+    // Add event listeners to all share buttons
     document.querySelectorAll(".share-btn").forEach(btn => {
         btn.addEventListener("click", function(event) {
             event.preventDefault(); // Prevent default anchor behavior
-            shareTo(btn.dataset.platform);
+            const platform = btn.dataset.platform; // Get platform from data attribute
+            shareTo(platform); // Trigger the share
         });
     });
 });
+
