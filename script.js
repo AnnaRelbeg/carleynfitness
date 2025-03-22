@@ -158,7 +158,7 @@ function showSlides() {
     }
     slideIndex = (slideIndex + 1) % slides.length;
     slides[slideIndex].style.display = "block";
-    setTimeout(showSlides, 2000);
+    setTimeout(showSlides, 200000);
 }
 showSlides();
 
