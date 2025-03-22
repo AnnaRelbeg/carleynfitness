@@ -158,7 +158,7 @@ function showSlides() {
     }
     slideIndex = (slideIndex + 1) % slides.length;
     slides[slideIndex].style.display = "block";
-    setTimeout(showSlides, 200000);
+    setTimeout(showSlides, 2000000);
 }
 showSlides();
 
@@ -195,7 +195,6 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 });
 
-document.addEventListener('DOMContentLoaded', function() {
     // Social Share function
     function shareTo(platform) {
         const pageUrl = encodeURIComponent(window.location.href);
@@ -221,5 +220,4 @@ document.addEventListener('DOMContentLoaded', function() {
             shareTo(platform); // Trigger the share
         });
     });
-});
 
