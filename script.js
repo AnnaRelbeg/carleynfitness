@@ -195,23 +195,27 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 });
 
-// Social Share
-function shareTo(platform) {
-    const pageUrl = encodeURIComponent(window.location.href);
-    const pageTitle = encodeURIComponent(document.title);
-    const shareUrls = {
-        facebook: `https://www.facebook.com/sharer/sharer.php?u=${pageUrl}`,
-        twitter: `https://twitter.com/intent/tweet?url=${pageUrl}&text=${pageTitle}`,
-        linkedin: `https://www.linkedin.com/sharing/share-offsite/?url=${pageUrl}`,
-        whatsapp: `https://api.whatsapp.com/send?text=${pageTitle}%20-%20${pageUrl}`
-    };
+document.addEventListener('DOMContentLoaded', function() {
+    // Social Share function
+    function shareTo(platform) {
+        const pageUrl = encodeURIComponent(window.location.href);
+        const pageTitle = encodeURIComponent(document.title);
+        const shareUrls = {
+            facebook: `https://www.facebook.com/sharer/sharer.php?u=${pageUrl}`,
+            twitter: `https://twitter.com/intent/tweet?url=${pageUrl}&text=${pageTitle}`,
+            linkedin: `https://www.linkedin.com/sharing/share-offsite/?url=${pageUrl}`,
+            whatsapp: `https://api.whatsapp.com/send?text=${pageTitle}%20-%20${pageUrl}`
+        };
 
-    if (shareUrls[platform]) {
-        window.open(shareUrls[platform], "_blank");
+        if (shareUrls[platform]) {
+            window.open(shareUrls[platform], "_blank");
+        }
     }
-}
 
-document.querySelectorAll(".social-share").forEach(btn => {
-    btn.addEventListener("click", () => shareTo(btn.dataset.platform));
+    document.querySelectorAll(".share-btn").forEach(btn => {
+        btn.addEventListener("click", function(event) {
+            event.preventDefault(); // Prevent default anchor behavior
+            shareTo(btn.dataset.platform);
+        });
+    });
 });
-
