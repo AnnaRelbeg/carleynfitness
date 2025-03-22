@@ -205,9 +205,13 @@ function shareTo(platform) {
         linkedin: `https://www.linkedin.com/sharing/share-offsite/?url=${pageUrl}`,
         whatsapp: `https://api.whatsapp.com/send?text=${pageTitle}%20-%20${pageUrl}`
     };
-    window.open(shareUrls[platform], "_blank");
+
+    if (shareUrls[platform]) {
+        window.open(shareUrls[platform], "_blank");
+    }
 }
 
 document.querySelectorAll(".social-share").forEach(btn => {
     btn.addEventListener("click", () => shareTo(btn.dataset.platform));
 });
+
