@@ -164,25 +164,41 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 });
 
+// blog
+document.addEventListener("DOMContentLoaded", function () {
+    const readMoreBtn = document.querySelector(".read-more-btn");
+    const fullArticle = document.querySelector(".full-article");
 
-    // Get current page URL
-    const pageUrl = encodeURIComponent(window.location.href);
-    const pageTitle = encodeURIComponent(document.title);
+    readMoreBtn.addEventListener("click", function () {
+        if (fullArticle.style.display === "none" || fullArticle.style.display === "") {
+            fullArticle.style.display = "block";
+            readMoreBtn.textContent = "Read Less";
+        } else {
+            fullArticle.style.display = "none";
+            readMoreBtn.textContent = "Read More";
+        }
+    });
 
-    function shareToFacebook() {
-        window.open(`https://www.facebook.com/sharer/sharer.php?u=${pageUrl}`, '_blank');
+    function shareTo(platform) {
+        const pageUrl = encodeURIComponent(window.location.href);
+        const pageTitle = encodeURIComponent(document.title);
+
+        let shareUrl = "";
+        if (platform === "facebook") {
+            shareUrl = `https://www.facebook.com/sharer/sharer.php?u=${pageUrl}`;
+        } else if (platform === "twitter") {
+            shareUrl = `https://twitter.com/intent/tweet?url=${pageUrl}&text=${pageTitle}`;
+        } else if (platform === "linkedin") {
+            shareUrl = `https://www.linkedin.com/sharing/share-offsite/?url=${pageUrl}`;
+        } else if (platform === "whatsapp") {
+            shareUrl = `https://api.whatsapp.com/send?text=${pageTitle}%20-%20${pageUrl}`;
+        }
+
+        window.open(shareUrl, "_blank");
     }
 
-    function shareToTwitter() {
-        window.open(`https://twitter.com/intent/tweet?url=${pageUrl}&text=${pageTitle}`, '_blank');
-    }
-
-    function shareToLinkedIn() {
-        window.open(`https://www.linkedin.com/sharing/share-offsite/?url=${pageUrl}`, '_blank');
-    }
-
-    function shareToWhatsApp() {
-        window.open(`https://api.whatsapp.com/send?text=${pageTitle} - ${pageUrl}`, '_blank');
-    }
-
-
+    document.querySelector(".facebook").addEventListener("click", () => shareTo("facebook"));
+    document.querySelector(".twitter").addEventListener("click", () => shareTo("twitter"));
+    document.querySelector(".linkedin").addEventListener("click", () => shareTo("linkedin"));
+    document.querySelector(".whatsapp").addEventListener("click", () => shareTo("whatsapp"));
+});
