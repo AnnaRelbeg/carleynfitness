@@ -34,6 +34,7 @@ document.addEventListener('DOMContentLoaded', async function () {
     const yearDisplay = document.getElementById('year-display');
     const bookingForm = document.getElementById('booking-form');
     const bookingDateInput = document.getElementById('booking-date');
+    const form = document.getElementById('form'); // FIX: Define the form correctly
 
     let selectedMonth = new Date().getMonth();
     let selectedYear = new Date().getFullYear();
