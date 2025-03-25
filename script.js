@@ -29,100 +29,108 @@ const contactForm = document.getElementById("contactForm");
 
 // Calendar Initialization
 document.addEventListener('DOMContentLoaded', async function () {
-    const currentDate = new Date();
-    const currentMonth = currentDate.getMonth();
-    const currentYear = currentDate.getFullYear();
-    const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
-    const firstDayOfMonth = new Date(currentYear, currentMonth, 1).getDay();
+    const calendarElement = document.getElementById('calendar');
+    const monthSelect = document.getElementById('month-select');
+    const yearDisplay = document.getElementById('year-display');
+    const bookingForm = document.getElementById('booking-form');
+    const bookingDateInput = document.getElementById('booking-date');
 
-    // Set calendar header
-    calendarHeader.innerText = `${currentDate.toLocaleString('default', { month: 'long' })} ${currentYear}`;
-    calendarElement.innerHTML = '';
+    let selectedMonth = new Date().getMonth();
+    let selectedYear = new Date().getFullYear();
 
-    // Add empty cells before the 1st of the month
-    for (let i = 0; i < firstDayOfMonth; i++) {
-        const emptyCell = document.createElement('div');
-        calendarElement.appendChild(emptyCell);
-    }
+    // Populate month dropdown
+    const monthNames = [
+        "January", "February", "March", "April", "May", "June",
+        "July", "August", "September", "October", "November", "December"
+    ];
 
-    // Populate calendar days
-    for (let day = 1; day <= daysInMonth; day++) {
-        const dayCell = document.createElement('div');
-        dayCell.innerText = day;
-        dayCell.classList.add('date');
+    monthNames.forEach((month, index) => {
+        const option = document.createElement("option");
+        option.value = index;
+        option.textContent = month;
+        if (index === selectedMonth) {
+            option.selected = true;
+        }
+        monthSelect.appendChild(option);
+    });
 
-        const dateString = `${currentYear}-${(currentMonth + 1).toString().padStart(2, '0')}-${day.toString().padStart(2, '0')}`;
-        dayCell.dataset.date = dateString;
+    yearDisplay.textContent = selectedYear; // Show current year
 
-        // Disable past dates
-        if (new Date(dateString) < currentDate) {
-            dayCell.classList.add('disabled');
-            dayCell.style.pointerEvents = 'none';
+    // Function to generate the calendar
+    async function generateCalendar(month, year) {
+        calendarElement.innerHTML = "";
+        const firstDay = new Date(year, month, 1).getDay();
+        const daysInMonth = new Date(year, month + 1, 0).getDate();
+
+        // Set header
+        yearDisplay.textContent = year;
+
+        // Add empty cells before the 1st day of the month
+        for (let i = 0; i < firstDay; i++) {
+            const emptyCell = document.createElement('div');
+            emptyCell.classList.add('empty');
+            calendarElement.appendChild(emptyCell);
         }
 
-        if (day === currentDate.getDate()) {
-            dayCell.classList.add('today');
-        }
+        // Populate days
+        for (let day = 1; day <= daysInMonth; day++) {
+            const dayCell = document.createElement('div');
+            dayCell.innerText = day;
+            dayCell.classList.add('date');
 
-        calendarElement.appendChild(dayCell);
-    }
+            const dateString = `${year}-${(month + 1).toString().padStart(2, '0')}-${day.toString().padStart(2, '0')}`;
+            dayCell.dataset.date = dateString;
 
-    // Fetch bookings from Firestore and update UI
-    await fetchBookings();
-});
-
-// Handle date click events using event delegation
-calendarElement.addEventListener('click', function (event) {
-    if (event.target.classList.contains('date') && !event.target.classList.contains('booked')) {
-        document.querySelectorAll('.date').forEach(d => d.classList.remove('highlight'));
-        event.target.classList.add('highlight');
-
-        bookingForm.style.display = 'block';
-        bookingDateInput.value = event.target.dataset.date;
-    }
-});
-
-// Handle booking form submission
-form.addEventListener('submit', async function (event) {
-    event.preventDefault();
-    const name = document.getElementById('name').value;
-    const email = document.getElementById('email').value;
-    const time = document.getElementById('time').value;
-    const date = bookingDateInput.value;
-
-    try {
-        await addDoc(collection(db, 'bookings'), { name, email, date, time, status: 'pending' });
-        alert(`Booking Confirmed! Name: ${name}, Email: ${email}, Date: ${date}, Time: ${time}`);
-        form.reset();
-        bookingForm.style.display = 'none';
-
-        // Mark the booked date
-        const dayCell = document.querySelector(`[data-date="${date}"]`);
-        if (dayCell) {
-            dayCell.classList.add('booked');
-            dayCell.style.pointerEvents = 'none';
-        }
-    } catch (error) {
-        console.error("Error adding booking: ", error);
-    }
-});
-
-// Fetch and mark booked dates
-async function fetchBookings() {
-    try {
-        const querySnapshot = await getDocs(collection(db, 'bookings'));
-        querySnapshot.forEach((doc) => {
-            const { date } = doc.data();
-            const bookedCell = document.querySelector(`[data-date="${date}"]`);
-            if (bookedCell) {
-                bookedCell.classList.add('booked');
-                bookedCell.style.pointerEvents = 'none';
+            // Disable past dates
+            const today = new Date();
+            if (new Date(dateString) < new Date(today.getFullYear(), today.getMonth(), today.getDate())) {
+                dayCell.classList.add('disabled');
+                dayCell.style.pointerEvents = 'none';
             }
-        });
-    } catch (error) {
-        console.error("Error fetching bookings:", error);
+
+            calendarElement.appendChild(dayCell);
+        }
+
+        await fetchBookings(); // Ensure bookings are reloaded
     }
-}
+
+    // Handle month selection change
+    monthSelect.addEventListener("change", async function () {
+        selectedMonth = parseInt(this.value);
+        generateCalendar(selectedMonth, selectedYear);
+    });
+
+    // Event Delegation: Attach a single event listener to the calendar
+    calendarElement.addEventListener('click', function (event) {
+        if (event.target.classList.contains('date') && !event.target.classList.contains('booked')) {
+            document.querySelectorAll('.date').forEach(d => d.classList.remove('highlight'));
+            event.target.classList.add('highlight');
+
+            bookingForm.style.display = 'block';
+            bookingDateInput.value = event.target.dataset.date;
+        }
+    });
+
+    // Fetch and mark booked dates
+    async function fetchBookings() {
+        try {
+            const querySnapshot = await getDocs(collection(db, 'bookings'));
+            querySnapshot.forEach((doc) => {
+                const { date } = doc.data();
+                const bookedCell = document.querySelector(`[data-date="${date}"]`);
+                if (bookedCell) {
+                    bookedCell.classList.add('booked');
+                    bookedCell.style.pointerEvents = 'none';
+                }
+            });
+        } catch (error) {
+            console.error("Error fetching bookings:", error);
+        }
+    }
+
+    // Initial render
+    await generateCalendar(selectedMonth, selectedYear);
+});
 
 // Handle contact form submission
 contactForm.addEventListener("submit", async function (e) {
