@@ -460,7 +460,43 @@
 
 #calendar-header {
   text-align: center;
-  font-size: 16px;
+  font-size: 18px;
+}
+
+/* Style the month dropdown */
+#month-select {
+  background-color: white; /* Background color */
+  color: #333; /* Text color */
+  font-size: 18px; /* Increase text size */
+  padding: 10px 15px; /* Add padding for better appearance */
+  border: 2px solid #4BB78F; /* Green border */
+  border-radius: 8px; /* Rounded corners */
+  cursor: pointer;
+  transition: all 0.3s ease;
+  outline: none; /* Remove default outline */
+  box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1); /* Soft shadow */
+  appearance: none; /* Remove default browser styling */
+}
+
+/* Add arrow icon for dropdown */
+#month-select {
+  background-image: url('data:image/svg+xml;charset=UTF-8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="black"><path d="M7 10l5 5 5-5z"/></svg>');
+  background-repeat: no-repeat;
+  background-position: right 10px center;
+  background-size: 16px;
+  padding-right: 30px; /* Space for dropdown icon */
+}
+
+/* Hover effect */
+#month-select:hover {
+  background-color: #4BB78F;
+  color: white;
+}
+
+/* Focus effect */
+#month-select:focus {
+  border-color: #3a9b75;
+  box-shadow: 0 0 5px rgba(75, 183, 143, 0.8);
 }
 
 /* Mark booked dates */
