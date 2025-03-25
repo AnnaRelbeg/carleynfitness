@@ -158,7 +158,7 @@ function showSlides() {
     }
     slideIndex = (slideIndex + 1) % slides.length;
     slides[slideIndex].style.display = "block";
-    setTimeout(showSlides, 2000000);
+    setTimeout(showSlides, 200000);
 }
 showSlides();
 
@@ -173,7 +173,10 @@ document.addEventListener("DOMContentLoaded", function () {
         menuToggle.addEventListener("click", () => {
             navMenu.classList.toggle("active");
         });
-
+    
+    } else {
+        console.error("Menu button or navMenu not found");
+        
         // Close the menu when a link is clicked
         navLinks.forEach(link => {
             link.addEventListener("click", () => {
@@ -196,28 +199,32 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
     // Social Share function
-    function shareTo(platform) {
-        const pageUrl = encodeURIComponent(window.location.href);
-        const pageTitle = encodeURIComponent(document.title);
-        const shareUrls = {
-            facebook: `https://www.facebook.com/sharer/sharer.php?u=${pageUrl}`,
-            twitter: `https://twitter.com/intent/tweet?url=${pageUrl}&text=${pageTitle}`,
-            linkedin: `https://www.linkedin.com/sharing/share-offsite/?url=${pageUrl}`,
-            whatsapp: `https://api.whatsapp.com/send?text=${pageTitle}%20-%20${pageUrl}`
-        };
-
-        if (shareUrls[platform]) {
-            // Open the share URL in a new tab
-            window.open(shareUrls[platform], "_blank");
+    document.addEventListener("DOMContentLoaded", function () {
+        // Function to open the share URL
+        function shareTo(platform) {
+            const pageUrl = encodeURIComponent(window.location.href);
+            const pageTitle = encodeURIComponent(document.title);
+    
+            const shareUrls = {
+                facebook: `https://www.facebook.com/sharer/sharer.php?u=${pageUrl}`,
+                twitter: `https://twitter.com/intent/tweet?url=${pageUrl}&text=${pageTitle}`,
+                linkedin: `https://www.linkedin.com/sharing/share-offsite/?url=${pageUrl}`,
+                whatsapp: `https://api.whatsapp.com/send?text=${pageTitle}%20-%20${pageUrl}`
+            };
+    
+            // Open the share URL if it exists
+            if (shareUrls[platform]) {
+                window.open(shareUrls[platform], "_blank");
+            } else {
+                console.error(`Unsupported platform: ${platform}`);
+            }
         }
-    }
-
-    // Add event listeners to all share buttons
-    document.querySelectorAll(".share-btn").forEach(btn => {
-        btn.addEventListener("click", function(event) {
-            event.preventDefault(); // Prevent default anchor behavior
-            const platform = btn.dataset.platform; // Get platform from data attribute
-            shareTo(platform); // Trigger the share
+    
+        // Attach click event listeners to each button
+        document.querySelectorAll(".share-btn").forEach(btn => {
+            btn.addEventListener("click", function () {
+                const platform = this.dataset.platform; // Get platform from button's data attribute
+                shareTo(platform); // Trigger share functionality
+            });
         });
     });
-
