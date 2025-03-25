@@ -164,27 +164,31 @@ showSlides();
 
 // Mobile Navbar
 document.addEventListener("DOMContentLoaded", function () {
+    console.log("Script Loaded!"); // Check if this appears in the console
     const menuToggle = document.querySelector(".menu-button");
     const navMenu = document.querySelector(".navbar ul");
     const navLinks = document.querySelectorAll(".navbar ul li a");
 
     // Ensure both menuToggle and navMenu are available before adding the event listener
     if (menuToggle && navMenu) {
+        console.log("Menu button and nav menu found!");
         menuToggle.addEventListener("click", () => {
+            console.log("Menu button clicked!");
             navMenu.classList.toggle("active");
         });
-    
-    } else {
-        console.error("Menu button or navMenu not found");
-        
+
         // Close the menu when a link is clicked
         navLinks.forEach(link => {
             link.addEventListener("click", () => {
                 navMenu.classList.remove("active");
             });
         });
+
+    } else {
+        console.error("Menu button or navMenu not found");
     }
 });
+
 
 
 // Blog Read More
