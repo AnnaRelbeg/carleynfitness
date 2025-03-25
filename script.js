@@ -56,6 +56,9 @@ document.addEventListener('DOMContentLoaded', async function () {
 
     yearDisplay.textContent = selectedYear; // Show current year
 
+    // Weekday names (Sunday, Monday, etc.)
+    const weekdayNames = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+
     // Function to generate the calendar
     async function generateCalendar(month, year) {
         calendarElement.innerHTML = "";
@@ -72,10 +75,18 @@ document.addEventListener('DOMContentLoaded', async function () {
             calendarElement.appendChild(emptyCell);
         }
 
-        // Populate days
+       // Populate days
+        const dayNames = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+
         for (let day = 1; day <= daysInMonth; day++) {
             const dayCell = document.createElement('div');
-            dayCell.innerText = day;
+        
+            // Get the day name
+            const date = new Date(year, month, day);
+            const dayName = dayNames[date.getDay()];
+        
+            // Display day name with the date
+            dayCell.innerHTML = `${day}<br>${dayName}`; // Using innerHTML for line break;
             dayCell.classList.add('date');
 
             const dateString = `${year}-${(month + 1).toString().padStart(2, '0')}-${day.toString().padStart(2, '0')}`;
@@ -110,6 +121,40 @@ document.addEventListener('DOMContentLoaded', async function () {
             bookingDateInput.value = event.target.dataset.date;
         }
     });
+
+// Handle booking form submission
+form.addEventListener('submit', async function (event) {
+    event.preventDefault();
+    const name = document.getElementById('name').value;
+    const email = document.getElementById('email').value;
+    const time = document.getElementById('time').value;
+    const date = bookingDateInput.value;
+
+    try {
+        // Add booking to Firestore
+        await addDoc(collection(db, 'bookings'), { name, email, date, time, status: 'pending' });
+
+        // Display success message
+        alert(`Booking Confirmed! Name: ${name}, Email: ${email}, Date: ${date}, Time: ${time}`);
+
+        // Reset form and hide it
+        form.reset();
+        bookingForm.style.display = 'none';
+
+        // Mark the booked date on the calendar
+        const dayCell = document.querySelector(`[data-date="${date}"]`);
+        if (dayCell) {
+            dayCell.classList.add('booked');
+            dayCell.style.pointerEvents = 'none';
+        }
+
+        // Optionally, reload the bookings
+        await fetchBookings(); 
+
+    } catch (error) {
+        console.error("Error adding booking: ", error);
+    }
+});
 
     // Fetch and mark booked dates
     async function fetchBookings() {

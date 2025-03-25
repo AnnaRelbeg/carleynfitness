@@ -471,30 +471,75 @@
   display: inline-block;
   cursor: pointer;
   background-color: white;
+  transition: background-color 0.3s, transform 0.2s; /* Smooth transition */
 }
 
+.date:hover {
+  background-color: #e0f7fa; /* Light blue hover effect */
+}
+
+.date:active {
+  background-color: #009688; /* Darker teal when clicked */
+  color: white;
+  transform: scale(0.95); /* Slight shrink effect */
+}
+
+/* Highlight selected dates */
 .date.highlight {
   background-color: #4BB78F; /* Highlight color */
-  color: white; /* Optional: Text color when highlighted */
+  color: white;
 }
 
+/* Booked dates - visually distinct */
 .booked {  
-  background-color: #f00; 
+  background-color: #d32f2f; /* Dark red for contrast */
   color: white; 
   pointer-events: none; 
+  border: none;
+  font-weight: bold;
+  opacity: 0.7;
 }
 
 /* Highlight today's date */
 .today { 
   background-color: #ffcc00; 
+  font-weight: bold;
+  border-radius: 5px;
 }
 
+/* Disabled dates */
 .date.disabled {
   background-color: #f2f2f2; /* Grey out disabled dates */
   color: #aaa; /* Faded text */
-  pointer-events: none; /* Prevent any interaction */
-  cursor: not-allowed; /* Show "not allowed" cursor */
+  pointer-events: none; /* Prevent interaction */
+  cursor: not-allowed;
+  border: none;
+  opacity: 0.5;
 }
+
+/* Style the submit button */
+#form input[type="submit"] {
+  background-color: #4BB78F; /* Green color */
+  color: white;
+  padding: 12px 20px;
+  font-size: 16px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.1s ease;
+}
+
+/* Hover effect */
+#form input[type="submit"]:hover {
+  background-color: #3a9b75; /* Darker green */
+}
+
+/* Click effect */
+#form input[type="submit"]:active {
+  background-color: #2e7d5b; /* Even darker green */
+  transform: scale(0.98); /* Slightly shrink when clicked */
+}
+
 
 /*--------------------------------------
 | 8) Social Media 
