@@ -135,7 +135,7 @@ form.addEventListener('submit', async function (event) {
         await addDoc(collection(db, 'bookings'), { name, email, date, time, status: 'pending' });
 
         // Display success message
-        alert(`Booking Confirmed! Name: ${name}, Email: ${email}, Date: ${date}, Time: ${time}`);
+        alert(`Booking Confirmed🥳! Name: ${name}, Email: ${email}, Date: ${date}, Time: ${time}`);
 
         // Reset form and hide it
         form.reset();
