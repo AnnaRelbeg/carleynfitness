@@ -192,8 +192,70 @@
 });
     </script>
 
-    <!-- External JS -->
-     <script src="script.js"></script>
+<!--Mobile Navbar-->
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    console.log("Script Loaded!"); // Check if this appears in the console
+    const menuToggle = document.querySelector(".menu-button");
+    const navMenu = document.querySelector(".navbar ul");
+    const navLinks = document.querySelectorAll(".navbar ul li a");
+
+    // Ensure both menuToggle and navMenu are available before adding the event listener
+    if (menuToggle && navMenu) {
+        console.log("Menu button and nav menu found!");
+        menuToggle.addEventListener("click", () => {
+            console.log("Menu button clicked!");
+            navMenu.classList.toggle("active");
+        });
+
+        // Close the menu when a link is clicked
+        navLinks.forEach(link => {
+            link.addEventListener("click", () => {
+                navMenu.classList.remove("active");
+            });
+        });
+
+    } else {
+        console.error("Menu button or navMenu not found");
+    }
+});
+</script>
+
+<!--Share Buttons-->
+<script>
+    
+    // Social Share function
+    document.addEventListener("DOMContentLoaded", function () {
+        // Function to open the share URL
+        function shareTo(platform) {
+            const pageUrl = encodeURIComponent(window.location.href);
+            const pageTitle = encodeURIComponent(document.title);
+    
+            const shareUrls = {
+                facebook: `https://www.facebook.com/sharer/sharer.php?u=${pageUrl}`,
+                twitter: `https://twitter.com/intent/tweet?url=${pageUrl}&text=${pageTitle}`,
+                linkedin: `https://www.linkedin.com/sharing/share-offsite/?url=${pageUrl}`,
+                whatsapp: `https://api.whatsapp.com/send?text=${pageTitle}%20-%20${pageUrl}`
+            };
+    
+            // Open the share URL if it exists
+            if (shareUrls[platform]) {
+                window.open(shareUrls[platform], "_blank");
+            } else {
+                console.error(`Unsupported platform: ${platform}`);
+            }
+        }
+    
+        // Attach click event listeners to each button
+        document.querySelectorAll(".share-btn").forEach(btn => {
+            btn.addEventListener("click", function () {
+                const platform = this.dataset.platform; // Get platform from button's data attribute
+                shareTo(platform); // Trigger share functionality
+            });
+        });
+    });
+
+</script>
 
 </body>
 </html>
