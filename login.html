@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Client Portal - Track Your Progress</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-auth.js"></script>
+</head>
+<body>
+
+      <!-- Navbar (Fixed at the Top) -->
+      <nav class="navbar">
+        <button class="menu-button" onclick="toggleMenu()">☰</button>
+        <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="index.html#about">About</a></li>
+            <li><a href="index.html#services">Services & Pricing</a></li>
+            <li><a href="index.html#social-media">Let's Connect</a></li>
+            <li><a href="index.html#testimonials">Client Stories</a></li>
+            <li><a href="index.html#free-consultation">Contact</a></li>
+            <li><a href="blog.html">Blog</a></li>
+        </ul>
+    </nav>
+
+      <!-- Move the slideshow-container outside of the main section -->
+  <div class="slideshow-container">
+    <!-- Slides for the image slideshow -->
+    <div class="mySlides fade">
+        <img src="images/Background_big.png" alt="Slideshow Image 1">
+    </div>
+    <div class="mySlides fade">
+        <img src="images/Background_big.png" alt="Slideshow Image 2">
+    </div>
+    <!-- Add more slides as needed -->
+</div>
+
+      <!-- Hero / Header Section -->
+  <header class="header" data-aos="fade-up">
+    <!-- Optional overlay if you want a darker hero area -->
+    <div class="hero-overlay"></div>
+
+    <div class="hero-content">
+      <!-- Logo (smaller) -->
+      <div class="logo-container">
+        <a href="index.html">
+          <img src="images/logo.png" alt="CarleyNFitness Logo" />
+        </a>
+      </div>
+
+      <h1 data-aos="fade-up" data-aos-delay="100">
+        Welcome to Your Personal <br>Body Dashboard
+      </h1>
+      <p data-aos="fade-up" data-aos-delay="200">
+        Track your progress, crush your goals, and transform your life with your personal dashboard!
+      </p>
+  </header>
+    <section id="login" class="section login">
+    <div class="container">
+        <h2>Login to Access Your Progress</h2>
+        <p>Sign in to see your latest results, track improvements, and plan your next steps in your fitness journey.<br><br></p>
+        <form id="login-form">
+            <label for="email">Email:</label>
+            <input type="email" id="email" placeholder="Enter your email" required>
+            <label for="password">Password:</label>
+            <input type="password" id="password" placeholder="Enter your password" required>
+            <button type="submit">Login</button>
+        </form>
+    </section>
+    </div>
+    <section id="dashboard" style="display:none;">
+        <h2>Your Body Dashboard</h2>
+        <p>Welcome back, <span id="client-name">Client</span>!</p>
+        <div id="progress">
+            <h3>Your Progress</h3>
+            <p>Current Weight: <span id="current-weight">N/A</span></p>
+            <p>Last Workout: <span id="last-workout">N/A</span></p>
+            <button onclick="logout()">Logout</button>
+        </div>
+    </section>
+
+  <!-- Footer -->
+  <footer class="footer" data-aos="fade-up">
+    <p>&copy; 2025 CarleyNFitness. Designed by Anna Gebler</a>.</p>
+  </footer>
+
+  <!-- AOS Scripts -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
+  <script>
+    AOS.init({
+      duration: 1000,
+      once: true
+    });
+  </script>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.2/main.min.js"></script> 
+  <script type="module" src="script.js"></script>
+  <!--Mobile Navbar-->
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        console.log("Script Loaded!"); // Check if this appears in the console
+        const menuToggle = document.querySelector(".menu-button");
+        const navMenu = document.querySelector(".navbar ul");
+        const navLinks = document.querySelectorAll(".navbar ul li a");
+    
+        // Ensure both menuToggle and navMenu are available before adding the event listener
+        if (menuToggle && navMenu) {
+            console.log("Menu button and nav menu found!");
+            menuToggle.addEventListener("click", () => {
+                console.log("Menu button clicked!");
+                navMenu.classList.toggle("active");
+            });
+    
+            // Close the menu when a link is clicked
+            navLinks.forEach(link => {
+                link.addEventListener("click", () => {
+                    navMenu.classList.remove("active");
+                });
+            });
+    
+        } else {
+            console.error("Menu button or navMenu not found");
+        }
+    });
+    </script>
+</body>
+</html>
