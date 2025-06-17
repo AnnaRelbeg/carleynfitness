@@ -3,42 +3,229 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Client Dashboard | CarleyNFitness</title>
+  <title>My Dashboard</title>
   <link rel="stylesheet" href="styles.css" />
-
-  <!-- Firebase SDKs -->
-  <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-app.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-auth.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-firestore.js"></script>
-  
-  <!-- FullCalendar -->
-  <link href="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.2/main.min.css" rel="stylesheet">
-  <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.2/main.min.js"></script>
 </head>
 <body>
-  <nav class="navbar">
-    <ul>
-      <li><a href="index.html">Home</a></li>
-      <li><a href="blog.html">Blog</a></li>
-      <li><button onclick="logout()">Logout</button></li>
-    </ul>
-  </nav>
-
-  <section class="section">
+  <section class="section" style="max-width: 700px; margin-top: 60px;">
     <div class="container">
-      <h1>Welcome to Your Dashboard</h1>
-      <p id="welcome-message">Loading...</p>
-      <br>
+      <h2>Welcome to Your Fitness Dashboard</h2>
 
-      <h2>Carley's Training Schedule</h2>
-      <div id="full-calendar"></div>
+      <!-- 🔹 Summary Card -->
+      <div class="dashboard-card" id="summary-card" style="display: none;">
+        <h3>Summary</h3>
+        <p><strong>Name:</strong> <span id="summary-name"></span></p>
+        <p><strong>Goal:</strong> <span id="summary-goal"></span></p>
+        <p><strong>Weight Progress:</strong>
+          <span id="summary-weight"></span>
+        </p>
+      </div>
+
+      <!-- 🔧 Editable Profile Form -->
+      <form id="profile-form">
+        <p><strong>Email:</strong> <span id="user-email"></span></p>
+
+        <label for="fullName">Full Name</label>
+        <input type="text" id="fullName" required />
+
+        <label for="goal">Goal</label>
+        <input type="text" id="goal" />
+
+        <label for="startDate">Start Date</label>
+        <input type="date" id="startDate" />
+
+        <label for="currentWeight">Current Weight (kg)</label>
+        <input type="number" id="currentWeight" step="0.1" />
+
+        <label for="targetWeight">Target Weight (kg)</label>
+        <input type="number" id="targetWeight" step="0.1" />
+
+        <label for="notes">Notes</label>
+        <textarea id="notes"></textarea>
+
+        <button type="submit" class="btn-primary">💾 Save Changes</button>
+        <p id="responseMsg"></p>
+      </form>
+      <br>
+      <!-- 📈 Progress Graph -->
+      <div class="dashboard-card">
+        <h3>Progress Graph</h3>
+          <canvas id="progressChart" width="400" height="200"></canvas>
+      </div>
+
+      <button id="logoutBtn" class="btn-secondary">🚪 Log out</button>
     </div>
   </section>
 
-  <footer class="footer">
-    <p>&copy; 2025 CarleyNFitness. Designed by Anna Gebler</p>
-  </footer>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-app.js";
+  import {
+    getAuth,
+    onAuthStateChanged,
+    signOut
+  } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-auth.js";
+  import {
+    getFirestore,
+    doc,
+    getDoc,
+    setDoc,
+    collection,
+    addDoc,
+    getDocs,
+    Timestamp
+  } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-firestore.js";
 
-  <script type="module" src="script.js"></script>
+  const firebaseConfig = {
+    apiKey: "AIzaSyDpju8JIedURVxBJgmZ1yBuRzd4CEdFDVY",
+    authDomain: "carleynfitnesscalendar.firebaseapp.com",
+    projectId: "carleynfitnesscalendar",
+    storageBucket: "carleynfitnesscalendar.appspot.com",
+    messagingSenderId: "1013642078015",
+    appId: "1:1013642078015:web:e8bcff9d1559f1c1d5158a"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+  const db = getFirestore(app);
+
+  const form = document.getElementById("profile-form");
+  const responseMsg = document.getElementById("responseMsg");
+  const logoutBtn = document.getElementById("logoutBtn");
+
+  const summaryCard = document.getElementById("summary-card");
+  const userEmailDisplay = document.getElementById("user-email");
+
+  const summaryName = document.getElementById("summary-name");
+  const summaryGoal = document.getElementById("summary-goal");
+  const summaryWeight = document.getElementById("summary-weight");
+
+  const chartCanvas = document.getElementById("progressChart")?.getContext("2d");
+  let progressChart;
+
+  async function loadProgressData(uid) {
+    const progressRef = collection(db, "clients", uid, "progress");
+    const snapshot = await getDocs(progressRef);
+    const data = [];
+
+    snapshot.forEach(doc => {
+      const entry = doc.data();
+      if (entry.date && entry.weight) {
+        data.push({
+          x: new Date(entry.date.seconds * 1000),
+          y: entry.weight
+        });
+      }
+    });
+
+    data.sort((a, b) => a.x - b.x);
+    return data;
+  }
+
+  async function renderGraph(uid) {
+    if (!chartCanvas) return;
+    const data = await loadProgressData(uid);
+
+    if (progressChart) progressChart.destroy();
+
+    progressChart = new Chart(chartCanvas, {
+      type: 'line',
+      data: {
+        datasets: [{
+          label: 'Weight (kg)',
+          data: data,
+          borderColor: '#ff6384',
+          backgroundColor: '#ffe5ec',
+          fill: true,
+          tension: 0.3
+        }]
+      },
+      options: {
+        scales: {
+          x: {
+            type: 'time',
+            time: { unit: 'week' },
+            title: { display: true, text: 'Date' }
+          },
+          y: {
+            title: { display: true, text: 'Weight (kg)' }
+          }
+        }
+      }
+    });
+  }
+
+  onAuthStateChanged(auth, async (user) => {
+    if (!user) {
+      window.location.href = "login.html";
+      return;
+    }
+
+    userEmailDisplay.textContent = user.email;
+    const docRef = doc(db, "clients", user.uid);
+    const docSnap = await getDoc(docRef);
+
+    if (docSnap.exists()) {
+      const data = docSnap.data();
+
+      document.getElementById("fullName").value = data.fullName || "";
+      document.getElementById("goal").value = data.goal || "";
+      document.getElementById("startDate").value = data.startDate || "";
+      document.getElementById("currentWeight").value = data.currentWeight || "";
+      document.getElementById("targetWeight").value = data.targetWeight || "";
+      document.getElementById("notes").value = data.notes || "";
+
+      summaryCard.style.display = "block";
+      summaryName.textContent = data.fullName || "Unknown";
+      summaryGoal.textContent = data.goal || "None";
+
+      if (data.currentWeight && data.targetWeight) {
+        const diff = (data.currentWeight - data.targetWeight).toFixed(1);
+        summaryWeight.textContent = `${data.currentWeight}kg → ${data.targetWeight}kg (${diff}kg to go)`;
+      } else {
+        summaryWeight.textContent = "N/A";
+      }
+    }
+
+    await renderGraph(user.uid);
+
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+
+      const profile = {
+        fullName: document.getElementById("fullName").value.trim(),
+        email: user.email,
+        goal: document.getElementById("goal").value.trim(),
+        startDate: document.getElementById("startDate").value,
+        currentWeight: parseFloat(document.getElementById("currentWeight").value),
+        targetWeight: parseFloat(document.getElementById("targetWeight").value),
+        notes: document.getElementById("notes").value.trim()
+      };
+
+      try {
+        await setDoc(docRef, profile);
+
+        await addDoc(collection(db, "clients", user.uid, "progress"), {
+          weight: profile.currentWeight,
+          date: Timestamp.now()
+        });
+
+        responseMsg.style.color = "green";
+        responseMsg.textContent = "✅ Profile updated!";
+        await renderGraph(user.uid);
+      } catch (err) {
+        console.error(err);
+        responseMsg.style.color = "red";
+        responseMsg.textContent = "❌ Error saving profile.";
+      }
+    });
+  });
+
+  logoutBtn.addEventListener("click", async () => {
+    await signOut(auth);
+    window.location.href = "index.html";
+  });
+</script>
+
 </body>
 </html>

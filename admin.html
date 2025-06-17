@@ -11,7 +11,7 @@
     <div class="container">
     <h1 id="carley-status"></h1>
 
-      <h2>➕ Create New Client Account</h2>
+      <h2>Create New Client Account</h2>
       <form id="client-form">
         <label for="email">Client Email</label>
         <input type="email" id="email" required placeholder="Client Email" />
@@ -46,9 +46,24 @@
     </div>
   </section>
 
-  <script type="module">
+<script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-app.js";
-  import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-auth.js";
+  import {
+    getAuth,
+    createUserWithEmailAndPassword,
+    onAuthStateChanged,
+    signOut
+  } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-auth.js";
+  import {
+    getFirestore,
+    doc,
+    getDoc,
+    setDoc,
+    collection,
+    query,
+    where,
+    getDocs
+  } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-firestore.js";
 
   const firebaseConfig = {
     apiKey: "AIzaSyDpju8JIedURVxBJgmZ1yBuRzd4CEdFDVY",
@@ -61,76 +76,66 @@
 
   const app = initializeApp(firebaseConfig);
   const auth = getAuth(app);
+  const db = getFirestore(app);
 
-  window.addEventListener("DOMContentLoaded", () => {
-    const form = document.getElementById("client-form");
-    const responseMsg = document.getElementById("responseMsg");
-    const logoutBtn = document.getElementById("logoutBtn");
+  const form = document.getElementById("client-form");
+  const responseMsg = document.getElementById("responseMsg");
+  const logoutBtn = document.getElementById("logoutBtn");
 
-    onAuthStateChanged(auth, (user) => {
-      console.log("AUTH STATE:", user ? user.email : "no user");
+  // 1. Pre-fill if Carley is logged in
+  onAuthStateChanged(auth, async (user) => {
+    if (user && user.email === "carleynfitness@gmail.com") {
+      document.getElementById("email").value = user.email;
+      document.getElementById("fullName").value = "Carley (Admin)";
+    }
+  });
 
-      if (!user || user.email.toLowerCase() !== "carleynfitness@gmail.com") {
-        alert("Access restricted. Redirecting...");
-        window.location.href = "login.html";
+  form.addEventListener("submit", async (e) => {
+    e.preventDefault();
+
+    const email = document.getElementById("email").value.trim();
+    const password = document.getElementById("password").value;
+    const profile = {
+      fullName: document.getElementById("fullName").value.trim(),
+      email,
+      goal: document.getElementById("goal").value.trim(),
+      startDate: document.getElementById("startDate").value,
+      currentWeight: parseFloat(document.getElementById("currentWeight").value),
+      targetWeight: parseFloat(document.getElementById("targetWeight").value),
+      notes: document.getElementById("notes").value.trim()
+    };
+
+    try {
+      // 2. Prevent duplicate registration
+      const existingQuery = query(collection(db, "clients"), where("email", "==", email));
+      const existingSnap = await getDocs(existingQuery);
+      if (!existingSnap.empty) {
+        responseMsg.style.color = "red";
+        responseMsg.textContent = "⚠️ This email is already registered. Try logging in instead.";
         return;
       }
 
-      document.getElementById("carley-status").textContent = `Logged in as: ${user.email}`;
-
-      form.addEventListener("submit", async (e) => {
-        e.preventDefault();
-
-        const email = document.getElementById("email").value.trim();
-        const password = document.getElementById("password").value;
-
-        const profile = {
-          fullName: document.getElementById("fullName").value.trim(),
-          email: email,
-          goal: document.getElementById("goal").value.trim(),
-          startDate: document.getElementById("startDate").value,
-          currentWeight: parseFloat(document.getElementById("currentWeight").value),
-          targetWeight: parseFloat(document.getElementById("targetWeight").value),
-          notes: document.getElementById("notes").value.trim()
-        };
-
-        try {
-          const idToken = await user.getIdToken();
-          const res = await fetch(
-            "https://us-central1-carleynfitnesscalendar.cloudfunctions.net/createClientUser",
-            {
-              method: "POST",
-              headers: {
-                "Content-Type": "application/json",
-                "Authorization": `Bearer ${idToken}`
-              },
-              body: JSON.stringify({ email, password, profile })
-            }
-          );
-
-          const result = await res.json();
-
-          if (res.ok) {
-            responseMsg.style.color = "green";
-            responseMsg.textContent = `✅ ${result.message}`;
-            form.reset();
-          } else {
-            throw new Error(result.message || "Unable to create user");
-          }
-        } catch (error) {
-          console.error(error);
-          responseMsg.style.color = "red";
-          responseMsg.textContent = "❌ Error: " + (error.message || "Unable to create user");
-        }
-      });
-    });
-
-    logoutBtn.addEventListener("click", async () => {
-      await signOut(auth);
-      window.location.href = "index.html";
-    });
+      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+      const uid = userCredential.user.uid;
+      await setDoc(doc(db, "clients", uid), profile);
+      responseMsg.style.color = "green";
+      responseMsg.textContent = "✅ Account created successfully! Redirecting...";
+      setTimeout(() => {
+        window.location.href = "dashboard.html";
+      }, 1500);
+    } catch (error) {
+      console.error(error);
+      responseMsg.style.color = "red";
+      responseMsg.textContent = "❌ Error: " + (error.message || "Unable to create user");
+    }
   });
-  </script>
+
+  logoutBtn.addEventListener("click", async () => {
+    await signOut(auth);
+    window.location.href = "index.html";
+  });
+</script>
+
 
 </body>
 </html>

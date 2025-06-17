@@ -852,3 +852,38 @@ box-shadow: 0 4px 6px rgba(0,0,0,0.1);
       background: scroll;
     }
   }
+
+
+  /*DASHBOARD STYLING*/
+
+      .dashboard-card {
+      background-color: #f7f7f7;
+      border-radius: 10px;
+      padding: 20px;
+      box-shadow: 0 0 8px rgba(0, 0, 0, 0.1);
+      margin-bottom: 30px;
+    }
+
+    .dashboard-card h3 {
+      margin-top: 0;
+      margin-bottom: 10px;
+      color: #444;
+    }
+
+    .dashboard-card p {
+      margin: 4px 0;
+    }
+
+    form input,
+    form textarea {
+      width: 100%;
+      padding: 8px;
+      margin: 6px 0 12px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+    }
+
+    .btn-primary,
+    .btn-secondary {
+      margin-top: 10px;
+    }

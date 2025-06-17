@@ -44,7 +44,8 @@
 
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-app.js";
-    import { getAuth, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-auth.js";
+    import { getAuth, createUserWithEmailAndPassword, signOut } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-auth.js";
+    import { getFirestore, doc, setDoc } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-firestore.js";
 
     const firebaseConfig = {
       apiKey: "AIzaSyDpju8JIedURVxBJgmZ1yBuRzd4CEdFDVY",
@@ -52,33 +53,51 @@
       projectId: "carleynfitnesscalendar",
       storageBucket: "carleynfitnesscalendar.appspot.com",
       messagingSenderId: "1013642078015",
-      appId: "1:1013642078015:web:e8bcff9d1559f1c1d5158a",
-      measurementId: "G-VJSQ9P5NLW"
+      appId: "1:1013642078015:web:e8bcff9d1559f1c1d5158a"
     };
 
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
+    const db = getFirestore(app);
 
-    const form = document.getElementById("signup-form");
-    const message = document.getElementById("signup-message");
+    const form = document.getElementById("client-form");
+    const responseMsg = document.getElementById("responseMsg");
+    const logoutBtn = document.getElementById("logoutBtn");
 
     form.addEventListener("submit", async (e) => {
       e.preventDefault();
-      const email = document.getElementById("signup-email").value;
-      const password = document.getElementById("signup-password").value;
+
+      const email = document.getElementById("email").value.trim();
+      const password = document.getElementById("password").value;
+      const profile = {
+        fullName: document.getElementById("fullName").value.trim(),
+        email: email,
+        goal: document.getElementById("goal").value.trim(),
+        startDate: document.getElementById("startDate").value,
+        currentWeight: parseFloat(document.getElementById("currentWeight").value),
+        targetWeight: parseFloat(document.getElementById("targetWeight").value),
+        notes: document.getElementById("notes").value.trim()
+      };
 
       try {
-        await createUserWithEmailAndPassword(auth, email, password);
-        message.textContent = "Signup successful! Redirecting to login page...";
-        message.style.color = "green";
-        form.reset();
+        const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+        const uid = userCredential.user.uid;
+        await setDoc(doc(db, "clients", uid), profile);
+        responseMsg.style.color = "green";
+        responseMsg.textContent = "✅ Account created successfully! Redirecting...";
         setTimeout(() => {
-          window.location.href = "login.html";
-        }, 2000);
+          window.location.href = "dashboard.html";
+        }, 1500);
       } catch (error) {
-        message.style.color = "red";
-        message.textContent = error.message;
+        console.error(error);
+        responseMsg.style.color = "red";
+        responseMsg.textContent = "❌ Error: " + (error.message || "Unable to create user");
       }
+    });
+
+    logoutBtn.addEventListener("click", async () => {
+      await signOut(auth);
+      window.location.href = "index.html";
     });
   </script>
 </body>
