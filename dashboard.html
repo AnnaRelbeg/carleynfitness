@@ -67,7 +67,6 @@
 
 
 
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-app.js";
   import {
@@ -92,6 +91,10 @@
     getDownloadURL,
     listAll
   } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-storage.js";
+
+  import { Chart, registerables } from "https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.esm.js";
+  import "https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns";
+  Chart.register(...registerables);
 
   const firebaseConfig = {
     apiKey: "AIzaSyDpju8JIedURVxBJgmZ1yBuRzd4CEdFDVY",
@@ -188,6 +191,9 @@
         const img = document.createElement("img");
         img.src = url;
         img.alt = "Progress photo";
+        img.style.maxWidth = "120px";
+        img.style.borderRadius = "6px";
+        img.style.margin = "8px";
         photoGallery.appendChild(img);
       }
     } catch (err) {
@@ -285,6 +291,7 @@
     window.location.href = "index.html";
   });
 </script>
+
 
 
 </body>
