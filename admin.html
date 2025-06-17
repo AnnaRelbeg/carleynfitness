@@ -49,7 +49,6 @@
   <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-app.js";
   import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-auth.js";
-  import { getFunctions, httpsCallable } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-functions.js";
 
   const firebaseConfig = {
     apiKey: "AIzaSyDpju8JIedURVxBJgmZ1yBuRzd4CEdFDVY",
@@ -62,8 +61,6 @@
 
   const app = initializeApp(firebaseConfig);
   const auth = getAuth(app);
-  const functions = getFunctions(app, "us-central1"); // ✅ Ensure correct region
-  const createClientUser = httpsCallable(functions, "createClientUser");
 
   window.addEventListener("DOMContentLoaded", () => {
     const form = document.getElementById("client-form");
@@ -79,7 +76,8 @@
         return;
       }
 
-      // ✅ Safe to enable form submission
+      document.getElementById("carley-status").textContent = `Logged in as: ${user.email}`;
+
       form.addEventListener("submit", async (e) => {
         e.preventDefault();
 
@@ -97,10 +95,28 @@
         };
 
         try {
-          const result = await createClientUser({ email, password, profile });
-          responseMsg.style.color = "green";
-          responseMsg.textContent = `✅ ${result.data.message}`;
-          form.reset();
+          const idToken = await user.getIdToken();
+          const res = await fetch(
+            "https://us-central1-carleynfitnesscalendar.cloudfunctions.net/createClientUser",
+            {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${idToken}`
+              },
+              body: JSON.stringify({ email, password, profile })
+            }
+          );
+
+          const result = await res.json();
+
+          if (res.ok) {
+            responseMsg.style.color = "green";
+            responseMsg.textContent = `✅ ${result.message}`;
+            form.reset();
+          } else {
+            throw new Error(result.message || "Unable to create user");
+          }
         } catch (error) {
           console.error(error);
           responseMsg.style.color = "red";
@@ -114,20 +130,7 @@
       window.location.href = "index.html";
     });
   });
-
-onAuthStateChanged(auth, (user) => {
-  if (!user || user.email.toLowerCase() !== "carleynfitness@gmail.com") {
-    alert("Access restricted. Redirecting...");
-    window.location.href = "login.html";
-    return;
-  }
-
-  document.getElementById("carley-status").textContent =
-    `Logged in as: ${user.email}`;
-});
-
-
-</script>
+  </script>
 
 </body>
 </html>
