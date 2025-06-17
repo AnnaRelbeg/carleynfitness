@@ -57,6 +57,16 @@
     </div>
   </section>
 
+  <section id="photo-upload-section">
+  <h3>📷 Progress Photos</h3>
+  <input type="file" id="photoInput" accept="image/*" />
+  <button id="uploadPhotoBtn">Upload Photo</button>
+  <p id="uploadStatus"></p>
+
+  <div id="photoGallery" class="photo-gallery"></div>
+  </section>
+
+
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-app.js";
@@ -75,6 +85,13 @@
     getDocs,
     Timestamp
   } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-firestore.js";
+  import {
+    getStorage,
+    ref as storageRef,
+    uploadBytes,
+    getDownloadURL,
+    listAll
+  } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-storage.js";
 
   const firebaseConfig = {
     apiKey: "AIzaSyDpju8JIedURVxBJgmZ1yBuRzd4CEdFDVY",
@@ -88,6 +105,7 @@
   const app = initializeApp(firebaseConfig);
   const auth = getAuth(app);
   const db = getFirestore(app);
+  const storage = getStorage(app);
 
   const form = document.getElementById("profile-form");
   const responseMsg = document.getElementById("responseMsg");
@@ -102,6 +120,11 @@
 
   const chartCanvas = document.getElementById("progressChart")?.getContext("2d");
   let progressChart;
+
+  const photoInput = document.getElementById("photoInput");
+  const uploadPhotoBtn = document.getElementById("uploadPhotoBtn");
+  const uploadStatus = document.getElementById("uploadStatus");
+  const photoGallery = document.getElementById("photoGallery");
 
   async function loadProgressData(uid) {
     const progressRef = collection(db, "clients", uid, "progress");
@@ -155,6 +178,23 @@
     });
   }
 
+  async function loadPhotos(uid) {
+    photoGallery.innerHTML = "";
+    const listRef = storageRef(storage, `clients/${uid}/photos`);
+    try {
+      const res = await listAll(listRef);
+      for (const item of res.items) {
+        const url = await getDownloadURL(item);
+        const img = document.createElement("img");
+        img.src = url;
+        img.alt = "Progress photo";
+        photoGallery.appendChild(img);
+      }
+    } catch (err) {
+      console.warn("No photos yet:", err.message);
+    }
+  }
+
   onAuthStateChanged(auth, async (user) => {
     if (!user) {
       window.location.href = "login.html";
@@ -188,6 +228,7 @@
     }
 
     await renderGraph(user.uid);
+    await loadPhotos(user.uid);
 
     form.addEventListener("submit", async (e) => {
       e.preventDefault();
@@ -219,6 +260,24 @@
         responseMsg.textContent = "❌ Error saving profile.";
       }
     });
+
+    uploadPhotoBtn.addEventListener("click", async () => {
+      if (!photoInput.files.length) return;
+
+      const file = photoInput.files[0];
+      const fileRef = storageRef(storage, `clients/${user.uid}/photos/${Date.now()}_${file.name}`);
+
+      try {
+        await uploadBytes(fileRef, file);
+        uploadStatus.textContent = "✅ Photo uploaded!";
+        uploadStatus.style.color = "green";
+        await loadPhotos(user.uid);
+      } catch (err) {
+        console.error(err);
+        uploadStatus.textContent = "❌ Upload failed.";
+        uploadStatus.style.color = "red";
+      }
+    });
   });
 
   logoutBtn.addEventListener("click", async () => {
@@ -226,6 +285,7 @@
     window.location.href = "index.html";
   });
 </script>
+
 
 </body>
 </html>

@@ -887,3 +887,46 @@ box-shadow: 0 4px 6px rgba(0,0,0,0.1);
     .btn-secondary {
       margin-top: 10px;
     }
+
+/* Progress Photo Gallery */
+#photoGallery {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+#photoGallery img {
+  width: 150px;
+  height: 150px;
+  object-fit: cover;
+  border-radius: 8px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  cursor: pointer;
+}
+
+#photoGallery img:hover {
+  transform: scale(1.05);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.25);
+}
+
+/* Upload area */
+.photo-upload-section {
+  margin-top: 30px;
+  padding: 15px;
+  border: 1px dashed #ccc;
+  border-radius: 10px;
+  text-align: center;
+  background-color: #f9f9f9;
+}
+
+.photo-upload-section input[type="file"] {
+  margin: 10px 0;
+}
+
+#uploadStatus {
+  margin-top: 10px;
+  font-weight: 500;
+}
+
