@@ -5,6 +5,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>My Dashboard</title>
   <link rel="stylesheet" href="styles.css" />
+  <!-- Chart.js and Date Adapter -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns"></script>
+
 </head>
 <body>
   <section class="section" style="max-width: 700px; margin-top: 60px;">
@@ -24,14 +28,10 @@
       <!-- 🔧 Editable Profile Form -->
       <form id="profile-form">
         <p><strong>Email:</strong> <span id="user-email"></span></p>
-
-        <label for="fullName">Full Name</label>
-        <input type="text" id="fullName" required />
-
         <label for="goal">Goal</label>
         <input type="text" id="goal" />
 
-        <label for="startDate">Start Date</label>
+        <label for="startDate">Goal Start Date</label>
         <input type="date" id="startDate" />
 
         <label for="currentWeight">Current Weight (kg)</label>
@@ -57,14 +57,14 @@
     </div>
   </section>
 
-  <section id="photo-upload-section">
-  <h3>📷 Progress Photos</h3>
+<div class="photo-upload-section">
+  <h3>📸 Upload Progress Photos</h3>
   <input type="file" id="photoInput" accept="image/*" />
-  <button id="uploadPhotoBtn">Upload Photo</button>
+  <button id="uploadPhotoBtn" class="btn-primary">Upload Photo</button>
   <p id="uploadStatus"></p>
+  <div id="photoGallery"></div>
+</div>
 
-  <div id="photoGallery" class="photo-gallery"></div>
-  </section>
 
 
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
