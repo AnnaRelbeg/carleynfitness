@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sign Up | CarleyNFitness</title>
+  <link rel="stylesheet" href="styles.css" />
+  
+  <!-- Firebase SDK -->
+  <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-auth.js"></script>
+</head>
+<body>
+  <nav class="navbar">
+    <ul>
+      <li><a href="index.html">Home</a></li>
+      <li><a href="login.html">Login</a></li>
+    </ul>
+  </nav>
+
+  <section class="section" style="max-width: 500px; margin-top: 100px;">
+    <div class="container">
+      <h1>Create Your Client Account</h1>
+      <p>Sign up to access your personal fitness dashboard and bookings.</p>
+
+      <form id="signup-form">
+        <label for="signup-email">Email</label>
+        <input type="email" id="signup-email" placeholder="Enter your email" required />
+
+        <label for="signup-password">Password</label>
+        <input type="password" id="signup-password" placeholder="Enter your password" required />
+
+        <button type="submit" class="btn-primary">Sign Up</button>
+      </form>
+
+      <p id="signup-message" style="margin-top: 15px; color: green;"></p>
+      <p style="margin-top: 10px;">Already have an account? <a href="login.html">Log in here</a>.</p>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <p>&copy; 2025 CarleyNFitness. Designed by Anna Gebler</p>
+  </footer>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-app.js";
+    import { getAuth, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-auth.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyDpju8JIedURVxBJgmZ1yBuRzd4CEdFDVY",
+      authDomain: "carleynfitnesscalendar.firebaseapp.com",
+      projectId: "carleynfitnesscalendar",
+      storageBucket: "carleynfitnesscalendar.appspot.com",
+      messagingSenderId: "1013642078015",
+      appId: "1:1013642078015:web:e8bcff9d1559f1c1d5158a",
+      measurementId: "G-VJSQ9P5NLW"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+
+    const form = document.getElementById("signup-form");
+    const message = document.getElementById("signup-message");
+
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const email = document.getElementById("signup-email").value;
+      const password = document.getElementById("signup-password").value;
+
+      try {
+        await createUserWithEmailAndPassword(auth, email, password);
+        message.textContent = "Signup successful! Redirecting to login page...";
+        message.style.color = "green";
+        form.reset();
+        setTimeout(() => {
+          window.location.href = "login.html";
+        }, 2000);
+      } catch (error) {
+        message.style.color = "red";
+        message.textContent = error.message;
+      }
+    });
+  </script>
+</body>
+</html>

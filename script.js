@@ -243,6 +243,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 });
 
+
 //Redirecting from index.html to a Cleaner URL
 if (window.location.pathname.indexOf('index.html') > -1) {
     window.location.replace(window.location.pathname.replace('index.html', ''));

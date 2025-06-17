@@ -5,8 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Client Portal - Track Your Progress</title>
     <link rel="stylesheet" href="styles.css">
-    <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-auth.js"></script>
 </head>
 <body>
 
@@ -67,18 +65,10 @@
             <input type="password" id="password" placeholder="Enter your password" required>
             <button type="submit">Login</button>
         </form>
+        <p>Don't have an account? <a href="signup.html">Sign up here</a>.</p>
+
     </section>
     </div>
-    <section id="dashboard" style="display:none;">
-        <h2>Your Body Dashboard</h2>
-        <p>Welcome back, <span id="client-name">Client</span>!</p>
-        <div id="progress">
-            <h3>Your Progress</h3>
-            <p>Current Weight: <span id="current-weight">N/A</span></p>
-            <p>Last Workout: <span id="last-workout">N/A</span></p>
-            <button onclick="logout()">Logout</button>
-        </div>
-    </section>
 
   <!-- Footer -->
   <footer class="footer" data-aos="fade-up">
@@ -95,7 +85,6 @@
   </script>
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.2/main.min.js"></script> 
-  <script type="module" src="script.js"></script>
   <!--Mobile Navbar-->
 <script>
     document.addEventListener("DOMContentLoaded", function () {
@@ -124,5 +113,77 @@
         }
     });
     </script>
+
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-app.js";
+  import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-auth.js";
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyDpju8JIedURVxBJgmZ1yBuRzd4CEdFDVY",
+    authDomain: "carleynfitnesscalendar.firebaseapp.com",
+    projectId: "carleynfitnesscalendar",
+    storageBucket: "carleynfitnesscalendar.appspot.com",
+    messagingSenderId: "1013642078015",
+    appId: "1:1013642078015:web:e8bcff9d1559f1c1d5158a"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+
+  window.addEventListener("DOMContentLoaded", () => {
+    const loginForm = document.getElementById("login-form");
+
+    // Create error display element
+    const errorBox = document.createElement("p");
+    errorBox.style.color = "red";
+    errorBox.style.marginTop = "10px";
+    loginForm.appendChild(errorBox);
+
+    if (loginForm) {
+      loginForm.addEventListener("submit", async (e) => {
+        e.preventDefault();
+        errorBox.textContent = ""; // reset previous errors
+
+        const email = document.getElementById("email").value.trim();
+        const password = document.getElementById("password").value;
+
+        try {
+          const userCredential = await signInWithEmailAndPassword(auth, email, password);
+          const user = userCredential.user;
+
+          if (user.email === "carleynfitness@gmail.com") {
+            window.location.href = "admin.html";
+          } else {
+            window.location.href = "dashboard.html";
+          }
+        } catch (error) {
+          console.error("Login error:", error.code);
+
+          switch (error.code) {
+            case "auth/invalid-email":
+              errorBox.textContent = "❌ Invalid email format.";
+              break;
+            case "auth/user-not-found":
+              errorBox.textContent = "❌ No account found with that email.";
+              break;
+            case "auth/wrong-password":
+              errorBox.textContent = "❌ Incorrect password. Please try again.";
+              break;
+            case "auth/too-many-requests":
+              errorBox.textContent = "⚠️ Too many attempts. Please try again later.";
+              break;
+            default:
+              errorBox.textContent = "❌ Login failed. Please check your details.";
+          }
+        }
+      });
+    }
+  });
+</script>
+
+
+
+
+
 </body>
 </html>

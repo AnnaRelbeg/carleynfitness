@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin – Set Up Client</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <section class="section" style="max-width: 600px; margin-top: 100px;">
+    <div class="container">
+      <h2>Create New Client Account</h2>
+      <form id="client-form">
+        <label for="email">Client Email</label>
+        <input type="email" id="email" required placeholder="Client Email" />
+
+        <label for="password">Temporary Password</label>
+        <input type="password" id="password" required placeholder="Temporary Password" />
+
+        <label for="fullName">Full Name</label>
+        <input type="text" id="fullName" required />
+
+        <label for="goal">Goal</label>
+        <input type="text" id="goal" />
+
+        <label for="startDate">Start Date</label>
+        <input type="date" id="startDate" />
+
+        <label for="currentWeight">Current Weight (kg)</label>
+        <input type="number" id="currentWeight" step="0.1" />
+
+        <label for="targetWeight">Target Weight (kg)</label>
+        <input type="number" id="targetWeight" step="0.1" />
+
+        <label for="notes">Notes</label>
+        <textarea id="notes"></textarea>
+
+        <button type="submit" class="btn-primary">Create Client</button>
+        <p id="responseMsg"></p>
+      </form>
+
+      <br>
+      <button id="logoutBtn" class="btn-secondary">Log out and return to website</button>
+    </div>
+  </section>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-app.js";
+    import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-auth.js";
+    import { getFunctions, httpsCallable } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-functions.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyDpju8JIedURVxBJgmZ1yBuRzd4CEdFDVY",
+      authDomain: "carleynfitnesscalendar.firebaseapp.com",
+      projectId: "carleynfitnesscalendar",
+      storageBucket: "carleynfitnesscalendar.appspot.com",
+      messagingSenderId: "1013642078015",
+      appId: "1:1013642078015:web:e8bcff9d1559f1c1d5158a"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const functions = getFunctions(app);
+
+    const createClientUser = httpsCallable(functions, "createClientUser");
+
+    window.addEventListener("DOMContentLoaded", () => {
+      const form = document.getElementById("client-form");
+      const responseMsg = document.getElementById("responseMsg");
+      const logoutBtn = document.getElementById("logoutBtn");
+
+      onAuthStateChanged(auth, (user) => {
+        console.log("AUTH STATE:", user ? user.email : "no user");
+        if (!user || user.email !== "carleynfitness@gmail.com") {
+          alert("Access restricted. Redirecting...");
+          window.location.href = "login.html";
+        }
+      });
+
+      form.addEventListener("submit", async (e) => {
+        e.preventDefault();
+
+        const email = document.getElementById("email").value.trim();
+        const password = document.getElementById("password").value;
+
+        const profile = {
+          fullName: document.getElementById("fullName").value.trim(),
+          email: email,
+          goal: document.getElementById("goal").value.trim(),
+          startDate: document.getElementById("startDate").value,
+          currentWeight: parseFloat(document.getElementById("currentWeight").value),
+          targetWeight: parseFloat(document.getElementById("targetWeight").value),
+          notes: document.getElementById("notes").value.trim()
+        };
+
+        try {
+          const result = await createClientUser({ email, password, profile });
+          responseMsg.style.color = "green";
+          responseMsg.textContent = `✅ ${result.data.message}`;
+          form.reset();
+        } catch (error) {
+          console.error(error);
+          responseMsg.style.color = "red";
+          responseMsg.textContent = "❌ Error: " + (error.message || "Unable to create user");
+        }
+      });
+
+      logoutBtn.addEventListener("click", async () => {
+        await signOut(auth);
+        window.location.href = "index.html";
+      });
+    });
+  </script>
+</body>
+</html>
