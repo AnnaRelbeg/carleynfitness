@@ -9,6 +9,8 @@
 <body>
   <section class="section" style="max-width: 600px; margin-top: 100px;">
     <div class="container">
+    <h1 id="carley-status"></h1>
+
       <h2>Create New Client Account</h2>
       <form id="client-form">
         <label for="email">Client Email</label>
@@ -112,6 +114,19 @@
       window.location.href = "index.html";
     });
   });
+
+onAuthStateChanged(auth, (user) => {
+  if (!user || user.email.toLowerCase() !== "carleynfitness@gmail.com") {
+    alert("Access restricted. Redirecting...");
+    window.location.href = "login.html";
+    return;
+  }
+
+  document.getElementById("carley-status").textContent =
+    `Logged in as: ${user.email}`;
+});
+
+
 </script>
 
 </body>
