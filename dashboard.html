@@ -5,11 +5,11 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>My Dashboard</title>
   <link rel="stylesheet" href="styles.css" />
-  <!-- Chart.js and Date Adapter -->
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns"></script>
-
+  <!-- Chart.js v4 with date-fns adapter -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns@3"></script>
 </head>
+
 <body>
   <section class="section" style="max-width: 700px; margin-top: 60px;">
     <div class="container">
@@ -92,10 +92,6 @@
     listAll
   } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-storage.js";
 
-  import { Chart, registerables } from "https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.esm.js";
-  import "https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns";
-  Chart.register(...registerables);
-
   const firebaseConfig = {
     apiKey: "AIzaSyDpju8JIedURVxBJgmZ1yBuRzd4CEdFDVY",
     authDomain: "carleynfitnesscalendar.firebaseapp.com",
@@ -149,7 +145,7 @@
   }
 
   async function renderGraph(uid) {
-    if (!chartCanvas) return;
+    if (!chartCanvas || typeof Chart === "undefined") return;
     const data = await loadProgressData(uid);
 
     if (progressChart) progressChart.destroy();
@@ -214,7 +210,6 @@
     if (docSnap.exists()) {
       const data = docSnap.data();
 
-      document.getElementById("fullName").value = data.fullName || "";
       document.getElementById("goal").value = data.goal || "";
       document.getElementById("startDate").value = data.startDate || "";
       document.getElementById("currentWeight").value = data.currentWeight || "";
@@ -240,7 +235,7 @@
       e.preventDefault();
 
       const profile = {
-        fullName: document.getElementById("fullName").value.trim(),
+        fullName: summaryName.textContent,
         email: user.email,
         goal: document.getElementById("goal").value.trim(),
         startDate: document.getElementById("startDate").value,
@@ -251,7 +246,6 @@
 
       try {
         await setDoc(docRef, profile);
-
         await addDoc(collection(db, "clients", user.uid, "progress"), {
           weight: profile.currentWeight,
           date: Timestamp.now()
@@ -269,7 +263,6 @@
 
     uploadPhotoBtn.addEventListener("click", async () => {
       if (!photoInput.files.length) return;
-
       const file = photoInput.files[0];
       const fileRef = storageRef(storage, `clients/${user.uid}/photos/${Date.now()}_${file.name}`);
 
@@ -291,6 +284,7 @@
     window.location.href = "index.html";
   });
 </script>
+
 
 
 
