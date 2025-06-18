@@ -43,6 +43,9 @@
         <label for="targetWeight">Target Weight (kg)</label>
         <input type="number" id="targetWeight" step="0.1" />
 
+        <label for="waist">Waist Circumference (cm)</label>
+        <input type="number" id="waist" step="0.1" />
+
         <label for="notes">Notes</label>
         <textarea id="notes"></textarea>
 
@@ -129,56 +132,74 @@
   const photoGallery = document.getElementById("photoGallery");
 
   async function loadProgressData(uid) {
-    const progressRef = collection(db, "clients", uid, "progress");
-    const snapshot = await getDocs(progressRef);
-    const data = [];
+  const progressRef = collection(db, "clients", uid, "progress");
+  const snapshot = await getDocs(progressRef);
+  const weightData = [];
+  const waistData = [];
 
-    snapshot.forEach(doc => {
-      const entry = doc.data();
-      if (entry.date && entry.weight) {
-        data.push({
-          x: new Date(entry.date.seconds * 1000),
-          y: entry.weight
-        });
+  snapshot.forEach(doc => {
+    const entry = doc.data();
+    if (entry.date) {
+      const date = new Date(entry.date.seconds * 1000);
+      if (entry.weight) {
+        weightData.push({ x: date, y: entry.weight });
       }
-    });
+      if (entry.waist) {
+        waistData.push({ x: date, y: entry.waist });
+      }
+    }
+  });
 
-    data.sort((a, b) => a.x - b.x);
-    return data;
-  }
+  weightData.sort((a, b) => a.x - b.x);
+  waistData.sort((a, b) => a.x - b.x);
+  return { weightData, waistData };
+}
 
-  async function renderGraph(uid) {
-    if (!chartCanvas || typeof Chart === "undefined") return;
-    const data = await loadProgressData(uid);
 
-    if (progressChart) progressChart.destroy();
+  async function renderGraph(uid, startDate) {
+  if (!chartCanvas) return;
+  const { weightData, waistData } = await loadProgressData(uid);
 
-    progressChart = new Chart(chartCanvas, {
-      type: 'line',
-      data: {
-        datasets: [{
+  if (progressChart) progressChart.destroy();
+
+  progressChart = new Chart(chartCanvas, {
+    type: 'line',
+    data: {
+      datasets: [
+        {
           label: 'Weight (kg)',
-          data: data,
+          data: weightData,
           borderColor: '#ff6384',
           backgroundColor: '#ffe5ec',
-          fill: true,
+          fill: false,
           tension: 0.3
-        }]
-      },
-      options: {
-        scales: {
-          x: {
-            type: 'time',
-            time: { unit: 'week' },
-            title: { display: true, text: 'Date' }
-          },
-          y: {
-            title: { display: true, text: 'Weight (kg)' }
-          }
+        },
+        {
+          label: 'Waist (cm)',
+          data: waistData,
+          borderColor: '#6384ff',
+          backgroundColor: '#e5ecff',
+          fill: false,
+          tension: 0.3
+        }
+      ]
+    },
+    options: {
+      scales: {
+        x: {
+          type: 'time',
+          time: { unit: 'week' },
+          min: startDate ? new Date(startDate) : undefined,
+          title: { display: true, text: 'Date' }
+        },
+        y: {
+          title: { display: true, text: 'Measurement' }
         }
       }
-    });
-  }
+    }
+  });
+}
+
 
   async function loadPhotos(uid) {
     photoGallery.innerHTML = "";
@@ -218,6 +239,7 @@
       document.getElementById("startDate").value = data.startDate || "";
       document.getElementById("currentWeight").value = data.currentWeight || "";
       document.getElementById("targetWeight").value = data.targetWeight || "";
+      document.getElementById("waist").value = data.waist || "";
       document.getElementById("notes").value = data.notes || "";
 
       summaryCard.style.display = "block";
@@ -232,19 +254,20 @@
       }
     }
 
-    await renderGraph(user.uid);
+    await renderGraph(user.uid, document.getElementById("startDate").value);
     await loadPhotos(user.uid);
 
     form.addEventListener("submit", async (e) => {
       e.preventDefault();
 
       const profile = {
-        fullName: summaryName.textContent,
+        fullName: document.getElementById("fullName").value,
         email: user.email,
         goal: document.getElementById("goal").value.trim(),
         startDate: document.getElementById("startDate").value,
         currentWeight: parseFloat(document.getElementById("currentWeight").value),
         targetWeight: parseFloat(document.getElementById("targetWeight").value),
+        waist: parseFloat(document.getElementById("waist").value),
         notes: document.getElementById("notes").value.trim()
       };
 
@@ -252,6 +275,7 @@
         await setDoc(docRef, profile);
         await addDoc(collection(db, "clients", user.uid, "progress"), {
           weight: profile.currentWeight,
+          waist: profile.waist,
           date: Timestamp.now()
         });
 
@@ -277,7 +301,7 @@
         await loadPhotos(user.uid);
       } catch (err) {
         console.error(err);
-        uploadStatus.textContent = "❌ Upload failed.";
+        uploadStatus.textContent = "❌ Upload failed!";
         uploadStatus.style.color = "red";
       }
     });
@@ -288,9 +312,5 @@
     window.location.href = "index.html";
   });
 </script>
-
-
-
-
 </body>
 </html>
