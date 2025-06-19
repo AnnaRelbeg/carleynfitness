@@ -332,11 +332,9 @@ async function loadPhotos(uid) {
       }
     }
 
-    const startDateRaw = document.getElementById("startDate").value;
-    const startDate = startDateRaw ? new Date(startDateRaw) : null;
-    await renderGraph(user.uid, startDate);
-
-    await loadPhotos(user.uid);
+      const startDate = data.startDate ? new Date(data.startDate) : null;
+      await renderGraph(user.uid, startDate);
+      await loadPhotos(user.uid);
 
     form.addEventListener("submit", async (e) => {
       e.preventDefault();
