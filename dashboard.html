@@ -211,12 +211,12 @@ async function renderGraph(uid, startDate) {
       responsive: true,
       plugins: { tooltip: { enabled: true }, legend: { position: 'top' } },
       scales: {
-        x: {
-          type: 'time',
-          time: { unit: 'week' },
-          min: startDate ? new Date(startDate) : undefined,
-          title: { display: true, text: 'Date' }
-        },
+          x: {
+    type: 'time',
+    time: { unit: 'week' },
+    min: startDate || undefined,
+    title: { display: true, text: 'Date' }
+  },
         y: {
           title: { display: true, text: 'Weight (kg)' }
         }
@@ -251,12 +251,12 @@ async function renderGraph(uid, startDate) {
       responsive: true,
       plugins: { tooltip: { enabled: true }, legend: { position: 'top' } },
       scales: {
-        x: {
-          type: 'time',
-          time: { unit: 'week' },
-          min: startDate ? new Date(startDate) : undefined,
-          title: { display: true, text: 'Date' }
-        },
+          x: {
+            type: 'time',
+            time: { unit: 'week' },
+            min: startDate || undefined,
+            title: { display: true, text: 'Date' }
+  },
         y: {
           title: { display: true, text: 'Waist (cm)' }
         }
@@ -332,7 +332,10 @@ async function loadPhotos(uid) {
       }
     }
 
-    await renderGraph(user.uid, document.getElementById("startDate").value);
+    const startDateRaw = document.getElementById("startDate").value;
+    const startDate = startDateRaw ? new Date(startDateRaw) : null;
+    await renderGraph(user.uid, startDate);
+
     await loadPhotos(user.uid);
 
     form.addEventListener("submit", async (e) => {
