@@ -178,7 +178,8 @@ async function renderGraph(uid, startDate) {
           borderColor: '#ff6384',
           backgroundColor: '#ffe5ec',
           fill: false,
-          tension: 0.3
+          tension: 0.3,
+          pointRadius: 4
         },
         {
           label: 'Waist (cm)',
@@ -187,7 +188,8 @@ async function renderGraph(uid, startDate) {
           borderColor: '#6384ff',
           backgroundColor: '#e5ecff',
           fill: false,
-          tension: 0.3
+          tension: 0.3,
+          pointRadius: 4
         }
       ]
     },
@@ -219,6 +221,10 @@ async function renderGraph(uid, startDate) {
           title: {
             display: true,
             text: 'Weight (kg)'
+          },
+          beginAtZero: false,
+          ticks: {
+            callback: (value) => `${value}kg`
           }
         },
         'y-right': {
@@ -230,6 +236,10 @@ async function renderGraph(uid, startDate) {
           },
           grid: {
             drawOnChartArea: false
+          },
+          beginAtZero: false,
+          ticks: {
+            callback: (value) => `${value}cm`
           }
         }
       }
