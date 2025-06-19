@@ -30,33 +30,50 @@
         </p>
       </div>
 
-      <!-- 🔧 Editable Profile Form -->
-      <form id="profile-form">
-        <p><strong>Email:</strong> <span id="user-email"></span></p>
-        <label for="fullName">Full Name</label>
-        <input type="text" id="fullName" readonly />
+<!-- 🔧 Editable Profile Form -->
+<form id="profile-form">
+  <p><strong>Email:</strong> <span id="user-email"></span></p>
 
-        <label for="goal">Goal</label>
-        <input type="text" id="goal" />
+  <label for="fullName">Full Name</label>
+  <input type="text" id="fullName" readonly />
 
-        <label for="startDate">Goal Start Date</label>
-        <input type="date" id="startDate" />
+  <label for="goal">Goal</label>
+  <input type="text" id="goal" />
 
-        <label for="currentWeight">Current Weight (kg)</label>
-        <input type="number" id="currentWeight" step="0.1" />
+  <label for="startDate">Goal Start Date</label>
+  <input type="date" id="startDate" />
 
-        <label for="targetWeight">Target Weight (kg)</label>
-        <input type="number" id="targetWeight" step="0.1" />
+  <!-- Weight Fields Row -->
+  <div class="form-row">
+    <div class="form-group">
+      <label for="currentWeight">Current Weight (kg)</label>
+      <input type="number" id="currentWeight" step="0.1" />
+    </div>
+    <div class="form-group">
+      <label for="targetWeight">Target Weight (kg)</label>
+      <input type="number" id="targetWeight" step="0.1" />
+    </div>
+  </div>
 
-        <label for="waist">Waist Circumference (cm)</label>
-        <input type="number" id="waist" step="0.1" />
+  <!-- Waist Fields Row -->
+  <div class="form-row">
+    <div class="form-group">
+      <label for="waist">Current Waist Circumference (cm)</label>
+      <input type="number" id="waist" step="0.1" />
+    </div>
+    <div class="form-group">
+      <label for="targetWaist">Target Waist Circumference (cm)</label>
+      <input type="number" id="targetWaist" step="0.1" />
+    </div>
+  </div>
 
-        <label for="notes">Notes</label>
-        <textarea id="notes"></textarea>
+  <label for="notes">Notes</label>
+  <textarea id="notes"></textarea>
 
-        <button type="submit" class="btn-primary">💾 Save Changes</button>
-        <p id="responseMsg"></p>
-      </form>
+  <button type="submit" class="btn-primary">💾 Save Changes</button>
+  <p id="responseMsg"></p>
+</form>
+
       <br>
       <!-- 📈 Progress Graph -->
 <!-- 📈 Progress Graphs -->
@@ -88,26 +105,13 @@
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-app.js";
   import {
-    getAuth,
-    onAuthStateChanged,
-    signOut
+    getAuth, onAuthStateChanged, signOut
   } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-auth.js";
   import {
-    getFirestore,
-    doc,
-    getDoc,
-    setDoc,
-    collection,
-    addDoc,
-    getDocs,
-    Timestamp
+    getFirestore, doc, getDoc, setDoc, collection, addDoc, getDocs, Timestamp
   } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-firestore.js";
   import {
-    getStorage,
-    ref as storageRef,
-    uploadBytes,
-    getDownloadURL,
-    listAll
+    getStorage, ref as storageRef, uploadBytes, getDownloadURL, listAll
   } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-storage.js";
 
   document.addEventListener("DOMContentLoaded", async () => {
@@ -153,12 +157,8 @@
         const entry = doc.data();
         if (entry.date) {
           const date = new Date(entry.date.seconds * 1000);
-          if (entry.weight) {
-            weightData.push({ x: date, y: entry.weight });
-          }
-          if (entry.waist) {
-            waistData.push({ x: date, y: entry.waist });
-          }
+          if (entry.weight) weightData.push({ x: date, y: entry.weight });
+          if (entry.waist) waistData.push({ x: date, y: entry.waist });
         }
       });
 
@@ -175,7 +175,7 @@
       ];
     }
 
-    async function renderGraph(uid, startDate) {
+    async function renderGraph(uid, startDate, currentWeight, targetWeight, currentWaist, targetWaist) {
       const { weightData, waistData } = await loadProgressData(uid);
       const avg = (arr) => arr.length ? (arr.reduce((sum, d) => sum + d.y, 0) / arr.length).toFixed(1) : null;
 
@@ -214,15 +214,16 @@
         options: {
           responsive: true,
           plugins: { tooltip: { enabled: true }, legend: { position: 'top' } },
-        scales: {
-          x: {
-            type: 'time',
-            time: { unit: 'week' },
-            title: { display: true, text: 'Date' }
-        },
-
+          scales: {
+            x: {
+              type: 'time',
+              time: { unit: 'week' },
+              title: { display: true, text: 'Date' }
+            },
             y: {
-              title: { display: true, text: 'Weight (kg)' }
+              title: { display: true, text: 'Weight (kg)' },
+              min: Math.min(currentWeight, targetWeight) - 2,
+              max: Math.max(currentWeight, targetWeight) + 2
             }
           }
         }
@@ -254,14 +255,16 @@
         options: {
           responsive: true,
           plugins: { tooltip: { enabled: true }, legend: { position: 'top' } },
-        scales: {
-          x: {
-            type: 'time',
-            time: { unit: 'week' },
-            title: { display: true, text: 'Date' }
-        },
+          scales: {
+            x: {
+              type: 'time',
+              time: { unit: 'week' },
+              title: { display: true, text: 'Date' }
+            },
             y: {
-              title: { display: true, text: 'Waist (cm)' }
+              title: { display: true, text: 'Waist (cm)' },
+              min: Math.min(currentWaist, targetWaist) - 2,
+              max: Math.max(currentWaist, targetWaist) + 2
             }
           }
         }
@@ -318,6 +321,7 @@
         document.getElementById("currentWeight").value = data.currentWeight || "";
         document.getElementById("targetWeight").value = data.targetWeight || "";
         document.getElementById("waist").value = data.waist || "";
+        document.getElementById("targetWaist").value = data.targetWaist || "";
         document.getElementById("notes").value = data.notes || "";
 
         summaryCard.style.display = "block";
@@ -330,10 +334,17 @@
         } else {
           summaryWeight.textContent = "N/A";
         }
+
+        await renderGraph(
+          user.uid,
+          data.startDate ? new Date(data.startDate) : null,
+          data.currentWeight,
+          data.targetWeight,
+          data.waist,
+          data.targetWaist
+        );
       }
 
-      const startDate = docSnap.data().startDate ? new Date(docSnap.data().startDate) : null;
-      await renderGraph(user.uid, startDate);
       await loadPhotos(user.uid);
 
       form.addEventListener("submit", async (e) => {
@@ -347,6 +358,7 @@
           currentWeight: parseFloat(document.getElementById("currentWeight").value),
           targetWeight: parseFloat(document.getElementById("targetWeight").value),
           waist: parseFloat(document.getElementById("waist").value),
+          targetWaist: parseFloat(document.getElementById("targetWaist").value),
           notes: document.getElementById("notes").value.trim()
         };
 
@@ -360,7 +372,7 @@
 
           responseMsg.style.color = "green";
           responseMsg.textContent = "✅ Profile updated!";
-          await renderGraph(user.uid);
+          await renderGraph(user.uid, new Date(profile.startDate), profile.currentWeight, profile.targetWeight, profile.waist, profile.targetWaist);
         } catch (err) {
           console.error(err);
           responseMsg.style.color = "red";
@@ -390,9 +402,9 @@
       await signOut(auth);
       window.location.href = "index.html";
     });
-
   });
 </script>
+
 
 
 </body>
