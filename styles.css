@@ -930,3 +930,22 @@ box-shadow: 0 4px 6px rgba(0,0,0,0.1);
   font-weight: 500;
 }
 
+#photoGallery {
+  display: flex;
+  flex-wrap: nowrap;
+  gap: 16px;
+  overflow-x: auto;
+  padding: 12px 0;
+  scroll-behavior: smooth;
+}
+
+.photo-thumb {
+  max-height: 120px;
+  border-radius: 8px;
+  transition: transform 0.3s ease;
+  cursor: pointer;
+}
+
+.photo-thumb:hover {
+  transform: scale(1.05);
+}

@@ -9,6 +9,10 @@
   <!-- Chart.js v4 with date-fns adapter -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns@3"></script>
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/glightbox/3.2.0/css/glightbox.min.css" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/glightbox/3.2.0/js/glightbox.min.js"></script>
+
 </head>
 
 <body>
@@ -202,25 +206,29 @@
 }
 
 
-  async function loadPhotos(uid) {
-    photoGallery.innerHTML = "";
-    const listRef = storageRef(storage, `clients/${uid}/photos`);
-    try {
-      const res = await listAll(listRef);
-      for (const item of res.items) {
-        const url = await getDownloadURL(item);
-        const img = document.createElement("img");
-        img.src = url;
-        img.alt = "Progress photo";
-        img.style.maxWidth = "120px";
-        img.style.borderRadius = "6px";
-        img.style.margin = "8px";
-        photoGallery.appendChild(img);
-      }
-    } catch (err) {
-      console.warn("No photos yet:", err.message);
+async function loadPhotos(uid) {
+  photoGallery.innerHTML = "";
+  const listRef = storageRef(storage, `clients/${uid}/photos`);
+  try {
+    const res = await listAll(listRef);
+    const photoHTML = [];
+
+    for (const item of res.items) {
+      const url = await getDownloadURL(item);
+      photoHTML.push(`
+        <a href="${url}" class="glightbox" data-gallery="progress-photos">
+          <img src="${url}" alt="Progress photo" class="photo-thumb"/>
+        </a>
+      `);
     }
+
+    photoGallery.innerHTML = photoHTML.join("");
+    GLightbox({ selector: ".glightbox" });
+  } catch (err) {
+    console.warn("No photos yet:", err.message);
   }
+}
+
 
   onAuthStateChanged(auth, async (user) => {
     if (!user) {
