@@ -59,13 +59,17 @@
       </form>
       <br>
       <!-- 📈 Progress Graph -->
-      <div class="dashboard-card">
-        <h3>Progress Graph</h3>
-          <canvas id="progressChart" width="400" height="200"></canvas>
-      </div>
+<div class="dashboard-card" style="display: flex; gap: 20px; flex-wrap: wrap;">
+  <div style="flex: 1; min-width: 300px;">
+    <h3>Weight Progress</h3>
+    <canvas id="weightChart" width="400" height="200"></canvas>
+  </div>
+  <div style="flex: 1; min-width: 300px;">
+    <h3>Waist Progress</h3>
+    <canvas id="waistChart" width="400" height="200"></canvas>
+  </div>
+</div>
 
-      <button id="logoutBtn" class="btn-secondary">🚪 Log out</button>
-    </div>
   </section>
 
 <div class="photo-upload-section">
@@ -161,83 +165,88 @@
 }
 
 
+let weightChart, waistChart;
+
 async function renderGraph(uid, startDate) {
-  if (!chartCanvas) return;
   const { weightData, waistData } = await loadProgressData(uid);
 
-  if (progressChart) progressChart.destroy();
+  // Destroy existing charts to avoid duplicates
+  if (weightChart) weightChart.destroy();
+  if (waistChart) waistChart.destroy();
 
-  progressChart = new Chart(chartCanvas, {
+  const start = startDate ? new Date(startDate) : undefined;
+
+  const sharedOptions = {
     type: 'line',
-    data: {
-      datasets: [
-        {
-          label: 'Weight (kg)',
-          data: weightData,
-          yAxisID: 'y-left',
-          borderColor: '#ff6384',
-          backgroundColor: '#ffe5ec',
-          fill: false,
-          tension: 0.3,
-          pointRadius: 4
-        },
-        {
-          label: 'Waist (cm)',
-          data: waistData,
-          yAxisID: 'y-right',
-          borderColor: '#6384ff',
-          backgroundColor: '#e5ecff',
-          fill: false,
-          tension: 0.3,
-          pointRadius: 4
-        }
-      ]
-    },
     options: {
       responsive: true,
-      interaction: {
-        mode: 'index',
-        intersect: false
-      },
-      plugins: {
-        legend: {
-          position: 'top'
-        },
-        tooltip: {
-          mode: 'index',
-          intersect: false
-        }
-      },
       scales: {
         x: {
           type: 'time',
           time: { unit: 'week' },
-          min: startDate ? new Date(startDate) : undefined,
+          min: start,
           title: { display: true, text: 'Date' }
         },
-        'y-left': {
-          type: 'linear',
-          position: 'left',
-          title: {
-            display: true,
-            text: 'Weight (kg)'
-          },
+        y: {
           beginAtZero: false,
+          title: { display: true, text: '' }
+        }
+      }
+    }
+  };
+
+  // Weight Chart
+  const weightCtx = document.getElementById("weightChart").getContext("2d");
+  weightChart = new Chart(weightCtx, {
+    ...sharedOptions,
+    data: {
+      datasets: [{
+        label: 'Weight (kg)',
+        data: weightData,
+        borderColor: '#ff6384',
+        backgroundColor: '#ffe5ec',
+        fill: false,
+        tension: 0.3,
+        pointRadius: 4
+      }]
+    },
+    options: {
+      ...sharedOptions.options,
+      scales: {
+        ...sharedOptions.options.scales,
+        y: {
+          ...sharedOptions.options.scales.y,
+          title: { display: true, text: 'Weight (kg)' },
           ticks: {
             callback: (value) => `${value}kg`
           }
-        },
-        'y-right': {
-          type: 'linear',
-          position: 'right',
-          title: {
-            display: true,
-            text: 'Waist (cm)'
-          },
-          grid: {
-            drawOnChartArea: false
-          },
-          beginAtZero: false,
+        }
+      }
+    }
+  });
+
+  // Waist Chart
+  const waistCtx = document.getElementById("waistChart").getContext("2d");
+  waistChart = new Chart(waistCtx, {
+    ...sharedOptions,
+    data: {
+      datasets: [{
+        label: 'Waist (cm)',
+        data: waistData,
+        borderColor: '#6384ff',
+        backgroundColor: '#e5ecff',
+        fill: false,
+        tension: 0.3,
+        pointRadius: 4
+      }]
+    },
+    options: {
+      ...sharedOptions.options,
+      scales: {
+        ...sharedOptions.options.scales,
+        y: {
+          ...sharedOptions.options.scales.y,
+          title: { display: true, text: 'Waist (cm)' },
           ticks: {
             callback: (value) => `${value}cm`
           }
