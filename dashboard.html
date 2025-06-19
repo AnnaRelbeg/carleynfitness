@@ -59,16 +59,20 @@
       </form>
       <br>
       <!-- 📈 Progress Graph -->
-<div class="dashboard-card" style="display: flex; gap: 20px; flex-wrap: wrap;">
-  <div style="flex: 1; min-width: 300px;">
+<!-- 📈 Progress Graphs -->
+<div class="dashboard-card graph-container">
+  <div class="graph-block">
     <h3>Weight Progress</h3>
-    <canvas id="weightChart" width="400" height="200"></canvas>
+    <canvas id="weightChart"></canvas>
   </div>
-  <div style="flex: 1; min-width: 300px;">
-    <h3>Waist Progress</h3>
-    <canvas id="waistChart" width="400" height="200"></canvas>
+  <button onclick="downloadChart('weightChart')" class="btn-secondary">⬇️ Download Weight Graph</button>
+  <div class="graph-block">
+    <h3>Waist Circumference</h3>
+    <canvas id="waistChart"></canvas>
   </div>
+  <button onclick="downloadChart('waistChart')" class="btn-secondary">⬇️ Download Waist Graph</button>
 </div>
+
 
   </section>
 
@@ -170,92 +174,102 @@ let weightChart, waistChart;
 async function renderGraph(uid, startDate) {
   const { weightData, waistData } = await loadProgressData(uid);
 
-  // Destroy existing charts to avoid duplicates
-  if (weightChart) weightChart.destroy();
-  if (waistChart) waistChart.destroy();
+  const avg = (arr) => arr.length ? (arr.reduce((sum, d) => sum + d.y, 0) / arr.length).toFixed(1) : null;
 
-  const start = startDate ? new Date(startDate) : undefined;
+  const weightCtx = document.getElementById("weightChart").getContext("2d");
+  const waistCtx = document.getElementById("waistChart").getContext("2d");
 
-  const sharedOptions = {
+  if (window.weightChart) window.weightChart.destroy();
+  if (window.waistChart) window.waistChart.destroy();
+
+  window.weightChart = new Chart(weightCtx, {
     type: 'line',
+    data: {
+      datasets: [
+        {
+          label: 'Weight (kg)',
+          data: weightData,
+          borderColor: '#E91E63',
+          backgroundColor: '#F8BBD0',
+          fill: true,
+          tension: 0.3,
+          pointRadius: 4
+        },
+        {
+          label: `Average Weight: ${avg(weightData)}kg`,
+          data: weightData.map(d => ({ x: d.x, y: avg(weightData) })),
+          borderDash: [6, 6],
+          borderColor: '#C2185B',
+          pointRadius: 0,
+          fill: false
+        }
+      ]
+    },
     options: {
       responsive: true,
+      plugins: { tooltip: { enabled: true }, legend: { position: 'top' } },
       scales: {
         x: {
           type: 'time',
           time: { unit: 'week' },
-          min: start,
+          min: startDate ? new Date(startDate) : undefined,
           title: { display: true, text: 'Date' }
         },
         y: {
-          beginAtZero: false,
-          title: { display: true, text: '' }
-        }
-      }
-    }
-  };
-
-  // Weight Chart
-  const weightCtx = document.getElementById("weightChart").getContext("2d");
-  weightChart = new Chart(weightCtx, {
-    ...sharedOptions,
-    data: {
-      datasets: [{
-        label: 'Weight (kg)',
-        data: weightData,
-        borderColor: '#ff6384',
-        backgroundColor: '#ffe5ec',
-        fill: false,
-        tension: 0.3,
-        pointRadius: 4
-      }]
-    },
-    options: {
-      ...sharedOptions.options,
-      scales: {
-        ...sharedOptions.options.scales,
-        y: {
-          ...sharedOptions.options.scales.y,
-          title: { display: true, text: 'Weight (kg)' },
-          ticks: {
-            callback: (value) => `${value}kg`
-          }
+          title: { display: true, text: 'Weight (kg)' }
         }
       }
     }
   });
 
-  // Waist Chart
-  const waistCtx = document.getElementById("waistChart").getContext("2d");
-  waistChart = new Chart(waistCtx, {
-    ...sharedOptions,
+  window.waistChart = new Chart(waistCtx, {
+    type: 'line',
     data: {
-      datasets: [{
-        label: 'Waist (cm)',
-        data: waistData,
-        borderColor: '#6384ff',
-        backgroundColor: '#e5ecff',
-        fill: false,
-        tension: 0.3,
-        pointRadius: 4
-      }]
+      datasets: [
+        {
+          label: 'Waist (cm)',
+          data: waistData,
+          borderColor: '#2196F3',
+          backgroundColor: '#BBDEFB',
+          fill: true,
+          tension: 0.3,
+          pointRadius: 4
+        },
+        {
+          label: `Average Waist: ${avg(waistData)}cm`,
+          data: waistData.map(d => ({ x: d.x, y: avg(waistData) })),
+          borderDash: [6, 6],
+          borderColor: '#1565C0',
+          pointRadius: 0,
+          fill: false
+        }
+      ]
     },
     options: {
-      ...sharedOptions.options,
+      responsive: true,
+      plugins: { tooltip: { enabled: true }, legend: { position: 'top' } },
       scales: {
-        ...sharedOptions.options.scales,
+        x: {
+          type: 'time',
+          time: { unit: 'week' },
+          min: startDate ? new Date(startDate) : undefined,
+          title: { display: true, text: 'Date' }
+        },
         y: {
-          ...sharedOptions.options.scales.y,
-          title: { display: true, text: 'Waist (cm)' },
-          ticks: {
-            callback: (value) => `${value}cm`
-          }
+          title: { display: true, text: 'Waist (cm)' }
         }
       }
     }
   });
 }
 
+function downloadChart(chartId) {
+  const canvas = document.getElementById(chartId);
+  const link = document.createElement('a');
+  link.download = `${chartId}.png`;
+  link.href = canvas.toDataURL();
+  link.click();
+}
 
 
 

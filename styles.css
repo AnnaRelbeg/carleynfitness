@@ -949,3 +949,22 @@ box-shadow: 0 4px 6px rgba(0,0,0,0.1);
 .photo-thumb:hover {
   transform: scale(1.05);
 }
+
+/* GRAPTHS */
+.graph-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 24px;
+  justify-content: space-between;
+}
+
+.graph-block {
+  flex: 1 1 45%;
+  min-width: 300px;
+}
+
+@media (max-width: 768px) {
+  .graph-block {
+    flex: 1 1 100%;
+  }
+}
