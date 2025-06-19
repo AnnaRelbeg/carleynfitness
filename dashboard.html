@@ -254,13 +254,12 @@
         options: {
           responsive: true,
           plugins: { tooltip: { enabled: true }, legend: { position: 'top' } },
-          scales: {
-            x: {
-              type: 'time',
-              time: { unit: 'week' },
-              min: startDate || undefined,
-              title: { display: true, text: 'Date' }
-            },
+        scales: {
+          x: {
+            type: 'time',
+            time: { unit: 'week' },
+            title: { display: true, text: 'Date' }
+        },
             y: {
               title: { display: true, text: 'Waist (cm)' }
             }
