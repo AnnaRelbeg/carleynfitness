@@ -65,14 +65,13 @@
     <h3>Weight Progress</h3>
     <canvas id="weightChart"></canvas>
   </div>
-  <button onclick="downloadChart('weightChart')" class="btn-secondary">⬇️ Download Weight Graph</button>
   <div class="graph-block">
     <h3>Waist Circumference</h3>
     <canvas id="waistChart"></canvas>
   </div>
-  <button onclick="downloadChart('waistChart')" class="btn-secondary">⬇️ Download Waist Graph</button>
 </div>
-
+  <button onclick="downloadChart('weightChart')" class="btn-secondary">⬇️ Download Weight Graph</button>
+  <button onclick="downloadChart('waistChart')" class="btn-secondary">⬇️ Download Waist Graph</button>
 
   </section>
 
@@ -215,13 +214,13 @@
         options: {
           responsive: true,
           plugins: { tooltip: { enabled: true }, legend: { position: 'top' } },
-          scales: {
-            x: {
-              type: 'time',
-              time: { unit: 'week' },
-              min: startDate || undefined,
-              title: { display: true, text: 'Date' }
-            },
+        scales: {
+          x: {
+            type: 'time',
+            time: { unit: 'week' },
+            title: { display: true, text: 'Date' }
+        },
+
             y: {
               title: { display: true, text: 'Weight (kg)' }
             }
