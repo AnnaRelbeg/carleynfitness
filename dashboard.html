@@ -128,8 +128,11 @@
 
     const form = document.getElementById("profile-form");
     const responseMsg = document.getElementById("responseMsg");
+    const logoutBtn = document.getElementById("logoutBtn");
+
     const summaryCard = document.getElementById("summary-card");
     const userEmailDisplay = document.getElementById("user-email");
+
     const summaryName = document.getElementById("summary-name");
     const summaryGoal = document.getElementById("summary-goal");
     const summaryWeight = document.getElementById("summary-weight");
@@ -138,6 +141,8 @@
     const uploadPhotoBtn = document.getElementById("uploadPhotoBtn");
     const uploadStatus = document.getElementById("uploadStatus");
     const photoGallery = document.getElementById("photoGallery");
+
+    let weightChart, waistChart;
 
     async function loadProgressData(uid) {
       const progressRef = collection(db, "clients", uid, "progress");
@@ -149,8 +154,12 @@
         const entry = doc.data();
         if (entry.date) {
           const date = new Date(entry.date.seconds * 1000);
-          if (entry.weight) weightData.push({ x: date, y: entry.weight });
-          if (entry.waist) waistData.push({ x: date, y: entry.waist });
+          if (entry.weight) {
+            weightData.push({ x: date, y: entry.weight });
+          }
+          if (entry.waist) {
+            waistData.push({ x: date, y: entry.waist });
+          }
         }
       });
 
@@ -159,13 +168,16 @@
       return { weightData, waistData };
     }
 
-    let weightChart, waistChart;
+    function getAvgLine(dataArr, avgValue) {
+      if (!dataArr.length) return [];
+      return [
+        { x: dataArr[0].x, y: avgValue },
+        { x: dataArr[dataArr.length - 1].x, y: avgValue }
+      ];
+    }
 
     async function renderGraph(uid, startDate) {
       const { weightData, waistData } = await loadProgressData(uid);
-      console.log("Weight Data:", weightData);
-      console.log("Waist Data:", waistData);
-
       const avg = (arr) => arr.length ? (arr.reduce((sum, d) => sum + d.y, 0) / arr.length).toFixed(1) : null;
 
       const weightCtx = document.getElementById("weightChart").getContext("2d");
@@ -173,6 +185,9 @@
 
       if (weightChart instanceof Chart) weightChart.destroy();
       if (waistChart instanceof Chart) waistChart.destroy();
+
+      const weightAvg = avg(weightData);
+      const waistAvg = avg(waistData);
 
       weightChart = new Chart(weightCtx, {
         type: 'line',
@@ -188,8 +203,8 @@
               pointRadius: 4
             },
             {
-              label: `Average Weight: ${avg(weightData)}kg`,
-              data: weightData.map(d => ({ x: d.x, y: avg(weightData) })),
+              label: `Average Weight: ${weightAvg}kg`,
+              data: getAvgLine(weightData, weightAvg),
               borderDash: [6, 6],
               borderColor: '#C2185B',
               pointRadius: 0,
@@ -228,8 +243,8 @@
               pointRadius: 4
             },
             {
-              label: `Average Waist: ${avg(waistData)}cm`,
-              data: waistData.map(d => ({ x: d.x, y: avg(waistData) })),
+              label: `Average Waist: ${waistAvg}cm`,
+              data: getAvgLine(waistData, waistAvg),
               borderDash: [6, 6],
               borderColor: '#1565C0',
               pointRadius: 0,
@@ -317,11 +332,11 @@
         } else {
           summaryWeight.textContent = "N/A";
         }
-
-        const startDate = data.startDate ? new Date(data.startDate) : null;
-        await renderGraph(user.uid, startDate);
-        await loadPhotos(user.uid);
       }
+
+      const startDate = docSnap.data().startDate ? new Date(docSnap.data().startDate) : null;
+      await renderGraph(user.uid, startDate);
+      await loadPhotos(user.uid);
 
       form.addEventListener("submit", async (e) => {
         e.preventDefault();
@@ -373,13 +388,14 @@
       });
     });
 
-    const logoutBtn = document.getElementById("logoutBtn");
     logoutBtn.addEventListener("click", async () => {
       await signOut(auth);
       window.location.href = "index.html";
     });
+
   });
 </script>
+
 
 </body>
 </html>
