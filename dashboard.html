@@ -161,7 +161,7 @@
 }
 
 
-  async function renderGraph(uid, startDate) {
+async function renderGraph(uid, startDate) {
   if (!chartCanvas) return;
   const { weightData, waistData } = await loadProgressData(uid);
 
@@ -170,24 +170,27 @@
   progressChart = new Chart(chartCanvas, {
     type: 'line',
     data: {
-      datasets: [
-        {
-          label: 'Weight (kg)',
-          data: weightData,
-          borderColor: '#ff6384',
-          backgroundColor: '#ffe5ec',
-          fill: false,
-          tension: 0.3
-        },
-        {
-          label: 'Waist (cm)',
-          data: waistData,
-          borderColor: '#6384ff',
-          backgroundColor: '#e5ecff',
-          fill: false,
-          tension: 0.3
-        }
-      ]
+datasets: [
+  {
+    label: 'Weight (kg)',
+    data: weightData,
+    borderColor: '#ff6384',
+    backgroundColor: '#ffe5ec',
+    fill: false,
+    tension: 0.3,
+    yAxisID: 'weight'
+  },
+  {
+    label: 'Waist (cm)',
+    data: waistData,
+    borderColor: '#6384ff',
+    backgroundColor: '#e5ecff',
+    fill: false,
+    tension: 0.3,
+    yAxisID: 'waist'
+  }
+]
+
     },
     options: {
       scales: {
@@ -197,13 +200,28 @@
           min: startDate ? new Date(startDate) : undefined,
           title: { display: true, text: 'Date' }
         },
-        y: {
-          title: { display: true, text: 'Measurement' }
+        'y-left': {
+          position: 'left',
+          title: {
+            display: true,
+            text: 'Weight (kg)'
+          }
+        },
+        'y-right': {
+          position: 'right',
+          title: {
+            display: true,
+            text: 'Waist (cm)'
+          },
+          grid: {
+            drawOnChartArea: false  // keeps grids from overlapping
+          }
         }
       }
     }
   });
 }
+
 
 
 async function loadPhotos(uid) {
