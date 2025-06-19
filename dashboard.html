@@ -112,283 +112,274 @@
   } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-storage.js";
 
   document.addEventListener("DOMContentLoaded", async () => {
+    const firebaseConfig = {
+      apiKey: "AIzaSyDpju8JIedURVxBJgmZ1yBuRzd4CEdFDVY",
+      authDomain: "carleynfitnesscalendar.firebaseapp.com",
+      projectId: "carleynfitnesscalendar",
+      storageBucket: "carleynfitnesscalendar.firebasestorage.app",
+      messagingSenderId: "1013642078015",
+      appId: "1:1013642078015:web:e8bcff9d1559f1c1d5158a"
+    };
 
-  const firebaseConfig = {
-    apiKey: "AIzaSyDpju8JIedURVxBJgmZ1yBuRzd4CEdFDVY",
-    authDomain: "carleynfitnesscalendar.firebaseapp.com",
-    projectId: "carleynfitnesscalendar",
-    storageBucket: "carleynfitnesscalendar.firebasestorage.app",
-    messagingSenderId: "1013642078015",
-    appId: "1:1013642078015:web:e8bcff9d1559f1c1d5158a"
-  };
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+    const storage = getStorage(app);
 
-  const app = initializeApp(firebaseConfig);
-  const auth = getAuth(app);
-  const db = getFirestore(app);
-  const storage = getStorage(app);
+    const form = document.getElementById("profile-form");
+    const responseMsg = document.getElementById("responseMsg");
+    const summaryCard = document.getElementById("summary-card");
+    const userEmailDisplay = document.getElementById("user-email");
+    const summaryName = document.getElementById("summary-name");
+    const summaryGoal = document.getElementById("summary-goal");
+    const summaryWeight = document.getElementById("summary-weight");
 
-  const form = document.getElementById("profile-form");
-  const responseMsg = document.getElementById("responseMsg");
-  const logoutBtn = document.getElementById("logoutBtn");
+    const photoInput = document.getElementById("photoInput");
+    const uploadPhotoBtn = document.getElementById("uploadPhotoBtn");
+    const uploadStatus = document.getElementById("uploadStatus");
+    const photoGallery = document.getElementById("photoGallery");
 
-  const summaryCard = document.getElementById("summary-card");
-  const userEmailDisplay = document.getElementById("user-email");
+    async function loadProgressData(uid) {
+      const progressRef = collection(db, "clients", uid, "progress");
+      const snapshot = await getDocs(progressRef);
+      const weightData = [];
+      const waistData = [];
 
-  const summaryName = document.getElementById("summary-name");
-  const summaryGoal = document.getElementById("summary-goal");
-  const summaryWeight = document.getElementById("summary-weight");
+      snapshot.forEach(doc => {
+        const entry = doc.data();
+        if (entry.date) {
+          const date = new Date(entry.date.seconds * 1000);
+          if (entry.weight) weightData.push({ x: date, y: entry.weight });
+          if (entry.waist) waistData.push({ x: date, y: entry.waist });
+        }
+      });
 
-  const photoInput = document.getElementById("photoInput");
-  const uploadPhotoBtn = document.getElementById("uploadPhotoBtn");
-  const uploadStatus = document.getElementById("uploadStatus");
-  const photoGallery = document.getElementById("photoGallery");
-
-  async function loadProgressData(uid) {
-  const progressRef = collection(db, "clients", uid, "progress");
-  const snapshot = await getDocs(progressRef);
-  const weightData = [];
-  const waistData = [];
-
-  snapshot.forEach(doc => {
-    const entry = doc.data();
-    if (entry.date) {
-      const date = new Date(entry.date.seconds * 1000);
-      if (entry.weight) {
-        weightData.push({ x: date, y: entry.weight });
-      }
-      if (entry.waist) {
-        waistData.push({ x: date, y: entry.waist });
-      }
+      weightData.sort((a, b) => a.x - b.x);
+      waistData.sort((a, b) => a.x - b.x);
+      return { weightData, waistData };
     }
-  });
 
-  weightData.sort((a, b) => a.x - b.x);
-  waistData.sort((a, b) => a.x - b.x);
-  return { weightData, waistData };
-}
+    let weightChart, waistChart;
 
+    async function renderGraph(uid, startDate) {
+      const { weightData, waistData } = await loadProgressData(uid);
+      console.log("Weight Data:", weightData);
+      console.log("Waist Data:", waistData);
 
-let weightChart, waistChart;
+      const avg = (arr) => arr.length ? (arr.reduce((sum, d) => sum + d.y, 0) / arr.length).toFixed(1) : null;
 
-async function renderGraph(uid, startDate) {
-  const { weightData, waistData } = await loadProgressData(uid);
+      const weightCtx = document.getElementById("weightChart").getContext("2d");
+      const waistCtx = document.getElementById("waistChart").getContext("2d");
 
-  const avg = (arr) => arr.length ? (arr.reduce((sum, d) => sum + d.y, 0) / arr.length).toFixed(1) : null;
+      if (weightChart instanceof Chart) weightChart.destroy();
+      if (waistChart instanceof Chart) waistChart.destroy();
 
-  const weightCtx = document.getElementById("weightChart").getContext("2d");
-  const waistCtx = document.getElementById("waistChart").getContext("2d");
-
-  if (weightChart instanceof Chart) weightChart.destroy();
-  if (waistChart instanceof Chart) waistChart.destroy();
-
-  weightChart = new Chart(weightCtx, {
-    type: 'line',
-    data: {
-      datasets: [
-        {
-          label: 'Weight (kg)',
-          data: weightData,
-          borderColor: '#E91E63',
-          backgroundColor: '#F8BBD0',
-          fill: true,
-          tension: 0.3,
-          pointRadius: 4
+      weightChart = new Chart(weightCtx, {
+        type: 'line',
+        data: {
+          datasets: [
+            {
+              label: 'Weight (kg)',
+              data: weightData,
+              borderColor: '#E91E63',
+              backgroundColor: '#F8BBD0',
+              fill: true,
+              tension: 0.3,
+              pointRadius: 4
+            },
+            {
+              label: `Average Weight: ${avg(weightData)}kg`,
+              data: weightData.map(d => ({ x: d.x, y: avg(weightData) })),
+              borderDash: [6, 6],
+              borderColor: '#C2185B',
+              pointRadius: 0,
+              fill: false
+            }
+          ]
         },
-        {
-          label: `Average Weight: ${avg(weightData)}kg`,
-          data: weightData.map(d => ({ x: d.x, y: avg(weightData) })),
-          borderDash: [6, 6],
-          borderColor: '#C2185B',
-          pointRadius: 0,
-          fill: false
+        options: {
+          responsive: true,
+          plugins: { tooltip: { enabled: true }, legend: { position: 'top' } },
+          scales: {
+            x: {
+              type: 'time',
+              time: { unit: 'week' },
+              min: startDate || undefined,
+              title: { display: true, text: 'Date' }
+            },
+            y: {
+              title: { display: true, text: 'Weight (kg)' }
+            }
+          }
         }
-      ]
-    },
-    options: {
-      responsive: true,
-      plugins: { tooltip: { enabled: true }, legend: { position: 'top' } },
-      scales: {
-          x: {
-    type: 'time',
-    time: { unit: 'week' },
-    min: startDate || undefined,
-    title: { display: true, text: 'Date' }
-  },
-        y: {
-          title: { display: true, text: 'Weight (kg)' }
-        }
-      }
-    }
-  });
+      });
 
-  waistChart = new Chart(waistCtx, {
-    type: 'line',
-    data: {
-      datasets: [
-        {
-          label: 'Waist (cm)',
-          data: waistData,
-          borderColor: '#2196F3',
-          backgroundColor: '#BBDEFB',
-          fill: true,
-          tension: 0.3,
-          pointRadius: 4
+      waistChart = new Chart(waistCtx, {
+        type: 'line',
+        data: {
+          datasets: [
+            {
+              label: 'Waist (cm)',
+              data: waistData,
+              borderColor: '#2196F3',
+              backgroundColor: '#BBDEFB',
+              fill: true,
+              tension: 0.3,
+              pointRadius: 4
+            },
+            {
+              label: `Average Waist: ${avg(waistData)}cm`,
+              data: waistData.map(d => ({ x: d.x, y: avg(waistData) })),
+              borderDash: [6, 6],
+              borderColor: '#1565C0',
+              pointRadius: 0,
+              fill: false
+            }
+          ]
         },
-        {
-          label: `Average Waist: ${avg(waistData)}cm`,
-          data: waistData.map(d => ({ x: d.x, y: avg(waistData) })),
-          borderDash: [6, 6],
-          borderColor: '#1565C0',
-          pointRadius: 0,
-          fill: false
+        options: {
+          responsive: true,
+          plugins: { tooltip: { enabled: true }, legend: { position: 'top' } },
+          scales: {
+            x: {
+              type: 'time',
+              time: { unit: 'week' },
+              min: startDate || undefined,
+              title: { display: true, text: 'Date' }
+            },
+            y: {
+              title: { display: true, text: 'Waist (cm)' }
+            }
+          }
         }
-      ]
-    },
-    options: {
-      responsive: true,
-      plugins: { tooltip: { enabled: true }, legend: { position: 'top' } },
-      scales: {
-          x: {
-            type: 'time',
-            time: { unit: 'week' },
-            min: startDate || undefined,
-            title: { display: true, text: 'Date' }
-  },
-        y: {
-          title: { display: true, text: 'Waist (cm)' }
-        }
-      }
-    }
-  });
-}
-
-function downloadChart(chartId) {
-  const canvas = document.getElementById(chartId);
-  const link = document.createElement('a');
-  link.download = `${chartId}.png`;
-  link.href = canvas.toDataURL();
-  link.click();
-}
-
-
-
-async function loadPhotos(uid) {
-  photoGallery.innerHTML = "";
-  const listRef = storageRef(storage, `clients/${uid}/photos`);
-  try {
-    const res = await listAll(listRef);
-    const photoHTML = [];
-
-    for (const item of res.items) {
-      const url = await getDownloadURL(item);
-      photoHTML.push(`
-        <a href="${url}" class="glightbox" data-gallery="progress-photos">
-          <img src="${url}" alt="Progress photo" class="photo-thumb"/>
-        </a>
-      `);
+      });
     }
 
-    photoGallery.innerHTML = photoHTML.join("");
-    GLightbox({ selector: ".glightbox" });
-  } catch (err) {
-    console.warn("No photos yet:", err.message);
-  }
-}
-
-
-  onAuthStateChanged(auth, async (user) => {
-    if (!user) {
-      window.location.href = "login.html";
-      return;
+    function downloadChart(chartId) {
+      const canvas = document.getElementById(chartId);
+      const link = document.createElement('a');
+      link.download = `${chartId}.png`;
+      link.href = canvas.toDataURL();
+      link.click();
     }
 
-    userEmailDisplay.textContent = user.email;
-    const docRef = doc(db, "clients", user.uid);
-    const docSnap = await getDoc(docRef);
-
-    if (docSnap.exists()) {
-      const data = docSnap.data();
-
-      document.getElementById("fullName").value = data.fullName || "";
-      document.getElementById("goal").value = data.goal || "";
-      document.getElementById("startDate").value = data.startDate || "";
-      document.getElementById("currentWeight").value = data.currentWeight || "";
-      document.getElementById("targetWeight").value = data.targetWeight || "";
-      document.getElementById("waist").value = data.waist || "";
-      document.getElementById("notes").value = data.notes || "";
-
-      summaryCard.style.display = "block";
-      summaryName.textContent = data.fullName || "Unknown";
-      summaryGoal.textContent = data.goal || "None";
-
-      if (data.currentWeight && data.targetWeight) {
-        const diff = (data.currentWeight - data.targetWeight).toFixed(1);
-        summaryWeight.textContent = `${data.currentWeight}kg → ${data.targetWeight}kg (${diff}kg to go)`;
-      } else {
-        summaryWeight.textContent = "N/A";
-      }
-    }
-
-      const startDate = data.startDate ? new Date(data.startDate) : null;
-      await renderGraph(user.uid, startDate);
-      await loadPhotos(user.uid);
-
-    form.addEventListener("submit", async (e) => {
-      e.preventDefault();
-
-      const profile = {
-        fullName: document.getElementById("fullName").value,
-        email: user.email,
-        goal: document.getElementById("goal").value.trim(),
-        startDate: document.getElementById("startDate").value,
-        currentWeight: parseFloat(document.getElementById("currentWeight").value),
-        targetWeight: parseFloat(document.getElementById("targetWeight").value),
-        waist: parseFloat(document.getElementById("waist").value),
-        notes: document.getElementById("notes").value.trim()
-      };
-
+    async function loadPhotos(uid) {
+      photoGallery.innerHTML = "";
+      const listRef = storageRef(storage, `clients/${uid}/photos`);
       try {
-        await setDoc(docRef, profile);
-        await addDoc(collection(db, "clients", user.uid, "progress"), {
-          weight: profile.currentWeight,
-          waist: profile.waist,
-          date: Timestamp.now()
-        });
+        const res = await listAll(listRef);
+        const photoHTML = [];
 
-        responseMsg.style.color = "green";
-        responseMsg.textContent = "✅ Profile updated!";
-        await renderGraph(user.uid);
+        for (const item of res.items) {
+          const url = await getDownloadURL(item);
+          photoHTML.push(`
+            <a href="${url}" class="glightbox" data-gallery="progress-photos">
+              <img src="${url}" alt="Progress photo" class="photo-thumb"/>
+            </a>
+          `);
+        }
+
+        photoGallery.innerHTML = photoHTML.join("");
+        GLightbox({ selector: ".glightbox" });
       } catch (err) {
-        console.error(err);
-        responseMsg.style.color = "red";
-        responseMsg.textContent = "❌ Error saving profile.";
+        console.warn("No photos yet:", err.message);
       }
-    });
+    }
 
-    uploadPhotoBtn.addEventListener("click", async () => {
-      if (!photoInput.files.length) return;
-      const file = photoInput.files[0];
-      const fileRef = storageRef(storage, `clients/${user.uid}/photos/${Date.now()}_${file.name}`);
+    onAuthStateChanged(auth, async (user) => {
+      if (!user) {
+        window.location.href = "login.html";
+        return;
+      }
 
-      try {
-        await uploadBytes(fileRef, file);
-        uploadStatus.textContent = "✅ Photo uploaded!";
-        uploadStatus.style.color = "green";
+      userEmailDisplay.textContent = user.email;
+      const docRef = doc(db, "clients", user.uid);
+      const docSnap = await getDoc(docRef);
+
+      if (docSnap.exists()) {
+        const data = docSnap.data();
+
+        document.getElementById("fullName").value = data.fullName || "";
+        document.getElementById("goal").value = data.goal || "";
+        document.getElementById("startDate").value = data.startDate || "";
+        document.getElementById("currentWeight").value = data.currentWeight || "";
+        document.getElementById("targetWeight").value = data.targetWeight || "";
+        document.getElementById("waist").value = data.waist || "";
+        document.getElementById("notes").value = data.notes || "";
+
+        summaryCard.style.display = "block";
+        summaryName.textContent = data.fullName || "Unknown";
+        summaryGoal.textContent = data.goal || "None";
+
+        if (data.currentWeight && data.targetWeight) {
+          const diff = (data.currentWeight - data.targetWeight).toFixed(1);
+          summaryWeight.textContent = `${data.currentWeight}kg → ${data.targetWeight}kg (${diff}kg to go)`;
+        } else {
+          summaryWeight.textContent = "N/A";
+        }
+
+        const startDate = data.startDate ? new Date(data.startDate) : null;
+        await renderGraph(user.uid, startDate);
         await loadPhotos(user.uid);
-      } catch (err) {
-        console.error(err);
-        uploadStatus.textContent = "❌ Upload failed!";
-        uploadStatus.style.color = "red";
       }
+
+      form.addEventListener("submit", async (e) => {
+        e.preventDefault();
+
+        const profile = {
+          fullName: document.getElementById("fullName").value,
+          email: user.email,
+          goal: document.getElementById("goal").value.trim(),
+          startDate: document.getElementById("startDate").value,
+          currentWeight: parseFloat(document.getElementById("currentWeight").value),
+          targetWeight: parseFloat(document.getElementById("targetWeight").value),
+          waist: parseFloat(document.getElementById("waist").value),
+          notes: document.getElementById("notes").value.trim()
+        };
+
+        try {
+          await setDoc(docRef, profile);
+          await addDoc(collection(db, "clients", user.uid, "progress"), {
+            weight: profile.currentWeight,
+            waist: profile.waist,
+            date: Timestamp.now()
+          });
+
+          responseMsg.style.color = "green";
+          responseMsg.textContent = "✅ Profile updated!";
+          await renderGraph(user.uid);
+        } catch (err) {
+          console.error(err);
+          responseMsg.style.color = "red";
+          responseMsg.textContent = "❌ Error saving profile.";
+        }
+      });
+
+      uploadPhotoBtn.addEventListener("click", async () => {
+        if (!photoInput.files.length) return;
+        const file = photoInput.files[0];
+        const fileRef = storageRef(storage, `clients/${user.uid}/photos/${Date.now()}_${file.name}`);
+
+        try {
+          await uploadBytes(fileRef, file);
+          uploadStatus.textContent = "✅ Photo uploaded!";
+          uploadStatus.style.color = "green";
+          await loadPhotos(user.uid);
+        } catch (err) {
+          console.error(err);
+          uploadStatus.textContent = "❌ Upload failed!";
+          uploadStatus.style.color = "red";
+        }
+      });
     });
-  });
 
-  logoutBtn.addEventListener("click", async () => {
-    await signOut(auth);
-    window.location.href = "index.html";
-  });
-
+    const logoutBtn = document.getElementById("logoutBtn");
+    logoutBtn.addEventListener("click", async () => {
+      await signOut(auth);
+      window.location.href = "index.html";
+    });
   });
 </script>
+
 </body>
 </html>
