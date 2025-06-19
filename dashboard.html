@@ -179,10 +179,10 @@ async function renderGraph(uid, startDate) {
   const weightCtx = document.getElementById("weightChart").getContext("2d");
   const waistCtx = document.getElementById("waistChart").getContext("2d");
 
-  if (window.weightChart) window.weightChart.destroy();
-  if (window.waistChart) window.waistChart.destroy();
+  if (weightChart instanceof Chart) weightChart.destroy();
+  if (waistChart instanceof Chart) waistChart.destroy();
 
-  window.weightChart = new Chart(weightCtx, {
+  weightChart = new Chart(weightCtx, {
     type: 'line',
     data: {
       datasets: [
@@ -222,7 +222,7 @@ async function renderGraph(uid, startDate) {
     }
   });
 
-  window.waistChart = new Chart(waistCtx, {
+  waistChart = new Chart(waistCtx, {
     type: 'line',
     data: {
       datasets: [
