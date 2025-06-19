@@ -111,6 +111,8 @@
     listAll
   } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-storage.js";
 
+  document.addEventListener("DOMContentLoaded", async () => {
+
   const firebaseConfig = {
     apiKey: "AIzaSyDpju8JIedURVxBJgmZ1yBuRzd4CEdFDVY",
     authDomain: "carleynfitnesscalendar.firebaseapp.com",
@@ -386,6 +388,8 @@ async function loadPhotos(uid) {
   logoutBtn.addEventListener("click", async () => {
     await signOut(auth);
     window.location.href = "index.html";
+  });
+
   });
 </script>
 </body>
