@@ -171,9 +171,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   const uploadStatus = document.getElementById("uploadStatus");
   const photoGallery = document.getElementById("photoGallery");
 
-  const metricFields = [
-    "weight", "waist", "hip", "chest", "thigh", "arm", "glutes"
-  ];
+  const metricFields = ["weight", "waist", "hip", "chest", "thigh", "arm", "glutes"];
 
   function getValue(id) {
     const val = parseFloat(document.getElementById(id)?.value);
@@ -192,14 +190,12 @@ document.addEventListener("DOMContentLoaded", async () => {
     const progressRef = collection(db, "clients", uid, "progress");
     const snapshot = await getDocs(progressRef);
     const data = {};
-
     metricFields.forEach(metric => data[metric] = []);
 
     snapshot.forEach(doc => {
       const entry = doc.data();
       const date = entry.date?.seconds ? new Date(entry.date.seconds * 1000) : null;
       if (!date) return;
-
       metricFields.forEach(metric => {
         if (entry[metric] !== undefined) {
           data[metric].push({ x: date, y: entry[metric] });
@@ -252,14 +248,11 @@ document.addEventListener("DOMContentLoaded", async () => {
       },
       options: {
         scales: {
-          x: {
-            type: 'time',
-            time: { unit: 'week' }
-          },
+          x: { type: 'time', time: { unit: 'week' } },
           y: {
             title: { display: true, text: "Weight (kg)" },
-            min: Math.min(goals.currentWeight, goals.targetWeight) - 2,
-            max: Math.max(goals.currentWeight, goals.targetWeight) + 2
+            min: Math.min(goals.weight ?? 0, goals.targetWeight ?? 0) - 2,
+            max: Math.max(goals.weight ?? 0, goals.targetWeight ?? 0) + 2
           }
         }
       }
@@ -290,14 +283,11 @@ document.addEventListener("DOMContentLoaded", async () => {
       },
       options: {
         scales: {
-          x: {
-            type: 'time',
-            time: { unit: 'week' }
-          },
+          x: { type: 'time', time: { unit: 'week' } },
           y: {
             title: { display: true, text: "Waist (cm)" },
-            min: Math.min(goals.currentWaist, goals.targetWaist) - 2,
-            max: Math.max(goals.currentWaist, goals.targetWaist) + 2
+            min: Math.min(goals.waist ?? 0, goals.targetWaist ?? 0) - 2,
+            max: Math.max(goals.waist ?? 0, goals.targetWaist ?? 0) + 2
           }
         }
       }
@@ -318,29 +308,27 @@ document.addEventListener("DOMContentLoaded", async () => {
     document.getElementById("notes").value = data.notes || "";
 
     metricFields.forEach(metric => {
-      const val = data[metric] ?? "";
-      const target = data[`target${metric.charAt(0).toUpperCase() + metric.slice(1)}`] ?? "";
       const input = document.getElementById(metric);
-      const targetInput = document.getElementById(`target${metric.charAt(0).toUpperCase() + metric.slice(1)}`);
-      if (input) input.value = val;
-      if (targetInput) targetInput.value = target;
+      const targetInput = document.getElementById(`target${metric.charAt(0).toUpperCase()}${metric.slice(1)}`);
+      if (input) input.value = data[metric] ?? "";
+      if (targetInput) targetInput.value = data[`target${metric.charAt(0).toUpperCase()}${metric.slice(1)}`] ?? "";
     });
 
     summaryCard.style.display = "block";
     summaryName.textContent = data.fullName || "Unknown";
     summaryGoal.textContent = data.goal || "None";
 
-    if (data.currentWeight && data.targetWeight) {
-      const diff = (data.currentWeight - data.targetWeight).toFixed(1);
-      summaryWeight.textContent = `${data.currentWeight}kg → ${data.targetWeight}kg (${diff}kg to go)`;
+    if (data.weight && data.targetWeight) {
+      const diff = (data.weight - data.targetWeight).toFixed(1);
+      summaryWeight.textContent = `${data.weight}kg → ${data.targetWeight}kg (${diff}kg to go)`;
     } else {
       summaryWeight.textContent = "N/A";
     }
 
     await renderGraph(user.uid, {
-      currentWeight: data.currentWeight ?? 0,
+      weight: data.weight ?? 0,
       targetWeight: data.targetWeight ?? 0,
-      currentWaist: data.waist ?? 0,
+      waist: data.waist ?? 0,
       targetWaist: data.targetWaist ?? 0
     });
 
@@ -359,21 +347,20 @@ document.addEventListener("DOMContentLoaded", async () => {
       metricFields.forEach(metric => {
         metrics[metric] = getValue(metric);
         profile[metric] = metrics[metric];
-        const targetKey = `target${metric.charAt(0).toUpperCase() + metric.slice(1)}`;
+        const targetKey = `target${metric.charAt(0).toUpperCase()}${metric.slice(1)}`;
         profile[targetKey] = getValue(targetKey);
       });
 
       try {
         await setDoc(docRef, profile);
         await saveProgress(user.uid, metrics);
-
         responseMsg.textContent = "✅ Profile updated!";
         responseMsg.style.color = "green";
 
         await renderGraph(user.uid, {
-          currentWeight: metrics.weight ?? 0,
+          weight: metrics.weight ?? 0,
           targetWeight: profile.targetWeight ?? 0,
-          currentWaist: metrics.waist ?? 0,
+          waist: metrics.waist ?? 0,
           targetWaist: profile.targetWaist ?? 0
         });
       } catch (err) {
@@ -400,6 +387,26 @@ document.addEventListener("DOMContentLoaded", async () => {
       }
     });
 
+    async function loadPhotos(uid) {
+      photoGallery.innerHTML = "";
+      const listRef = storageRef(storage, `clients/${uid}/photos`);
+      try {
+        const res = await listAll(listRef);
+        for (const item of res.items) {
+          const url = await getDownloadURL(item);
+          const a = document.createElement("a");
+          a.href = url;
+          a.className = "glightbox";
+          a.dataset.gallery = "progress-photos";
+          a.innerHTML = `<img src="${url}" alt="Progress photo" class="photo-thumb"/>`;
+          photoGallery.appendChild(a);
+        }
+        GLightbox({ selector: ".glightbox" });
+      } catch (err) {
+        console.warn("No photos yet:", err.message);
+      }
+    }
+
     await loadPhotos(user.uid);
   });
 
@@ -408,8 +415,8 @@ document.addEventListener("DOMContentLoaded", async () => {
     window.location.href = "index.html";
   });
 });
-
 </script>
+
 
 </body>
 </html>
