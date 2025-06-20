@@ -57,7 +57,7 @@
       <tbody>
         <tr>
           <td>Weight (kg/lbs)</td>
-          <td><input type="number" id="currentWeight" step="0.1" /></td>
+          <td><input type="number" id="weight" step="0.1" /></td>
           <td><input type="number" id="targetWeight" step="0.1" /></td>
         </tr>
         <tr>
@@ -100,8 +100,6 @@
   <button type="submit" class="btn-primary">💾 Save Changes</button>
   <p id="responseMsg"></p>
 </form>
-
-
       <br>
       <!-- 📈 Progress Graph -->
 <!-- 📈 Progress Graphs -->
@@ -118,7 +116,16 @@
   <button onclick="downloadChart('weightChart')" class="btn-secondary">⬇️ Download Weight Graph</button>
   <button onclick="downloadChart('waistChart')" class="btn-secondary">⬇️ Download Waist Graph</button>
 
+    <!-- 📊 Progress Bars for Body Metrics -->
+<div id="metric-progress-container" class="dashboard-card">
+  <h3>📈 Your Progress</h3>
+  <!-- JS will inject progress bars here -->
+</div>
+
   </section>
+
+
+
 
 <div class="photo-upload-section">
   <h3>📸 Upload Progress Photos</h3>
@@ -294,6 +301,45 @@ document.addEventListener("DOMContentLoaded", async () => {
     });
   }
 
+  function renderProgressBars(data) {
+  const container = document.getElementById("metric-progress-container");
+  container.innerHTML = "<h3>📈 Your Progress</h3>"; // Clear and re-add heading
+
+  const metrics = [
+    { key: "weight", label: "Weight (kg)" },
+    { key: "waist", label: "Waist (cm)" },
+    { key: "hip", label: "Hip (cm)" },
+    { key: "chest", label: "Chest (cm)" },
+    { key: "thigh", label: "Thigh (cm)" },
+    { key: "arm", label: "Arm (cm)" },
+    { key: "glutes", label: "Glutes (cm)" },
+  ];
+
+  metrics.forEach(({ key, label }) => {
+    const current = parseFloat(data[key]);
+    const target = parseFloat(data[`target${key.charAt(0).toUpperCase()}${key.slice(1)}`]);
+
+    if (!isNaN(current) && !isNaN(target)) {
+      const isReducing = current > target;
+      const totalDiff = Math.abs(current - target);
+      const progress = totalDiff === 0 ? 100 : Math.min(100, ((isReducing ? (current - target) : (target - current)) / totalDiff) * 100);
+
+      const progressBar = `
+        <div class="metric-bar">
+          <div class="metric-bar-label">${label}</div>
+          <div class="progress-bar-container">
+            <div class="progress-bar-fill" style="width: ${progress.toFixed(1)}%;">
+              ${progress.toFixed(1)}%
+            </div>
+          </div>
+        </div>
+      `;
+      container.innerHTML += progressBar;
+    }
+  });
+}
+
+
   onAuthStateChanged(auth, async (user) => {
     if (!user) return window.location.href = "login.html";
     userEmailDisplay.textContent = user.email;
@@ -317,6 +363,8 @@ document.addEventListener("DOMContentLoaded", async () => {
     summaryCard.style.display = "block";
     summaryName.textContent = data.fullName || "Unknown";
     summaryGoal.textContent = data.goal || "None";
+
+    renderProgressBars(data);
 
     if (data.weight && data.targetWeight) {
       const diff = (data.weight - data.targetWeight).toFixed(1);
@@ -356,6 +404,9 @@ document.addEventListener("DOMContentLoaded", async () => {
         await saveProgress(user.uid, metrics);
         responseMsg.textContent = "✅ Profile updated!";
         responseMsg.style.color = "green";
+
+        renderProgressBars(profile);
+
 
         await renderGraph(user.uid, {
           weight: metrics.weight ?? 0,
