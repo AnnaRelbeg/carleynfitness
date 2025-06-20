@@ -43,29 +43,56 @@
   <label for="startDate">Goal Start Date</label>
   <input type="date" id="startDate" />
 
-  <!-- Weight Fields Row -->
-  <div class="form-row">
-    <div class="form-group">
-      <label for="currentWeight">Current Weight (kg)</label>
-      <input type="number" id="currentWeight" step="0.1" />
-    </div>
-    <div class="form-group">
-      <label for="targetWeight">Target Weight (kg)</label>
-      <input type="number" id="targetWeight" step="0.1" />
-    </div>
-  </div>
-
-  <!-- Waist Fields Row -->
-  <div class="form-row">
-    <div class="form-group">
-      <label for="waist">Current Waist Circumference (cm)</label>
-      <input type="number" id="waist" step="0.1" />
-    </div>
-    <div class="form-group">
-      <label for="targetWaist">Target Waist Circumference (cm)</label>
-      <input type="number" id="targetWaist" step="0.1" />
-    </div>
-  </div>
+  <!-- 📊 Expandable Body Metrics Section -->
+  <details class="metrics-section" open>
+    <summary><strong>📊 Body Metrics</strong></summary>
+    <table class="metrics-table">
+      <thead>
+        <tr>
+          <th>Metric</th>
+          <th>Current Value</th>
+          <th>Target</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Weight (kg/lbs)</td>
+          <td><input type="number" id="currentWeight" step="0.1" /></td>
+          <td><input type="number" id="targetWeight" step="0.1" /></td>
+        </tr>
+        <tr>
+          <td>Waist Circumference (cm)</td>
+          <td><input type="number" id="waist" step="0.1" /></td>
+          <td><input type="number" id="targetWaist" step="0.1" /></td>
+        </tr>
+        <tr>
+          <td>Hip Circumference (cm)</td>
+          <td><input type="number" id="hip" step="0.1" /></td>
+          <td><input type="number" id="targetHip" step="0.1" /></td>
+        </tr>
+        <tr>
+          <td>Chest Circumference (cm)</td>
+          <td><input type="number" id="chest" step="0.1" /></td>
+          <td><input type="number" id="targetChest" step="0.1" /></td>
+        </tr>
+        <tr>
+          <td>Thigh Circumference (cm)</td>
+          <td><input type="number" id="thigh" step="0.1" /></td>
+          <td><input type="number" id="targetThigh" step="0.1" /></td>
+        </tr>
+        <tr>
+          <td>Arm Circumference (cm)</td>
+          <td><input type="number" id="arm" step="0.1" /></td>
+          <td><input type="number" id="targetArm" step="0.1" /></td>
+        </tr>
+        <tr>
+          <td>Glutes (cm)</td>
+          <td><input type="number" id="glutes" step="0.1" /></td>
+          <td><input type="number" id="targetGlutes" step="0.1" /></td>
+        </tr>
+      </tbody>
+    </table>
+  </details>
 
   <label for="notes">Notes</label>
   <textarea id="notes"></textarea>
@@ -73,6 +100,7 @@
   <button type="submit" class="btn-primary">💾 Save Changes</button>
   <p id="responseMsg"></p>
 </form>
+
 
       <br>
       <!-- 📈 Progress Graph -->
@@ -101,311 +129,287 @@
 </div>
 
 
+<script>
+import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-app.js";
+import {
+  getAuth, onAuthStateChanged, signOut
+} from "https://www.gstatic.com/firebasejs/9.6.10/firebase-auth.js";
+import {
+  getFirestore, doc, getDoc, setDoc, collection, addDoc, getDocs, Timestamp
+} from "https://www.gstatic.com/firebasejs/9.6.10/firebase-firestore.js";
+import {
+  getStorage, ref as storageRef, uploadBytes, getDownloadURL, listAll
+} from "https://www.gstatic.com/firebasejs/9.6.10/firebase-storage.js";
 
-<script type="module">
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-app.js";
-  import {
-    getAuth, onAuthStateChanged, signOut
-  } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-auth.js";
-  import {
-    getFirestore, doc, getDoc, setDoc, collection, addDoc, getDocs, Timestamp
-  } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-firestore.js";
-  import {
-    getStorage, ref as storageRef, uploadBytes, getDownloadURL, listAll
-  } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-storage.js";
+document.addEventListener("DOMContentLoaded", async () => {
+  const firebaseConfig = {
+    apiKey: "AIzaSyDpju8JIedURVxBJgmZ1yBuRzd4CEdFDVY",
+    authDomain: "carleynfitnesscalendar.firebaseapp.com",
+    projectId: "carleynfitnesscalendar",
+    storageBucket: "carleynfitnesscalendar.firebasestorage.app",
+    messagingSenderId: "1013642078015",
+    appId: "1:1013642078015:web:e8bcff9d1559f1c1d5158a"
+  };
 
-  document.addEventListener("DOMContentLoaded", async () => {
-    const firebaseConfig = {
-      apiKey: "AIzaSyDpju8JIedURVxBJgmZ1yBuRzd4CEdFDVY",
-      authDomain: "carleynfitnesscalendar.firebaseapp.com",
-      projectId: "carleynfitnesscalendar",
-      storageBucket: "carleynfitnesscalendar.firebasestorage.app",
-      messagingSenderId: "1013642078015",
-      appId: "1:1013642078015:web:e8bcff9d1559f1c1d5158a"
-    };
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+  const db = getFirestore(app);
+  const storage = getStorage(app);
 
-    const app = initializeApp(firebaseConfig);
-    const auth = getAuth(app);
-    const db = getFirestore(app);
-    const storage = getStorage(app);
+  const form = document.getElementById("profile-form");
+  const responseMsg = document.getElementById("responseMsg");
+  const logoutBtn = document.getElementById("logoutBtn");
 
-    const form = document.getElementById("profile-form");
-    const responseMsg = document.getElementById("responseMsg");
-    const logoutBtn = document.getElementById("logoutBtn");
+  const summaryCard = document.getElementById("summary-card");
+  const userEmailDisplay = document.getElementById("user-email");
+  const summaryName = document.getElementById("summary-name");
+  const summaryGoal = document.getElementById("summary-goal");
+  const summaryWeight = document.getElementById("summary-weight");
 
-    const summaryCard = document.getElementById("summary-card");
-    const userEmailDisplay = document.getElementById("user-email");
+  const photoInput = document.getElementById("photoInput");
+  const uploadPhotoBtn = document.getElementById("uploadPhotoBtn");
+  const uploadStatus = document.getElementById("uploadStatus");
+  const photoGallery = document.getElementById("photoGallery");
 
-    const summaryName = document.getElementById("summary-name");
-    const summaryGoal = document.getElementById("summary-goal");
-    const summaryWeight = document.getElementById("summary-weight");
+  const metricFields = [
+    "weight", "waist", "hip", "chest", "thigh", "arm", "glutes"
+  ];
 
-    const photoInput = document.getElementById("photoInput");
-    const uploadPhotoBtn = document.getElementById("uploadPhotoBtn");
-    const uploadStatus = document.getElementById("uploadStatus");
-    const photoGallery = document.getElementById("photoGallery");
+  function getValue(id) {
+    const val = parseFloat(document.getElementById(id)?.value);
+    return isNaN(val) ? null : val;
+  }
 
-    let weightChart, waistChart;
+  async function saveProgress(uid, metrics) {
+    const progressRef = collection(db, "clients", uid, "progress");
+    await addDoc(progressRef, {
+      ...metrics,
+      date: Timestamp.now()
+    });
+  }
 
-    async function loadProgressData(uid) {
-      const progressRef = collection(db, "clients", uid, "progress");
-      const snapshot = await getDocs(progressRef);
-      const weightData = [];
-      const waistData = [];
+  async function loadProgressData(uid) {
+    const progressRef = collection(db, "clients", uid, "progress");
+    const snapshot = await getDocs(progressRef);
+    const data = {};
 
-      snapshot.forEach(doc => {
-        const entry = doc.data();
-        if (entry.date) {
-          const date = new Date(entry.date.seconds * 1000);
-          if (entry.weight) weightData.push({ x: date, y: entry.weight });
-          if (entry.waist) waistData.push({ x: date, y: entry.waist });
+    metricFields.forEach(metric => data[metric] = []);
+
+    snapshot.forEach(doc => {
+      const entry = doc.data();
+      const date = entry.date?.seconds ? new Date(entry.date.seconds * 1000) : null;
+      if (!date) return;
+
+      metricFields.forEach(metric => {
+        if (entry[metric] !== undefined) {
+          data[metric].push({ x: date, y: entry[metric] });
         }
       });
+    });
 
-      weightData.sort((a, b) => a.x - b.x);
-      waistData.sort((a, b) => a.x - b.x);
-      return { weightData, waistData };
-    }
+    return data;
+  }
 
-    function getAvgLine(dataArr, avgValue) {
-      if (!dataArr.length) return [];
-      return [
-        { x: dataArr[0].x, y: avgValue },
-        { x: dataArr[dataArr.length - 1].x, y: avgValue }
-      ];
-    }
+  async function renderGraph(uid, goals) {
+    const allData = await loadProgressData(uid);
 
-    async function renderGraph(uid, startDate, currentWeight, targetWeight, currentWaist, targetWaist) {
-      const { weightData, waistData } = await loadProgressData(uid);
-      const avg = (arr) => arr.length ? (arr.reduce((sum, d) => sum + d.y, 0) / arr.length).toFixed(1) : null;
+    const avg = arr => arr.length ? (arr.reduce((sum, d) => sum + d.y, 0) / arr.length).toFixed(1) : null;
+    const getAvgLine = (arr, val) => arr.length ? [
+      { x: arr[0].x, y: val }, { x: arr[arr.length - 1].x, y: val }
+    ] : [];
 
-      const weightCtx = document.getElementById("weightChart").getContext("2d");
-      const waistCtx = document.getElementById("waistChart").getContext("2d");
+    const ctxWeight = document.getElementById("weightChart")?.getContext("2d");
+    const ctxWaist = document.getElementById("waistChart")?.getContext("2d");
 
-      if (weightChart instanceof Chart) weightChart.destroy();
-      if (waistChart instanceof Chart) waistChart.destroy();
+    if (window.weightChart) window.weightChart.destroy();
+    if (window.waistChart) window.waistChart.destroy();
 
-      const weightAvg = avg(weightData);
-      const waistAvg = avg(waistData);
+    const weightAvg = avg(allData.weight);
+    const waistAvg = avg(allData.waist);
 
-      weightChart = new Chart(weightCtx, {
-        type: 'line',
-        data: {
-          datasets: [
-            {
-              label: 'Weight (kg)',
-              data: weightData,
-              borderColor: '#E91E63',
-              backgroundColor: '#F8BBD0',
-              fill: true,
-              tension: 0.3,
-              pointRadius: 4
-            },
-            {
-              label: `Average Weight: ${weightAvg}kg`,
-              data: getAvgLine(weightData, weightAvg),
-              borderDash: [6, 6],
-              borderColor: '#C2185B',
-              pointRadius: 0,
-              fill: false
-            }
-          ]
-        },
-        options: {
-          responsive: true,
-          plugins: { tooltip: { enabled: true }, legend: { position: 'top' } },
-          scales: {
-            x: {
-              type: 'time',
-              time: { unit: 'week' },
-              title: { display: true, text: 'Date' }
-            },
-            y: {
-              title: { display: true, text: 'Weight (kg)' },
-              min: Math.min(currentWeight, targetWeight) - 2,
-              max: Math.max(currentWeight, targetWeight) + 2
-            }
+    window.weightChart = new Chart(ctxWeight, {
+      type: 'line',
+      data: {
+        datasets: [
+          {
+            label: "Weight (kg)",
+            data: allData.weight,
+            borderColor: "#E91E63",
+            backgroundColor: "#F8BBD0",
+            tension: 0.3,
+            fill: true,
+            pointRadius: 3
+          },
+          {
+            label: `Avg: ${weightAvg}kg`,
+            data: getAvgLine(allData.weight, weightAvg),
+            borderDash: [6, 6],
+            borderColor: "#C2185B",
+            pointRadius: 0,
+            fill: false
+          }
+        ]
+      },
+      options: {
+        scales: {
+          x: {
+            type: 'time',
+            time: { unit: 'week' }
+          },
+          y: {
+            title: { display: true, text: "Weight (kg)" },
+            min: Math.min(goals.currentWeight, goals.targetWeight) - 2,
+            max: Math.max(goals.currentWeight, goals.targetWeight) + 2
           }
         }
-      });
+      }
+    });
 
-      waistChart = new Chart(waistCtx, {
-        type: 'line',
-        data: {
-          datasets: [
-            {
-              label: 'Waist (cm)',
-              data: waistData,
-              borderColor: '#2196F3',
-              backgroundColor: '#BBDEFB',
-              fill: true,
-              tension: 0.3,
-              pointRadius: 4
-            },
-            {
-              label: `Average Waist: ${waistAvg}cm`,
-              data: getAvgLine(waistData, waistAvg),
-              borderDash: [6, 6],
-              borderColor: '#1565C0',
-              pointRadius: 0,
-              fill: false
-            }
-          ]
-        },
-        options: {
-          responsive: true,
-          plugins: { tooltip: { enabled: true }, legend: { position: 'top' } },
-          scales: {
-            x: {
-              type: 'time',
-              time: { unit: 'week' },
-              title: { display: true, text: 'Date' }
-            },
-            y: {
-              title: { display: true, text: 'Waist (cm)' },
-              min: Math.min(currentWaist, targetWaist) - 2,
-              max: Math.max(currentWaist, targetWaist) + 2
-            }
+    window.waistChart = new Chart(ctxWaist, {
+      type: 'line',
+      data: {
+        datasets: [
+          {
+            label: "Waist (cm)",
+            data: allData.waist,
+            borderColor: "#2196F3",
+            backgroundColor: "#BBDEFB",
+            tension: 0.3,
+            fill: true,
+            pointRadius: 3
+          },
+          {
+            label: `Avg: ${waistAvg}cm`,
+            data: getAvgLine(allData.waist, waistAvg),
+            borderDash: [6, 6],
+            borderColor: "#1565C0",
+            pointRadius: 0,
+            fill: false
+          }
+        ]
+      },
+      options: {
+        scales: {
+          x: {
+            type: 'time',
+            time: { unit: 'week' }
+          },
+          y: {
+            title: { display: true, text: "Waist (cm)" },
+            min: Math.min(goals.currentWaist, goals.targetWaist) - 2,
+            max: Math.max(goals.currentWaist, goals.targetWaist) + 2
           }
         }
+      }
+    });
+  }
+
+  onAuthStateChanged(auth, async (user) => {
+    if (!user) return window.location.href = "login.html";
+    userEmailDisplay.textContent = user.email;
+
+    const docRef = doc(db, "clients", user.uid);
+    const docSnap = await getDoc(docRef);
+    const data = docSnap.data() || {};
+
+    document.getElementById("fullName").value = data.fullName || "";
+    document.getElementById("goal").value = data.goal || "";
+    document.getElementById("startDate").value = data.startDate || "";
+    document.getElementById("notes").value = data.notes || "";
+
+    metricFields.forEach(metric => {
+      const val = data[metric] ?? "";
+      const target = data[`target${metric.charAt(0).toUpperCase() + metric.slice(1)}`] ?? "";
+      const input = document.getElementById(metric);
+      const targetInput = document.getElementById(`target${metric.charAt(0).toUpperCase() + metric.slice(1)}`);
+      if (input) input.value = val;
+      if (targetInput) targetInput.value = target;
+    });
+
+    summaryCard.style.display = "block";
+    summaryName.textContent = data.fullName || "Unknown";
+    summaryGoal.textContent = data.goal || "None";
+
+    if (data.currentWeight && data.targetWeight) {
+      const diff = (data.currentWeight - data.targetWeight).toFixed(1);
+      summaryWeight.textContent = `${data.currentWeight}kg → ${data.targetWeight}kg (${diff}kg to go)`;
+    } else {
+      summaryWeight.textContent = "N/A";
+    }
+
+    await renderGraph(user.uid, {
+      currentWeight: data.currentWeight ?? 0,
+      targetWeight: data.targetWeight ?? 0,
+      currentWaist: data.waist ?? 0,
+      targetWaist: data.targetWaist ?? 0
+    });
+
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+
+      const profile = {
+        fullName: document.getElementById("fullName").value,
+        email: user.email,
+        goal: document.getElementById("goal").value,
+        startDate: document.getElementById("startDate").value,
+        notes: document.getElementById("notes").value
+      };
+
+      const metrics = {};
+      metricFields.forEach(metric => {
+        metrics[metric] = getValue(metric);
+        profile[metric] = metrics[metric];
+        const targetKey = `target${metric.charAt(0).toUpperCase() + metric.slice(1)}`;
+        profile[targetKey] = getValue(targetKey);
       });
-    }
 
-    function downloadChart(chartId) {
-      const canvas = document.getElementById(chartId);
-      const link = document.createElement('a');
-      link.download = `${chartId}.png`;
-      link.href = canvas.toDataURL();
-      link.click();
-    }
-
-    async function loadPhotos(uid) {
-      photoGallery.innerHTML = "";
-      const listRef = storageRef(storage, `clients/${uid}/photos`);
       try {
-        const res = await listAll(listRef);
-        const photoHTML = [];
+        await setDoc(docRef, profile);
+        await saveProgress(user.uid, metrics);
 
-        for (const item of res.items) {
-          const url = await getDownloadURL(item);
-          photoHTML.push(`
-            <a href="${url}" class="glightbox" data-gallery="progress-photos">
-              <img src="${url}" alt="Progress photo" class="photo-thumb"/>
-            </a>
-          `);
-        }
+        responseMsg.textContent = "✅ Profile updated!";
+        responseMsg.style.color = "green";
 
-        photoGallery.innerHTML = photoHTML.join("");
-        GLightbox({ selector: ".glightbox" });
+        await renderGraph(user.uid, {
+          currentWeight: metrics.weight ?? 0,
+          targetWeight: profile.targetWeight ?? 0,
+          currentWaist: metrics.waist ?? 0,
+          targetWaist: profile.targetWaist ?? 0
+        });
       } catch (err) {
-        console.warn("No photos yet:", err.message);
+        console.error(err);
+        responseMsg.textContent = "❌ Error saving profile.";
+        responseMsg.style.color = "red";
       }
-    }
-
-    onAuthStateChanged(auth, async (user) => {
-      if (!user) {
-        window.location.href = "login.html";
-        return;
-      }
-
-      userEmailDisplay.textContent = user.email;
-      const docRef = doc(db, "clients", user.uid);
-      const docSnap = await getDoc(docRef);
-
-      if (docSnap.exists()) {
-        const data = docSnap.data();
-
-        document.getElementById("fullName").value = data.fullName || "";
-        document.getElementById("goal").value = data.goal || "";
-        document.getElementById("startDate").value = data.startDate || "";
-        document.getElementById("currentWeight").value = data.currentWeight || "";
-        document.getElementById("targetWeight").value = data.targetWeight || "";
-        document.getElementById("waist").value = data.waist || "";
-        document.getElementById("targetWaist").value = data.targetWaist || "";
-        document.getElementById("notes").value = data.notes || "";
-
-        summaryCard.style.display = "block";
-        summaryName.textContent = data.fullName || "Unknown";
-        summaryGoal.textContent = data.goal || "None";
-
-        if (data.currentWeight && data.targetWeight) {
-          const diff = (data.currentWeight - data.targetWeight).toFixed(1);
-          summaryWeight.textContent = `${data.currentWeight}kg → ${data.targetWeight}kg (${diff}kg to go)`;
-        } else {
-          summaryWeight.textContent = "N/A";
-        }
-
-        await renderGraph(
-          user.uid,
-          data.startDate ? new Date(data.startDate) : null,
-          data.currentWeight,
-          data.targetWeight,
-          data.waist,
-          data.targetWaist
-        );
-      }
-
-      await loadPhotos(user.uid);
-
-      form.addEventListener("submit", async (e) => {
-        e.preventDefault();
-
-        const profile = {
-          fullName: document.getElementById("fullName").value,
-          email: user.email,
-          goal: document.getElementById("goal").value.trim(),
-          startDate: document.getElementById("startDate").value,
-          currentWeight: parseFloat(document.getElementById("currentWeight").value),
-          targetWeight: parseFloat(document.getElementById("targetWeight").value),
-          waist: parseFloat(document.getElementById("waist").value),
-          targetWaist: parseFloat(document.getElementById("targetWaist").value),
-          notes: document.getElementById("notes").value.trim()
-        };
-
-        try {
-          await setDoc(docRef, profile);
-          await addDoc(collection(db, "clients", user.uid, "progress"), {
-            weight: profile.currentWeight,
-            waist: profile.waist,
-            date: Timestamp.now()
-          });
-
-          responseMsg.style.color = "green";
-          responseMsg.textContent = "✅ Profile updated!";
-          await renderGraph(user.uid, new Date(profile.startDate), profile.currentWeight, profile.targetWeight, profile.waist, profile.targetWaist);
-        } catch (err) {
-          console.error(err);
-          responseMsg.style.color = "red";
-          responseMsg.textContent = "❌ Error saving profile.";
-        }
-      });
-
-      uploadPhotoBtn.addEventListener("click", async () => {
-        if (!photoInput.files.length) return;
-        const file = photoInput.files[0];
-        const fileRef = storageRef(storage, `clients/${user.uid}/photos/${Date.now()}_${file.name}`);
-
-        try {
-          await uploadBytes(fileRef, file);
-          uploadStatus.textContent = "✅ Photo uploaded!";
-          uploadStatus.style.color = "green";
-          await loadPhotos(user.uid);
-        } catch (err) {
-          console.error(err);
-          uploadStatus.textContent = "❌ Upload failed!";
-          uploadStatus.style.color = "red";
-        }
-      });
     });
 
-    logoutBtn.addEventListener("click", async () => {
-      await signOut(auth);
-      window.location.href = "index.html";
+    uploadPhotoBtn.addEventListener("click", async () => {
+      if (!photoInput.files.length) return;
+      const file = photoInput.files[0];
+      const fileRef = storageRef(storage, `clients/${user.uid}/photos/${Date.now()}_${file.name}`);
+
+      try {
+        await uploadBytes(fileRef, file);
+        uploadStatus.textContent = "✅ Photo uploaded!";
+        uploadStatus.style.color = "green";
+        await loadPhotos(user.uid);
+      } catch (err) {
+        console.error(err);
+        uploadStatus.textContent = "❌ Upload failed!";
+        uploadStatus.style.color = "red";
+      }
     });
+
+    await loadPhotos(user.uid);
   });
+
+  logoutBtn.addEventListener("click", async () => {
+    await signOut(auth);
+    window.location.href = "index.html";
+  });
+});
+
 </script>
-
-
 
 </body>
 </html>

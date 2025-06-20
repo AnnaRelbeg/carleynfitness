@@ -993,3 +993,36 @@ box-shadow: 0 4px 6px rgba(0,0,0,0.1);
   border: 1px solid #ccc;
   border-radius: 4px;
 }
+
+.metrics-section {
+  margin-top: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  padding: 10px;
+  background: #fdfdfd;
+}
+
+.metrics-section summary {
+  font-size: 1.2rem;
+  cursor: pointer;
+  margin-bottom: 10px;
+}
+
+.metrics-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 10px;
+}
+
+.metrics-table th,
+.metrics-table td {
+  padding: 8px;
+  border: 1px solid #ddd;
+  text-align: left;
+}
+
+.metrics-table input {
+  width: 100%;
+  padding: 6px;
+  box-sizing: border-box;
+}
