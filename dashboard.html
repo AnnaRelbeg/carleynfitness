@@ -329,18 +329,22 @@ document.addEventListener("DOMContentLoaded", async () => {
 metrics.forEach(({ key, label }) => {
   const current = parseFloat(data[key]);
   const target = parseFloat(data[`target${key.charAt(0).toUpperCase()}${key.slice(1)}`]);
-  const start = parseFloat(data[`starting${key.charAt(0).toUpperCase()}${key.slice(1)}`]) || current;
+  const start = parseFloat(data[`starting${key.charAt(0).toUpperCase()}${key.slice(1)}`]) ?? current;
 
-  if (!isNaN(current) && !isNaN(target)) {
+  if (!isNaN(current) && !isNaN(target) && !isNaN(start)) {
+    const totalChange = target - start;
+    const progressAchieved = current - start;
+
     let progress = 0;
 
-    if (start !== target) {
-      const totalChange = target - start;
-      const achieved = current - start;
-      progress = (achieved / totalChange) * 100;
+    if (totalChange !== 0) {
+      progress = (progressAchieved / totalChange) * 100;
     }
 
-    progress = Math.max(0, Math.min(100, progress)); // Clamp between 0–100
+    // Clamp and convert to “progress toward goal” (0 to 100%)
+    progress = totalChange > 0
+      ? (progress > 100 ? 100 : progress < 0 ? 0 : progress)  // gaining
+      : (progress < -100 ? 100 : progress > 0 ? 0 : Math.abs(progress)); // reducing
 
     const progressBar = `
       <div class="metric-bar">
@@ -355,6 +359,7 @@ metrics.forEach(({ key, label }) => {
     container.innerHTML += progressBar;
   }
 });
+
 
 }
 
