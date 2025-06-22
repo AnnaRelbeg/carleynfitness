@@ -322,28 +322,36 @@ document.addEventListener("DOMContentLoaded", async () => {
     { key: "glutes", label: "Glutes (cm)" },
   ];
 
-  metrics.forEach(({ key, label }) => {
-    const current = parseFloat(data[key]);
-    const target = parseFloat(data[`target${key.charAt(0).toUpperCase()}${key.slice(1)}`]);
+metrics.forEach(({ key, label }) => {
+  const current = parseFloat(data[key]);
+  const target = parseFloat(data[`target${key.charAt(0).toUpperCase()}${key.slice(1)}`]);
+  const start = parseFloat(data[`starting${key.charAt(0).toUpperCase()}${key.slice(1)}`]) || current;
 
-    if (!isNaN(current) && !isNaN(target)) {
-      const isReducing = current > target;
-      const totalDiff = Math.abs(current - target);
-      const progress = totalDiff === 0 ? 100 : Math.min(100, ((isReducing ? (current - target) : (target - current)) / totalDiff) * 100);
+  if (!isNaN(current) && !isNaN(target)) {
+    let progress = 0;
 
-      const progressBar = `
-        <div class="metric-bar">
-          <div class="metric-bar-label">${label}</div>
-          <div class="progress-bar-container">
-            <div class="progress-bar-fill" style="width: ${progress.toFixed(1)}%;">
-              ${progress.toFixed(1)}%
-            </div>
+    if (start !== target) {
+      const totalChange = target - start;
+      const achieved = current - start;
+      progress = (achieved / totalChange) * 100;
+    }
+
+    progress = Math.max(0, Math.min(100, progress)); // Clamp between 0–100
+
+    const progressBar = `
+      <div class="metric-bar">
+        <div class="metric-bar-label">${label}</div>
+        <div class="progress-bar-container">
+          <div class="progress-bar-fill" style="width: ${progress.toFixed(1)}%;">
+            ${progress.toFixed(1)}%
           </div>
         </div>
-      `;
-      container.innerHTML += progressBar;
-    }
-  });
+      </div>
+    `;
+    container.innerHTML += progressBar;
+  }
+});
+
 }
 
 
@@ -398,13 +406,31 @@ document.addEventListener("DOMContentLoaded", async () => {
         notes: document.getElementById("notes").value
       };
 
+      const previousStartDate = data.startDate || "";
+      const goalStartDate = profile.startDate;
+      const goalDateChanged = previousStartDate !== goalStartDate;
+
+
       const metrics = {};
-      metricFields.forEach(metric => {
-        metrics[metric] = getValue(metric);
-        profile[metric] = metrics[metric];
-        const targetKey = `target${metric.charAt(0).toUpperCase()}${metric.slice(1)}`;
-        profile[targetKey] = getValue(targetKey);
-      });
+metricFields.forEach(metric => {
+  metrics[metric] = getValue(metric);
+  profile[metric] = metrics[metric];
+
+  const capitalised = metric.charAt(0).toUpperCase() + metric.slice(1);
+  const targetKey = `target${capitalised}`;
+  const startingKey = `starting${capitalised}`;
+
+  profile[targetKey] = getValue(targetKey);
+
+  // Reset starting value if goal start date changed, otherwise keep existing
+  if (goalDateChanged) {
+    profile[startingKey] = metrics[metric];
+  } else {
+    profile[startingKey] = data[startingKey] ?? metrics[metric];
+  }
+});
+
+
 
       try {
         await setDoc(docRef, profile);
