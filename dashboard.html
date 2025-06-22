@@ -33,7 +33,9 @@
 <!-- 🔧 Editable Profile Form -->
 <form id="profile-form">
   <p><strong>Email:</strong> <span id="user-email"></span></p>
-
+  
+  <details class="profile-section" >
+  <summary><strong>📝 Generic Information</strong></summary>
   <label for="fullName">Full Name</label>
   <input type="text" id="fullName" readonly />
 
@@ -43,8 +45,10 @@
   <label for="startDate">Goal Start Date</label>
   <input type="date" id="startDate" />
 
+</details>
+
   <!-- 📊 Expandable Body Metrics Section -->
-  <details class="metrics-section" open>
+  <details class="metrics-section" >
     <summary><strong>📊 Body Metrics</strong></summary>
     <table class="metrics-table">
       <thead>
