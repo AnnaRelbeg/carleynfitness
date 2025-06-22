@@ -226,8 +226,13 @@ document.addEventListener("DOMContentLoaded", async () => {
     const ctxWeight = document.getElementById("weightChart")?.getContext("2d");
     const ctxWaist = document.getElementById("waistChart")?.getContext("2d");
 
-    if (window.weightChart) window.weightChart.destroy();
-    if (window.waistChart) window.waistChart.destroy();
+    if (window.weightChart && typeof window.weightChart.destroy === 'function') {
+      window.weightChart.destroy();
+    }
+    if (window.waistChart && typeof window.waistChart.destroy === 'function') {
+        window.waistChart.destroy();
+    }
+
 
     const weightAvg = avg(allData.weight);
     const waistAvg = avg(allData.waist);
