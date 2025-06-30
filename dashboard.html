@@ -332,9 +332,10 @@ metrics.forEach(({ key, label }) => {
   const start = parseFloat(data[`starting${key.charAt(0).toUpperCase()}${key.slice(1)}`]) ?? current;
 
   if (!isNaN(current) && !isNaN(target) && !isNaN(start) && start !== target) {
-    const progress = Math.abs(current - target) < Math.abs(start - target)
-      ? (1 - Math.abs(current - target) / Math.abs(start - target)) * 100
-      : 0;
+    let progress = (1 - Math.abs(current - target) / Math.abs(start - target)) * 100;
+      if (isNaN(progress) || !isFinite(progress)) progress = 0;
+      progress = Math.max(0, Math.min(100, progress)); // clamp between 0-100
+
 
     const progressBar = `
       <div class="metric-bar">
