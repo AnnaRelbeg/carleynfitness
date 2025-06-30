@@ -123,7 +123,7 @@
     <br>
 
     <!-- 📈 Progress Graphs -->
-    <div class="dashboard-card graph-container">
+    <!--<div class="dashboard-card graph-container">
       <div class="graph-block">
         <h3>Weight Progress</h3>
         <canvas id="weightChart"></canvas>
@@ -134,7 +134,7 @@
       </div>
     </div>
     <button onclick="downloadChart('weightChart')" class="btn-secondary">⬇️ Download Weight Graph</button>
-    <button onclick="downloadChart('waistChart')" class="btn-secondary">⬇️ Download Waist Graph</button>
+    <button onclick="downloadChart('waistChart')" class="btn-secondary">⬇️ Download Waist Graph</button> -->
 
     <!-- 📊 Progress Bars for Body Metrics -->
     <div id="metric-progress-container" class="dashboard-card">
@@ -503,12 +503,12 @@ updateStreakDisplay("meal", data.mealStreakCount || 0);
       summaryWeight.textContent = "N/A";
     }
 
-    await renderGraph(user.uid, {
-      weight: data.weight ?? 0,
-      targetWeight: data.targetWeight ?? 0,
-      waist: data.waist ?? 0,
-      targetWaist: data.targetWaist ?? 0
-    });
+  //  await renderGraph(user.uid, {
+  //    weight: data.weight ?? 0,
+  //    targetWeight: data.targetWeight ?? 0,
+  //    waist: data.waist ?? 0,
+  //    targetWaist: data.targetWaist ?? 0
+  //  });
 
     form.addEventListener("submit", async (e) => {
       e.preventDefault();
