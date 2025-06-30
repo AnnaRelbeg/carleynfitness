@@ -98,6 +98,52 @@
     </table>
   </details>
 
+  <!-- 🔹 Add below existing metrics section -->
+<details class="log-section">
+  <summary><strong>🏋️ Workout Log</strong></summary>
+  <form id="workoutLogForm">
+    <label for="workoutType">Type</label>
+    <select id="workoutType">
+      <option>Strength</option>
+      <option>Cardio</option>
+      <option>Mobility</option>
+      <option>Other</option>
+    </select>
+
+    <label for="duration">Duration (mins)</label>
+    <input type="number" id="duration" min="5" required />
+
+    <label for="notes">Notes (optional)</label>
+    <textarea id="notes"></textarea>
+
+    <button class="btn-primary" type="submit">Log Workout</button>
+  </form>
+  <div id="workoutStreak"></div>
+</details>
+
+<details class="log-section">
+  <summary><strong>🍽️ Meal Macros Log</strong></summary>
+  <form id="mealLogForm">
+    <label for="calories">Calories</label>
+    <input type="number" id="calories" required />
+
+    <label for="protein">Protein (g)</label>
+    <input type="number" id="protein" required />
+
+    <label for="carbs">Carbs (g)</label>
+    <input type="number" id="carbs" required />
+
+    <label for="fat">Fat (g)</label>
+    <input type="number" id="fat" required />
+
+    <label for="fibre">Fibre (g)</label>
+    <input type="number" id="fibre" />
+
+    <button class="btn-primary" type="submit">Log Meal</button>
+  </form>
+  <div id="mealStreak"></div>
+</details>
+
   <label for="notes">Notes</label>
   <textarea id="notes"></textarea>
 
@@ -364,6 +410,97 @@ metrics.forEach(({ key, label }) => {
     const docSnap = await getDoc(docRef);
     const data = docSnap.data() || {};
 
+    // === 🔥 Streak tracking and 8PM reminder logic ===
+
+function streakEmojis(count) {
+  return '🔥'.repeat(count);
+}
+function badgeLabel(count) {
+  if (count >= 30) return '🥇 30-Day Streak Badge';
+  if (count >= 7) return '🏅 7-Day Streak Badge';
+  return '';
+}
+function updateStreakDisplay(type, count) {
+  const el = document.getElementById(`${type}Streak`);
+  const badge = badgeLabel(count);
+  el.innerHTML = `<p>Streak: ${count} days ${streakEmojis(count)}</p>` + (badge ? `<p><strong>${badge}</strong></p>` : '');
+}
+function checkReminder(lastDate) {
+  const now = new Date();
+  const is8pm = now.getHours() === 20 && now.getMinutes() < 10;
+  const todayStr = now.toISOString().split('T')[0];
+  const lastStr = lastDate ? new Date(lastDate).toISOString().split('T')[0] : '';
+  if (is8pm && todayStr !== lastStr) {
+    const messages = [
+      "Carley here — just checking if you’ve moved today or if I need to teleport in and confiscate the sofa 🛋️💪",
+      "Your workout streak is one log away from greatness. Let’s not ghost the dumbbells today 😄",
+      "If today’s the rest day, all good. But if it’s not… the glutes are waiting 🍑 (respectfully).",
+      "No judgment. Just a reminder that even 10 minutes counts. You in?",
+      "Coach Carley checking in: have you moved with purpose today? If not — consider this your friendly nudge 💥",
+      "Your streak is hungry. Feed it with a workout log and make Future You proud ✨"
+    ];
+    alert(messages[Math.floor(Math.random() * messages.length)]);
+  }
+}
+checkReminder(data.lastWorkoutLogDate);
+
+// === 🏋️ Workout Log Form Submission ===
+document.getElementById("workoutLogForm").addEventListener("submit", async (e) => {
+  e.preventDefault();
+  const log = {
+    type: document.getElementById("workoutType").value,
+    duration: parseInt(document.getElementById("duration").value),
+    notes: document.getElementById("notes").value,
+    date: Timestamp.now()
+  };
+  await addDoc(collection(db, "clients", user.uid, "workouts"), log);
+
+  const today = new Date().toISOString().split("T")[0];
+  const last = data.lastWorkoutLogDate ? new Date(data.lastWorkoutLogDate).toISOString().split("T")[0] : "";
+  let streak = 1;
+  if (last === new Date(Date.now() - 86400000).toISOString().split("T")[0]) {
+    streak = (data.workoutStreakCount || 0) + 1;
+  }
+  await setDoc(docRef, {
+    ...data,
+    workoutStreakCount: streak,
+    lastWorkoutLogDate: new Date().toISOString()
+  });
+  updateStreakDisplay("workout", streak);
+});
+
+// === 🍽️ Meal Log Form Submission ===
+document.getElementById("mealLogForm").addEventListener("submit", async (e) => {
+  e.preventDefault();
+  const log = {
+    calories: parseInt(document.getElementById("calories").value),
+    protein: parseInt(document.getElementById("protein").value),
+    carbs: parseInt(document.getElementById("carbs").value),
+    fat: parseInt(document.getElementById("fat").value),
+    fibre: parseInt(document.getElementById("fibre").value),
+    date: Timestamp.now()
+  };
+  await addDoc(collection(db, "clients", user.uid, "meals"), log);
+
+  const today = new Date().toISOString().split("T")[0];
+  const last = data.lastMealLogDate ? new Date(data.lastMealLogDate).toISOString().split("T")[0] : "";
+  let streak = 1;
+  if (last === new Date(Date.now() - 86400000).toISOString().split("T")[0]) {
+    streak = (data.mealStreakCount || 0) + 1;
+  }
+  await setDoc(docRef, {
+    ...data,
+    mealStreakCount: streak,
+    lastMealLogDate: new Date().toISOString()
+  });
+  updateStreakDisplay("meal", streak);
+});
+
+// === Show existing streaks on load ===
+updateStreakDisplay("workout", data.workoutStreakCount || 0);
+updateStreakDisplay("meal", data.mealStreakCount || 0);
+
+
     document.getElementById("fullName").value = data.fullName || "";
     document.getElementById("goal").value = data.goal || "";
     document.getElementById("startDate").value = data.startDate || "";
@@ -501,7 +638,6 @@ metricFields.forEach(metric => {
   });
 });
 </script>
-
 
 </body>
 </html>
