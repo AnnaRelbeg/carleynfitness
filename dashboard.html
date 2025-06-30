@@ -379,6 +379,10 @@ metrics.forEach(({ key, label }) => {
 
     // === 🔥 Streak tracking and 8PM reminder logic ===
 
+  updateStreakDisplay("workout", data.workoutStreakCount || 0);
+updateStreakDisplay("meal", data.mealStreakCount || 0);
+
+
 function streakEmojis(count) {
   return '🔥'.repeat(count);
 }
