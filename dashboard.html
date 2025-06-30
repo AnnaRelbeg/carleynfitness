@@ -69,25 +69,25 @@
 
       <!-- 🔹 Logs -->
       <details class="log-section">
-        <summary><strong>🏋️ Workout Log</strong></summary>
-        <form id="workoutLogForm">
-          <label for="workoutType">Type</label>
-          <select id="workoutType">
-            <option>Strength</option>
-            <option>Cardio</option>
-            <option>Mobility</option>
-            <option>Other</option>
-          </select>
+  <summary><strong>🏋️ Workout Log</strong></summary>
+  <form id="workoutLogForm">
+    <label for="workoutType">Type</label>
+    <select id="workoutType">
+      <option>Strength</option>
+      <option>Cardio</option>
+      <option>Mobility</option>
+      <option>Other</option>
+    </select>
 
-          <label for="duration">Duration (mins)</label>
-          <input type="number" id="duration" min="5" required />
+    <label for="duration">Duration (mins)</label>
+    <input type="number" id="duration" min="5" required />
 
-          <label for="notes">Notes (optional)</label>
-          <textarea id="workoutNotes"></textarea>
+    <label for="workoutNotes">Notes (optional)</label>
+    <textarea id="workoutNotes"></textarea>
 
-          <button class="btn-primary" type="submit">Log Workout</button>
-        </form>
-        <div id="workoutStreak"></div>
+    <button class="btn-primary" type="submit">Log Workout</button>
+  </form>
+  <div id="workoutStreak"></div>
       </details>
 
       <details class="log-section">
@@ -419,7 +419,7 @@ if (workoutForm) {
     const log = {
       type: document.getElementById("workoutType").value,
       duration: parseInt(document.getElementById("duration").value),
-      notes: document.getElementById("workoutNotes").value, // ✅ update here too
+      notes: document.getElementById("workoutNotes").value, // ✅ fixed ID
       date: Timestamp.now()
     };
     await addDoc(collection(db, "clients", user.uid, "workouts"), log);
@@ -436,8 +436,10 @@ if (workoutForm) {
       lastWorkoutLogDate: new Date().toISOString()
     });
     updateStreakDisplay("workout", streak);
+    alert("✅ Workout logged!");
   });
 }
+
 
 
 // === 🍽️ Meal Log Form Submission ===
