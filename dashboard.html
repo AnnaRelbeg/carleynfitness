@@ -9,173 +9,140 @@
   <!-- Chart.js v4 with date-fns adapter -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns@3"></script>
-
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/glightbox/3.2.0/css/glightbox.min.css" />
-<script src="https://cdnjs.cloudflare.com/ajax/libs/glightbox/3.2.0/js/glightbox.min.js"></script>
-
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/glightbox/3.2.0/js/glightbox.min.js"></script>
 </head>
-
 <body>
-  <section class="section" style="max-width: 700px; margin-top: 60px;">
-    <div class="container">
-      <h2>Welcome to Your Fitness Dashboard</h2>
 
-      <!-- 🔹 Summary Card -->
-      <div class="dashboard-card" id="summary-card" style="display: none;">
-        <h3>Summary</h3>
-        <p><strong>Name:</strong> <span id="summary-name"></span></p>
-        <p><strong>Goal:</strong> <span id="summary-goal"></span></p>
-        <p><strong>Weight Progress:</strong>
-          <span id="summary-weight"></span>
-        </p>
+<section class="section" style="max-width: 700px; margin-top: 60px;">
+  <div class="container">
+    <h2>Welcome to Your Fitness Dashboard</h2>
+
+    <!-- 🔹 Summary Card -->
+    <div class="dashboard-card" id="summary-card" style="display: none;">
+      <h3>Summary</h3>
+      <p><strong>Name:</strong> <span id="summary-name"></span></p>
+      <p><strong>Goal:</strong> <span id="summary-goal"></span></p>
+      <p><strong>Weight Progress:</strong>
+        <span id="summary-weight"></span>
+      </p>
+    </div>
+
+    <!-- 🔧 Editable Profile Form -->
+    <form id="profile-form">
+      <p><strong>Email:</strong> <span id="user-email"></span></p>
+
+      <details class="profile-section">
+        <summary><strong>📝 Generic Information</strong></summary>
+        <label for="fullName">Full Name</label>
+        <input type="text" id="fullName" readonly />
+
+        <label for="goal">Goal</label>
+        <input type="text" id="goal" />
+
+        <label for="startDate">Goal Start Date</label>
+        <input type="date" id="startDate" />
+      </details>
+
+      <!-- 📊 Expandable Body Metrics Section -->
+      <details class="metrics-section">
+        <summary><strong>📊 Body Metrics</strong></summary>
+        <table class="metrics-table">
+          <thead>
+            <tr>
+              <th>Metric</th>
+              <th>Current Value</th>
+              <th>Target</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td>Weight (kg/lbs)</td><td><input type="number" id="weight" step="0.1" /></td><td><input type="number" id="targetWeight" step="0.1" /></td></tr>
+            <tr><td>Waist Circumference (cm)</td><td><input type="number" id="waist" step="0.1" /></td><td><input type="number" id="targetWaist" step="0.1" /></td></tr>
+            <tr><td>Hip Circumference (cm)</td><td><input type="number" id="hip" step="0.1" /></td><td><input type="number" id="targetHip" step="0.1" /></td></tr>
+            <tr><td>Chest Circumference (cm)</td><td><input type="number" id="chest" step="0.1" /></td><td><input type="number" id="targetChest" step="0.1" /></td></tr>
+            <tr><td>Thigh Circumference (cm)</td><td><input type="number" id="thigh" step="0.1" /></td><td><input type="number" id="targetThigh" step="0.1" /></td></tr>
+            <tr><td>Arm Circumference (cm)</td><td><input type="number" id="arm" step="0.1" /></td><td><input type="number" id="targetArm" step="0.1" /></td></tr>
+            <tr><td>Glutes (cm)</td><td><input type="number" id="glutes" step="0.1" /></td><td><input type="number" id="targetGlutes" step="0.1" /></td></tr>
+          </tbody>
+        </table>
+      </details>
+
+      <!-- 🔹 Logs -->
+      <details class="log-section">
+        <summary><strong>🏋️ Workout Log</strong></summary>
+        <form id="workoutLogForm">
+          <label for="workoutType">Type</label>
+          <select id="workoutType">
+            <option>Strength</option>
+            <option>Cardio</option>
+            <option>Mobility</option>
+            <option>Other</option>
+          </select>
+
+          <label for="duration">Duration (mins)</label>
+          <input type="number" id="duration" min="5" required />
+
+          <label for="notes">Notes (optional)</label>
+          <textarea id="workoutNotes"></textarea>
+
+          <button class="btn-primary" type="submit">Log Workout</button>
+        </form>
+        <div id="workoutStreak"></div>
+      </details>
+
+      <details class="log-section">
+        <summary><strong>🍽️ Meal Macros Log</strong></summary>
+        <form id="mealLogForm">
+          <label for="calories">Calories</label>
+          <input type="number" id="calories" required />
+
+          <label for="protein">Protein (g)</label>
+          <input type="number" id="protein" required />
+
+          <label for="carbs">Carbs (g)</label>
+          <input type="number" id="carbs" required />
+
+          <label for="fat">Fat (g)</label>
+          <input type="number" id="fat" required />
+
+          <label for="fibre">Fibre (g)</label>
+          <input type="number" id="fibre" />
+
+          <button class="btn-primary" type="submit">Log Meal</button>
+        </form>
+        <div id="mealStreak"></div>
+      </details>
+
+      <label for="notes">Notes</label>
+      <textarea id="notes"></textarea>
+
+      <button type="submit" class="btn-primary">💾 Save Changes</button>
+      <p id="responseMsg"></p>
+    </form>
+
+    <br>
+
+    <!-- 📈 Progress Graphs -->
+    <div class="dashboard-card graph-container">
+      <div class="graph-block">
+        <h3>Weight Progress</h3>
+        <canvas id="weightChart"></canvas>
       </div>
-
-<!-- 🔧 Editable Profile Form -->
-<form id="profile-form">
-  <p><strong>Email:</strong> <span id="user-email"></span></p>
-  
-  <details class="profile-section" >
-  <summary><strong>📝 Generic Information</strong></summary>
-  <label for="fullName">Full Name</label>
-  <input type="text" id="fullName" readonly />
-
-  <label for="goal">Goal</label>
-  <input type="text" id="goal" />
-
-  <label for="startDate">Goal Start Date</label>
-  <input type="date" id="startDate" />
-
-</details>
-
-  <!-- 📊 Expandable Body Metrics Section -->
-  <details class="metrics-section" >
-    <summary><strong>📊 Body Metrics</strong></summary>
-    <table class="metrics-table">
-      <thead>
-        <tr>
-          <th>Metric</th>
-          <th>Current Value</th>
-          <th>Target</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td>Weight (kg/lbs)</td>
-          <td><input type="number" id="weight" step="0.1" /></td>
-          <td><input type="number" id="targetWeight" step="0.1" /></td>
-        </tr>
-        <tr>
-          <td>Waist Circumference (cm)</td>
-          <td><input type="number" id="waist" step="0.1" /></td>
-          <td><input type="number" id="targetWaist" step="0.1" /></td>
-        </tr>
-        <tr>
-          <td>Hip Circumference (cm)</td>
-          <td><input type="number" id="hip" step="0.1" /></td>
-          <td><input type="number" id="targetHip" step="0.1" /></td>
-        </tr>
-        <tr>
-          <td>Chest Circumference (cm)</td>
-          <td><input type="number" id="chest" step="0.1" /></td>
-          <td><input type="number" id="targetChest" step="0.1" /></td>
-        </tr>
-        <tr>
-          <td>Thigh Circumference (cm)</td>
-          <td><input type="number" id="thigh" step="0.1" /></td>
-          <td><input type="number" id="targetThigh" step="0.1" /></td>
-        </tr>
-        <tr>
-          <td>Arm Circumference (cm)</td>
-          <td><input type="number" id="arm" step="0.1" /></td>
-          <td><input type="number" id="targetArm" step="0.1" /></td>
-        </tr>
-        <tr>
-          <td>Glutes (cm)</td>
-          <td><input type="number" id="glutes" step="0.1" /></td>
-          <td><input type="number" id="targetGlutes" step="0.1" /></td>
-        </tr>
-      </tbody>
-    </table>
-  </details>
-
-  <!-- 🔹 Add below existing metrics section -->
-<details class="log-section">
-  <summary><strong>🏋️ Workout Log</strong></summary>
-  <form id="workoutLogForm">
-    <label for="workoutType">Type</label>
-    <select id="workoutType">
-      <option>Strength</option>
-      <option>Cardio</option>
-      <option>Mobility</option>
-      <option>Other</option>
-    </select>
-
-    <label for="duration">Duration (mins)</label>
-    <input type="number" id="duration" min="5" required />
-
-    <label for="notes">Notes (optional)</label>
-    <textarea id="notes"></textarea>
-
-    <button class="btn-primary" type="submit">Log Workout</button>
-  </form>
-  <div id="workoutStreak"></div>
-</details>
-
-<details class="log-section">
-  <summary><strong>🍽️ Meal Macros Log</strong></summary>
-  <form id="mealLogForm">
-    <label for="calories">Calories</label>
-    <input type="number" id="calories" required />
-
-    <label for="protein">Protein (g)</label>
-    <input type="number" id="protein" required />
-
-    <label for="carbs">Carbs (g)</label>
-    <input type="number" id="carbs" required />
-
-    <label for="fat">Fat (g)</label>
-    <input type="number" id="fat" required />
-
-    <label for="fibre">Fibre (g)</label>
-    <input type="number" id="fibre" />
-
-    <button class="btn-primary" type="submit">Log Meal</button>
-  </form>
-  <div id="mealStreak"></div>
-</details>
-
-  <label for="notes">Notes</label>
-  <textarea id="notes"></textarea>
-
-  <button type="submit" class="btn-primary">💾 Save Changes</button>
-  <p id="responseMsg"></p>
-</form>
-      <br>
-      <!-- 📈 Progress Graph -->
-<!-- 📈 Progress Graphs -->
-<div class="dashboard-card graph-container">
-  <div class="graph-block">
-    <h3>Weight Progress</h3>
-    <canvas id="weightChart"></canvas>
-  </div>
-  <div class="graph-block">
-    <h3>Waist Circumference</h3>
-    <canvas id="waistChart"></canvas>
-  </div>
-</div>
-  <button onclick="downloadChart('weightChart')" class="btn-secondary">⬇️ Download Weight Graph</button>
-  <button onclick="downloadChart('waistChart')" class="btn-secondary">⬇️ Download Waist Graph</button>
+      <div class="graph-block">
+        <h3>Waist Circumference</h3>
+        <canvas id="waistChart"></canvas>
+      </div>
+    </div>
+    <button onclick="downloadChart('weightChart')" class="btn-secondary">⬇️ Download Weight Graph</button>
+    <button onclick="downloadChart('waistChart')" class="btn-secondary">⬇️ Download Waist Graph</button>
 
     <!-- 📊 Progress Bars for Body Metrics -->
-<div id="metric-progress-container" class="dashboard-card">
-  <h3>📈 Your Progress</h3>
-  <!-- JS will inject progress bars here -->
-</div>
-
-  </section>
-
-
-
+    <div id="metric-progress-container" class="dashboard-card">
+      <h3>📈 Your Progress</h3>
+      <!-- JS will inject progress bars here -->
+    </div>
+  </div>
+</section>
 
 <div class="photo-upload-section">
   <h3>📸 Upload Progress Photos</h3>
@@ -450,7 +417,7 @@ document.getElementById("workoutLogForm").addEventListener("submit", async (e) =
   const log = {
     type: document.getElementById("workoutType").value,
     duration: parseInt(document.getElementById("duration").value),
-    notes: document.getElementById("notes").value,
+    notes: document.getElementById("workoutNotes").value,
     date: Timestamp.now()
   };
   await addDoc(collection(db, "clients", user.uid, "workouts"), log);
