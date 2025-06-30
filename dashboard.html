@@ -28,6 +28,52 @@
       </p>
     </div>
 
+     <!-- 🔹 Logs -->
+      <details class="log-section">
+  <summary><strong>🏋️ Workout Log</strong></summary>
+  <form id="workoutLogForm">
+    <label for="workoutType">Type</label>
+    <select id="workoutType">
+      <option>Strength</option>
+      <option>Cardio</option>
+      <option>Mobility</option>
+      <option>Other</option>
+    </select>
+
+    <label for="duration">Duration (mins)</label>
+    <input type="number" id="duration" min="5" required />
+
+    <label for="workoutNotes">Notes (optional)</label>
+    <textarea id="workoutNotes"></textarea>
+
+    <button class="btn-primary" type="submit">Log Workout</button>
+  </form>
+  <div id="workoutStreak"></div>
+      </details>
+
+      <details class="log-section">
+        <summary><strong>🍽️ Meal Macros Log</strong></summary>
+        <form id="mealLogForm">
+          <label for="calories">Calories</label>
+          <input type="number" id="calories" required />
+
+          <label for="protein">Protein (g)</label>
+          <input type="number" id="protein" required />
+
+          <label for="carbs">Carbs (g)</label>
+          <input type="number" id="carbs" required />
+
+          <label for="fat">Fat (g)</label>
+          <input type="number" id="fat" required />
+
+          <label for="fibre">Fibre (g)</label>
+          <input type="number" id="fibre" />
+
+          <button class="btn-primary" type="submit">Log Meal</button>
+        </form>
+        <div id="mealStreak"></div>
+      </details>
+
     <!-- 🔧 Editable Profile Form -->
     <form id="profile-form">
       <p><strong>Email:</strong> <span id="user-email"></span></p>
@@ -74,51 +120,7 @@
     </form>
 
 
-          <!-- 🔹 Logs -->
-      <details class="log-section">
-  <summary><strong>🏋️ Workout Log</strong></summary>
-  <form id="workoutLogForm">
-    <label for="workoutType">Type</label>
-    <select id="workoutType">
-      <option>Strength</option>
-      <option>Cardio</option>
-      <option>Mobility</option>
-      <option>Other</option>
-    </select>
-
-    <label for="duration">Duration (mins)</label>
-    <input type="number" id="duration" min="5" required />
-
-    <label for="workoutNotes">Notes (optional)</label>
-    <textarea id="workoutNotes"></textarea>
-
-    <button class="btn-primary" type="submit">Log Workout</button>
-  </form>
-  <div id="workoutStreak"></div>
-      </details>
-
-      <details class="log-section">
-        <summary><strong>🍽️ Meal Macros Log</strong></summary>
-        <form id="mealLogForm">
-          <label for="calories">Calories</label>
-          <input type="number" id="calories" required />
-
-          <label for="protein">Protein (g)</label>
-          <input type="number" id="protein" required />
-
-          <label for="carbs">Carbs (g)</label>
-          <input type="number" id="carbs" required />
-
-          <label for="fat">Fat (g)</label>
-          <input type="number" id="fat" required />
-
-          <label for="fibre">Fibre (g)</label>
-          <input type="number" id="fibre" />
-
-          <button class="btn-primary" type="submit">Log Meal</button>
-        </form>
-        <div id="mealStreak"></div>
-      </details>
+         
 
     <br>
 
