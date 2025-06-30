@@ -1067,3 +1067,64 @@ box-shadow: 0 4px 6px rgba(0,0,0,0.1);
   font-size: 1.1rem;
   padding: 0.25rem 0;
 }
+
+  .log-section {
+    margin-top: 30px;
+    border: 2px solid #ccc;
+    border-radius: 12px;
+    padding: 20px;
+    background-color: #f9f9f9;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+  }
+
+  .log-section summary {
+    font-size: 1.4rem;
+    font-weight: bold;
+    margin-bottom: 15px;
+  }
+
+  .log-section form label {
+    display: block;
+    margin-top: 12px;
+    font-weight: 600;
+  }
+
+  .log-section form input,
+  .log-section form select,
+  .log-section form textarea {
+    width: 100%;
+    padding: 10px;
+    margin-top: 5px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-size: 1rem;
+  }
+
+  .btn-primary {
+    margin-top: 15px;
+    background-color: #ff4081;
+    color: white;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background-color 0.3s ease;
+  }
+
+  .btn-primary:hover {
+    background-color: #e91e63;
+  }
+
+  #workoutStreak,
+  #mealStreak {
+    margin-top: 20px;
+    font-size: 1.3rem;
+    color: #333;
+    background-color: #fffbe6;
+    padding: 12px;
+    border-left: 5px solid #ff9800;
+    border-radius: 8px;
+    font-weight: bold;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.1);
+  }
