@@ -395,7 +395,8 @@ function updateStreakDisplay(type, count) {
   const el = document.getElementById(`${type}Streak`);
   const badge = badgeLabel(count);
 
-  const animatedFlames = '🔥'.repeat(count).split('').map(e => `<span class="streak-emoji">${e}</span>`).join('');
+  const animatedFlames = Array(count).fill('<span class="streak-emoji">&#x1F525;</span>').join('');
+
 
   el.innerHTML = `
     <div class="streak-display">
