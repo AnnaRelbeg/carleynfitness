@@ -412,29 +412,33 @@ function checkReminder(lastDate) {
 checkReminder(data.lastWorkoutLogDate);
 
 // === 🏋️ Workout Log Form Submission ===
-document.getElementById("workoutLogForm").addEventListener("submit", async (e) => {
-  e.preventDefault();
-  const log = {
-    type: document.getElementById("workoutType").value,
-    duration: parseInt(document.getElementById("duration").value),
-    notes: document.getElementById("workoutNotes").value,
-    date: Timestamp.now()
-  };
-  await addDoc(collection(db, "clients", user.uid, "workouts"), log);
+const workoutForm = document.getElementById("workoutLogForm");
+if (workoutForm) {
+  workoutForm.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const log = {
+      type: document.getElementById("workoutType").value,
+      duration: parseInt(document.getElementById("duration").value),
+      notes: document.getElementById("workoutNotes").value, // ✅ update here too
+      date: Timestamp.now()
+    };
+    await addDoc(collection(db, "clients", user.uid, "workouts"), log);
 
-  const today = new Date().toISOString().split("T")[0];
-  const last = data.lastWorkoutLogDate ? new Date(data.lastWorkoutLogDate).toISOString().split("T")[0] : "";
-  let streak = 1;
-  if (last === new Date(Date.now() - 86400000).toISOString().split("T")[0]) {
-    streak = (data.workoutStreakCount || 0) + 1;
-  }
-  await setDoc(docRef, {
-    ...data,
-    workoutStreakCount: streak,
-    lastWorkoutLogDate: new Date().toISOString()
+    const today = new Date().toISOString().split("T")[0];
+    const last = data.lastWorkoutLogDate ? new Date(data.lastWorkoutLogDate).toISOString().split("T")[0] : "";
+    let streak = 1;
+    if (last === new Date(Date.now() - 86400000).toISOString().split("T")[0]) {
+      streak = (data.workoutStreakCount || 0) + 1;
+    }
+    await setDoc(docRef, {
+      ...data,
+      workoutStreakCount: streak,
+      lastWorkoutLogDate: new Date().toISOString()
+    });
+    updateStreakDisplay("workout", streak);
   });
-  updateStreakDisplay("workout", streak);
-});
+}
+
 
 // === 🍽️ Meal Log Form Submission ===
 document.getElementById("mealLogForm").addEventListener("submit", async (e) => {
