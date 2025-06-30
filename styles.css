@@ -1102,3 +1102,25 @@ box-shadow: 0 4px 6px rgba(0,0,0,0.1);
   font-size: 1.1rem;
   font-weight: 600;
 }
+
+@keyframes bounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-5px); }
+}
+
+.streak-display {
+  margin-top: 0.5rem;
+  background: #fff9c4;
+  border-left: 5px solid #fbc02d;
+  padding: 0.75rem 1rem;
+  border-radius: 10px;
+  font-size: 1.2rem;
+  font-weight: 600;
+  animation: bounce 1s ease-in-out infinite;
+  display: inline-block;
+}
+
+.streak-emoji {
+  animation: bounce 0.8s ease-in-out infinite;
+  display: inline-block;
+}

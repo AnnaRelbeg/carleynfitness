@@ -394,8 +394,17 @@ function badgeLabel(count) {
 function updateStreakDisplay(type, count) {
   const el = document.getElementById(`${type}Streak`);
   const badge = badgeLabel(count);
-  el.innerHTML = `<p>Streak: ${count} days ${streakEmojis(count)}</p>` + (badge ? `<p><strong>${badge}</strong></p>` : '');
+
+  const animatedFlames = '🔥'.repeat(count).split('').map(e => `<span class="streak-emoji">${e}</span>`).join('');
+
+  el.innerHTML = `
+    <div class="streak-display">
+      <p>Streak: ${count} days ${animatedFlames}</p>
+      ${badge ? `<p><strong>${badge}</strong></p>` : ''}
+    </div>
+  `;
 }
+
 function checkReminder(lastDate) {
   const now = new Date();
   const is8pm = now.getHours() === 20 && now.getMinutes() < 10;
