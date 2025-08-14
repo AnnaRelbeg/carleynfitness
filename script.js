@@ -3,6 +3,11 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.10/firebas
 import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-analytics.js";
 import { getFirestore, collection, getDocs, addDoc } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-firestore.js";
 
+// =========================
+// FULLY BOOKED MODE TOGGLE
+// =========================
+const FULLY_BOOKED = true; // <-- set to true to lock the calendar
+
 // Firebase configuration
 const firebaseConfig = {
     apiKey: "AIzaSyDpju8JIedURVxBJgmZ1yBuRzd4CEdFDVY",
@@ -99,32 +104,61 @@ document.addEventListener('DOMContentLoaded', async function () {
                 dayCell.classList.add('disabled');
                 dayCell.style.pointerEvents = 'none';
             }
+            
+            // FULLY BOOKED: mark every day as booked/disabled
+            if (FULLY_BOOKED) {
+                dayCell.classList.add('booked');
+                dayCell.style.pointerEvents = 'none';
+                dayCell.title = 'Fully booked';
+            }
 
             calendarElement.appendChild(dayCell);
         }
 
-        await fetchBookings(); // Ensure bookings are reloaded
+                // Only fetch real bookings if we are NOT fully booked
+        if (!FULLY_BOOKED) {
+            await fetchBookings();
+        } else {
+            // Add a badge the first time we render
+            addFullyBookedBadge();
+            // Hide booking form just in case
+            if (bookingForm) bookingForm.style.display = 'none';
+        }
     }
 
-    // Handle month selection change
+        await fetchBookings(); // Ensure bookings are reloaded
+    
+
+    // Month change
     monthSelect.addEventListener("change", async function () {
         selectedMonth = parseInt(this.value);
         generateCalendar(selectedMonth, selectedYear);
     });
 
-    // Event Delegation: Attach a single event listener to the calendar
-    calendarElement.addEventListener('click', function (event) {
-        if (event.target.classList.contains('date') && !event.target.classList.contains('booked')) {
-            document.querySelectorAll('.date').forEach(d => d.classList.remove('highlight'));
-            event.target.classList.add('highlight');
+// Date click (single listener – no nesting)
+calendarElement.addEventListener('click', function (event) {
+  if (FULLY_BOOKED) {
+    alert('No slots available – currently fully booked. Please use the contact form to join the waitlist.');
+    return;
+  }
+  if (event.target.classList.contains('date') && !event.target.classList.contains('booked')) {
+    document.querySelectorAll('.date').forEach(d => d.classList.remove('highlight'));
+    event.target.classList.add('highlight');
 
-            bookingForm.style.display = 'block';
-            bookingDateInput.value = event.target.dataset.date;
-        }
-    });
+    bookingForm.style.display = 'block';
+    bookingDateInput.value = event.target.dataset.date;
+  }
+});
+
 
 // Handle booking form submission
-form.addEventListener('submit', async function (event) {
+    form.addEventListener('submit', async function (event) {
+        event.preventDefault();
+
+        if (FULLY_BOOKED) {
+            alert('I am fully booked at the moment. Please reach out via the contact form to join the waitlist 🙏');
+            return;
+        }
     event.preventDefault();
     const name = document.getElementById('name').value;
     const email = document.getElementById('email').value;
@@ -172,6 +206,17 @@ form.addEventListener('submit', async function (event) {
         } catch (error) {
             console.error("Error fetching bookings:", error);
         }
+    }
+
+        // Add a subtle "Fully booked" badge next to the header controls
+    function addFullyBookedBadge() {
+        const header = document.getElementById('calendar-header');
+        if (!header || header.querySelector('.fully-booked-badge')) return;
+        const badge = document.createElement('div');
+        badge.className = 'fully-booked-badge';
+        badge.textContent = 'Fully booked';
+        badge.style.cssText = 'margin-left:12px;padding:6px 10px;border-radius:8px;background:#f1f3f5;display:inline-block;font-weight:600;';
+        header.appendChild(badge);
     }
 
     // Initial render
