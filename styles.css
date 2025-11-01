@@ -1451,3 +1451,35 @@ box-shadow: 0 4px 6px rgba(0,0,0,0.1);
     width: 100%;
     margin-top: 10px;
 }
+
+/* ===================================== */
+/* 5. CALENDAR DISCLAIMER BOX */
+/* ===================================== */
+
+.calendar-disclaimer {
+    padding: 16px 20px;
+    margin: 20px 0 25px 0; /* Space above and below */
+    
+    /* Use your site's gold accent color */
+    background-color: #fdfaf5; 
+    border-left: 5px solid rgb(186, 154, 86); 
+    
+    border-radius: 8px;
+    line-height: 1.6;
+    text-align: left;
+}
+
+.calendar-disclaimer p {
+    margin: 0;
+    color: #555;
+    font-size: 1rem;
+}
+
+.calendar-disclaimer p:first-child {
+    margin-bottom: 5px;
+}
+
+.calendar-disclaimer strong {
+    color: #333;
+    font-weight: 700;
+}
