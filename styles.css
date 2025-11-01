@@ -1135,7 +1135,7 @@ box-shadow: 0 4px 6px rgba(0,0,0,0.1);
 }
 
 /* ===================================== */
-/* 1. Private Studio Feature Section */
+/* 1. Private Studio Feature - Text & Equipment List */
 /* ===================================== */
 
 /* Use the clean background from the gallery */
@@ -1192,9 +1192,7 @@ box-shadow: 0 4px 6px rgba(0,0,0,0.1);
     margin: 0 auto 25px auto;
 }
 
-/* --- 3.2 Modern Equipment List (Boxes) --- */
-
-/* The <ul> container */
+/* The <ul> container for the equipment list */
 .equipment-list {
     list-style: none; /* Remove default bullets */
     padding-left: 0;
@@ -1253,14 +1251,14 @@ box-shadow: 0 4px 6px rgba(0,0,0,0.1);
     color: #000;
 }
 
-/* --- 3.3 Button --- */
+/* Button below the list */
 .private-studio-feature .hero-buttons {
     text-align: center; /* Center the button */
     margin-top: 40px;
 }
 
 
-/* --- 3.4 Mobile Responsive --- */
+/* --- Mobile Responsive for Equipment List --- */
 @media (max-width: 768px) {
     .private-studio-feature h2 {
         font-size: 1.8rem;
@@ -1287,149 +1285,9 @@ box-shadow: 0 4px 6px rgba(0,0,0,0.1);
         top: 15px;
     }
 }
-/* ===================================== */
-/* 2. Studio Image Placeholder */
-/* ===================================== */
-
-.studio-visual {
-    width: 100%;
-    max-width: 900px; /* Limits width on large screens */
-    height: 400px; /* Gives the image area a prominent height */
-    margin: 30px auto 40px auto;
-    background-color: #e0e0e0; /* Placeholder color for when the image is added */
-    /* Use a background image here when you have one */
-    /* background-image: url('path/to/myfitpod-studio-image.jpg'); */
-    background-size: cover;
-    background-position: center;
-    border-radius: 10px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    /* This text is just to help you identify the placeholder */
-    color: #777;
-    font-size: 1.2em;
-    font-style: italic;
-}
-
-@media (max-width: 768px) {
-    .studio-visual {
-        height: 250px;
-    }
-}
 
 /* ===================================== */
-/* 2. Studio Image Gallery (Modern & Minimalist) */
-/* ===================================== */
-
-.private-studio-feature .studio-visual {
-    width: 100%;
-    max-width: 1000px;
-    margin: 30px auto 40px auto;
-    border-radius: 12px;
-    overflow: hidden;
-    /* Minimalist Background: Light and clean */
-    background: #f9f9f9;
-    padding: 15px;
-    border: 1px solid #eee;
-    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.05); /* Softer shadow */
-}
-
-.private-studio-feature .gallery-wrapper {
-    display: grid;
-    /* Clean, symmetrical 2x2 grid */
-    grid-template-columns: repeat(2, 1fr);
-
-}
-
-.private-studio-feature .gallery-wrapper .gallery-img {
-    width: 100%;
-    height: 100%;
-    /* Modern CSS: Responsive aspect ratio */
-    aspect-ratio: 4 / 3;
-    object-fit: cover;
-    border-radius: 8px;
-    cursor: pointer;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.05);
-    
-    /* Smooth transitions for the new focus effect */
-    transition: transform 0.3s cubic-bezier(0.25, 0.8, 0.25, 1), 
-                opacity 0.3s ease,
-                box-shadow 0.3s ease;
-}
-
-/* --- Minimalist Focus Effect --- */
-
-/* When hovering the whole gallery, dim all images */
-.private-studio-feature .gallery-wrapper:hover .gallery-img {
-    opacity: 0.7;
-}
-
-/* Bring the *specifically hovered* image back to full focus */
-.private-studio-feature .gallery-wrapper .gallery-img:hover {
-    opacity: 1;
-    transform: scale(1.04);
-    z-index: 10; /* Bring to front */
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15); /* Add shadow only on hover */
-}
-
-
-/* ===================================== */
-/* 2. Studio Image Gallery (Modern, Minimal, Full Images) */
-/* ===================================== */
-
-.private-studio-feature .studio-visual {
-    width: 100%;
-    max-width: 1000px;
-    margin: 30px auto 40px auto;
-    border-radius: 12px;
-    overflow: hidden;
-    /* Minimalist Background: Light and clean */
-    background: #f9f9f9;
-    padding: 15px;
-    border: 1px solid #eee;
-    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.05); /* Softer shadow */
-}
-
-.private-studio-feature .gallery-wrapper {
-    /* Use a Masonry-style column layout */
-    column-count: 2; /* 2 columns on desktop */
-    column-gap: 15px;
-    
-    /* Remove old grid styles */
-    display: block; 
-}
-
-.private-studio-feature .gallery-wrapper .gallery-img {
-    /* --- CRITICAL FIX: Respect original image aspect ratio --- */
-    width: 100%;
-    height: auto; /* Let the height be automatic */
-    aspect-ratio: unset; /* Remove fixed aspect ratio */
-    object-fit: unset;   /* Remove object-fit */
-    
-    border-radius: 8px;
-    cursor: pointer;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.05);
-    
-    /* Spacing for Masonry layout */
-    margin-bottom: 15px;
-    break-inside: avoid; /* Prevents an image from splitting across columns */
-    
-    /* Smooth transitions for hover effect */
-    transition: transform 0.3s cubic-bezier(0.25, 0.8, 0.25, 1), 
-                box-shadow 0.3s ease;
-}
-
-/* --- Simplified Hover Effect (No dimming) --- */
-.private-studio-feature .gallery-wrapper .gallery-img:hover {
-    transform: scale(1.03); /* Slightly less aggressive scale */
-    z-index: 10; /* Bring to front */
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15); /* Add shadow only on hover */
-}
-
-
-/* ===================================== */
-/* 2. Studio Image Gallery (4-Col Desktop + Filmstrip Mobile) */
+/* 2. Studio Image Gallery (Final Version) */
 /* ===================================== */
 
 .private-studio-feature .studio-visual {
@@ -1447,6 +1305,7 @@ box-shadow: 0 4px 6px rgba(0,0,0,0.1);
 .private-studio-feature .gallery-wrapper {
     display: grid;
     grid-template-columns: repeat(4, 1fr); 
+    gap: 15px;
 }
 
 .private-studio-feature .gallery-wrapper .gallery-img {
@@ -1468,7 +1327,7 @@ box-shadow: 0 4px 6px rgba(0,0,0,0.1);
 
 
 /* ======================================================== */
-/* MOBILE: Horizontal "Filmstrip" Scroller (Corrected) */
+/* FINAL MOBILE FIX (Small & Neat Vertical Stack) */
 /* ======================================================== */
 @media (max-width: 650px) {
 
@@ -1487,56 +1346,51 @@ box-shadow: 0 4px 6px rgba(0,0,0,0.1);
         padding: 0 15px;
     }
     
-    /* --- CORRECTION: THIS is the element that scrolls --- */
-    .private-studio-feature .studio-visual {
-        width: 100vw !important; 
-        max-width: none !important;
-        margin-left: 0 !important;
-        margin-right: 0 !important;
-        padding: 10px 0 !important; /* Padding top/bottom */
-        border-radius: 0;
-        background: #fdfdfd;
-        border: none;
-        box-shadow: none;
-        
-        /* --- ADDED SCROLL PROPERTIES --- */
-        overflow-x: auto !important; /* Allow horizontal scroll */
-        overflow-y: hidden !important;
-        scroll-snap-type: x mandatory;
-        -webkit-overflow-scrolling: touch; 
-    }
+/* This is the main container for the gallery */
+.private-studio-feature .studio-visual {
+    /* --- THIS IS THE FIX --- */
+    /* Removed the 100vw, max-width, and margin-left/right lines. */
+    /* It will now respect the parent container's padding. */
+    width: 100%; 
+    padding: 15px !important; 
+    
+    border-radius: 0;
+    background: #fdfdfd;
+    border: none;
+    box-shadow: none;
+    overflow: hidden !important; /* No scrolling */
+}
 
-    /* --- CORRECTION: This wrapper just holds the images in a line --- */
-    .private-studio-feature .gallery-wrapper {
-        display: flex !important; /* Override grid */
-        grid-template-columns: none !important; /* Clear grid styles */
-        
-        /* --- REMOVED overflow-x: auto --- */
-        
-        /* Make the wrapper as wide as all its images */
-        width: max-content !important; 
-        
-        padding: 5px 15px; /* Add padding to see start/end */
+/* This wrapper will stack the images */
+.private-studio-feature .gallery-wrapper {
+    display: grid !important; 
+    grid-template-columns: 1fr !important; /* Single column */
+    width: 100% !important; /* Fit the container */
+        gap: 15px; /* Neat space between images */
+        padding: 0 !important;
+        justify-items: center; /* Center the images horizontally */
     }
     
-    /* --- CORRECTION: Images now use viewport-width (vw) --- */
+    /* This is the individual images */
     .private-studio-feature .gallery-wrapper .gallery-img,
     .private-studio-feature .gallery-wrapper .gallery-img:nth-child(n) {
         
-        /* Each image is 80% of the *screen's* width */
-        flex: 0 0 80vw !important; 
-        width: 80vw !important;
-        height: 240px !important; /* Set a consistent height for the frame */
+        /* --- THIS IS THE "SMALLER" FIX --- */
+        width: 70% !important; /* Make images 70% of the container width */
+        max-width: 280px; /* Max width for any device */
         
-        object-fit: contain !important; /* Show full image */
-        background-color: #f0f0f0; 
+        height: auto !important; /* Height is automatic */
         
-        scroll-snap-align: center; /* Snap images to the center */
+        /* Clear all old/conflicting styles */
+        flex: unset !important; 
+        object-fit: unset !important; 
+        background-color: transparent !important;
+        scroll-snap-align: unset !important; 
         transform: none !important;
-        
+        margin-right: 0 !important; 
     }
     
-    /* This last rule is no longer needed with the new padding */
+    /* No longer needed */
     .private-studio-feature .gallery-wrapper .gallery-img:last-child {
         margin-right: 0; 
     }
