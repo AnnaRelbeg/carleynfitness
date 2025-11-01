@@ -1395,3 +1395,59 @@ box-shadow: 0 4px 6px rgba(0,0,0,0.1);
         margin-right: 0; 
     }
 }
+
+/* ===================================== */
+/* 4. Consultation Form Styles */
+/* ===================================== */
+
+#booking-form {
+    text-align: left;
+}
+
+/* This creates the side-by-side rows */
+.form-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    margin-bottom: 15px;
+}
+
+/* This makes each field in a row grow to fit */
+.form-row .form-group {
+    flex: 1;
+    min-width: 200px; /* Fields will stack on mobile */
+}
+
+/* This is for full-width fields like textareas */
+.form-group {
+    margin-bottom: 15px;
+}
+
+#booking-form label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: 600;
+}
+
+/* This re-uses your existing form styles */
+#booking-form input[type="text"],
+#booking-form input[type="email"],
+#booking-form input[type="tel"],
+#booking-form input[type="number"],
+#booking-form input[type="time"],
+#booking-form select,
+#booking-form textarea {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 1rem;
+    font-family: 'Montserrat', sans-serif;
+    box-sizing: border-box; /* Important for padding */
+}
+
+/* Make sure the submit button is full width */
+#booking-form input[type="submit"] {
+    width: 100%;
+    margin-top: 10px;
+}

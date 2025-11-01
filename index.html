@@ -387,15 +387,74 @@
     <div id="booking-form" style="display: none;">
         <h3><br>Book Your Consultation</h3>
         <form id="form">
+    <div class="form-row">
+        <div class="form-group">
             <label for="name">Name:</label>
-            <input type="text" id="name" name="name" required><br><br>
+            <input type="text" id="name" name="name" required>
+        </div>
+        <div class="form-group">
             <label for="email">Email:</label>
-            <input type="email" id="email" name="email" required><br><br>
-            <label for="time">Time:</label>
-            <input type="time" id="time" name="time" required><br><br>
-            <input type="hidden" id="booking-date">
-            <input type="submit" value="Book Now">
-        </form>
+            <input type="email" id="email" name="email" required>
+        </div>
+        <div class="form-group">
+            <label for="phone">Phone Number:</label>
+            <input type="tel" id="phone" name="phone" required>
+        </div>
+    </div>
+
+    <div class="form-row">
+        <div class="form-group">
+            <label for="age">Age:</label>
+            <input type="number" id="age" name="age" required min="16" max="100">
+        </div>
+        <div class="form-group">
+            <label for="gender">Gender:</label>
+            <select id="gender" name="gender">
+                <option value="female">Female</option>
+                <option value="female">Female</option>
+                <option value="male">Male</option>
+                <option value="other">Other</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="location">Location:</label>
+            <select id="location" name="location" required>
+                <option value="">Select a location...</option>
+                <option value="milton_keynes">Milton Keynes (myfitpod)</option>
+                <option value="online">Online Coaching</option>
+                <option value="hereford">Hereford (The Studio)</option>
+            </select>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label for="fitness-level">Current Fitness Level:</label>
+        <select id="fitness-level" name="fitness-level" required>
+            <option value="">Select your level...</option>
+            <option value="beginner">Beginner (Just starting out)</option>
+            <option value="intermediate">Intermediate (I'm familiar with exercise)</option>
+            <option value="advanced">Advanced (I train regularly)</option>
+        </select>
+    </div>
+    
+    <div class="form-group">
+        <label for="goals">What are your main fitness goals?</label>
+        <textarea id="goals" name="goals" rows="4" placeholder="E.g., lose weight, build muscle, improve mobility, run a 5k..."></textarea>
+    </div>
+
+    <div class="form-group">
+        <label for="conditions">Any medical conditions or injuries?</label>
+        <textarea id="conditions" name="conditions" rows="4" placeholder="Please list anything relevant (e.g., old knee injury, back pain, pre/post-natal...). If none, write 'None'."></textarea>
+    </div>
+    
+    <div class="form-group">
+        <label for="time">Time for your consultation:</label>
+        <input type="time" id="time" name="time" required>
+    </div>
+
+    <input type="hidden" id="booking-date">
+    <input type="submit" value="Book Consultation">
+</form>
     </div>
 </section>
 

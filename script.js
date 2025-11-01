@@ -6,7 +6,8 @@ import { getFirestore, collection, getDocs, addDoc } from "https://www.gstatic.c
 // =========================
 // FULLY BOOKED MODE TOGGLE
 // =========================
-const FULLY_BOOKED = true; // <-- set to true to lock the calendar
+// This calendar is for Milton Keynes, which is NOT fully booked.
+const FULLY_BOOKED = false; 
 
 // Firebase configuration
 const firebaseConfig = {
@@ -24,22 +25,28 @@ const app = initializeApp(firebaseConfig);
 const analytics = getAnalytics(app);
 const db = getFirestore(app);
 
-// DOM Elements
-const calendarElement = document.getElementById('calendar');
-const calendarHeader = document.getElementById('calendar-header');
-const bookingForm = document.getElementById('booking-form');
-const bookingDateInput = document.getElementById('booking-date');
-const form = document.getElementById('form');
+// Get the contact form (it's outside the calendar logic)
 const contactForm = document.getElementById("contactForm");
 
+// =========================
 // Calendar Initialization
+// =========================
 document.addEventListener('DOMContentLoaded', async function () {
+    
+    // --- All calendar-related elements defined *inside* here ---
     const calendarElement = document.getElementById('calendar');
     const monthSelect = document.getElementById('month-select');
     const yearDisplay = document.getElementById('year-display');
     const bookingForm = document.getElementById('booking-form');
     const bookingDateInput = document.getElementById('booking-date');
-    const form = document.getElementById('form'); // FIX: Define the form correctly
+    const form = document.getElementById('form');
+
+    // Check if we are on a page with the calendar
+    if (!calendarElement) {
+        console.log("No calendar found on this page.");
+        // Stop running calendar code if there's no calendar
+        return; 
+    }
 
     let selectedMonth = new Date().getMonth();
     let selectedYear = new Date().getFullYear();
@@ -62,12 +69,9 @@ document.addEventListener('DOMContentLoaded', async function () {
 
     yearDisplay.textContent = selectedYear; // Show current year
 
-    // Weekday names (Sunday, Monday, etc.)
-    const weekdayNames = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
-
     // Function to generate the calendar
     async function generateCalendar(month, year) {
-        calendarElement.innerHTML = "";
+        calendarElement.innerHTML = ""; // Clear old calendar
         const firstDay = new Date(year, month, 1).getDay();
         const daysInMonth = new Date(year, month + 1, 0).getDate();
 
@@ -81,7 +85,7 @@ document.addEventListener('DOMContentLoaded', async function () {
             calendarElement.appendChild(emptyCell);
         }
 
-       // Populate days
+        // Populate days
         const dayNames = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 
         for (let day = 1; day <= daysInMonth; day++) {
@@ -105,6 +109,15 @@ document.addEventListener('DOMContentLoaded', async function () {
                 dayCell.style.pointerEvents = 'none';
             }
             
+            // --- NEW CODE: Disable specific days of the week ---
+        const dayOfWeek = date.getDay(); // 0=Sun, 1=Mon, 2=Tue, 3=Wed, 4=Thu
+        if (dayOfWeek === 2 || dayOfWeek === 3 || dayOfWeek === 4) {
+            dayCell.classList.add('disabled');
+            dayCell.style.pointerEvents = 'none';
+            dayCell.title = 'Unavailable';
+        }
+        // --- END OF NEW CODE ---
+
             // FULLY BOOKED: mark every day as booked/disabled
             if (FULLY_BOOKED) {
                 dayCell.classList.add('booked');
@@ -115,7 +128,7 @@ document.addEventListener('DOMContentLoaded', async function () {
             calendarElement.appendChild(dayCell);
         }
 
-                // Only fetch real bookings if we are NOT fully booked
+        // Only fetch real bookings if we are NOT fully booked
         if (!FULLY_BOOKED) {
             await fetchBookings();
         } else {
@@ -125,73 +138,79 @@ document.addEventListener('DOMContentLoaded', async function () {
             if (bookingForm) bookingForm.style.display = 'none';
         }
     }
-
-        await fetchBookings(); // Ensure bookings are reloaded
-    
-
+ 
     // Month change
     monthSelect.addEventListener("change", async function () {
         selectedMonth = parseInt(this.value);
         generateCalendar(selectedMonth, selectedYear);
     });
 
-// Date click (single listener – no nesting)
-calendarElement.addEventListener('click', function (event) {
-  if (FULLY_BOOKED) {
-    alert('No slots available – currently fully booked. Please use the contact form to join the waitlist.');
-    return;
-  }
-  if (event.target.classList.contains('date') && !event.target.classList.contains('booked')) {
-    document.querySelectorAll('.date').forEach(d => d.classList.remove('highlight'));
-    event.target.classList.add('highlight');
+    // Date click
+    calendarElement.addEventListener('click', function (event) {
+        if (FULLY_BOOKED) {
+            alert('No slots available – currently fully booked. Please use the contact form to join the waitlist.');
+            return;
+        }
+        if (event.target.classList.contains('date') && !event.target.classList.contains('booked')) {
+            document.querySelectorAll('.date').forEach(d => d.classList.remove('highlight'));
+            event.target.classList.add('highlight');
 
-    bookingForm.style.display = 'block';
-    bookingDateInput.value = event.target.dataset.date;
-  }
-});
+            bookingForm.style.display = 'block';
+            bookingDateInput.value = event.target.dataset.date;
+        }
+    });
 
-
-// Handle booking form submission
+    // Handle booking form submission
     form.addEventListener('submit', async function (event) {
-        event.preventDefault();
+        event.preventDefault(); // Only need one preventDefault
 
         if (FULLY_BOOKED) {
             alert('I am fully booked at the moment. Please reach out via the contact form to join the waitlist 🙏');
             return;
         }
-    event.preventDefault();
-    const name = document.getElementById('name').value;
-    const email = document.getElementById('email').value;
-    const time = document.getElementById('time').value;
-    const date = bookingDateInput.value;
 
-    try {
-        // Add booking to Firestore
-        await addDoc(collection(db, 'bookings'), { name, email, date, time, status: 'pending' });
+        const name = document.getElementById('name').value;
+        const email = document.getElementById('email').value;
+        const time = document.getElementById('time').value;
+        const date = bookingDateInput.value;
 
-        // Display success message
-        alert(`Booking Confirmed🥳! Name: ${name}, Email: ${email}, Date: ${date}, Time: ${time}`);
+        // --- ADD THESE NEW LINES ---
+    const phone = document.getElementById('phone').value;
+    const age = document.getElementById('age').value;
+    const gender = document.getElementById('gender').value;
+    const location = document.getElementById('location').value;
+    const fitnessLevel = document.getElementById('fitness-level').value;
+    const goals = document.getElementById('goals').value;
+    const conditions = document.getElementById('conditions').value;
+    // --- END OF NEW LINES ---
 
-        // Reset form and hide it
-        form.reset();
-        bookingForm.style.display = 'none';
+        try {
+            // Add booking to Firestore
+            await addDoc(collection(db, 'bookings'), { name, email, date, time, phone, age, gender, location, fitnessLevel, goals, conditions, status: 'pending' });
 
-        // Mark the booked date on the calendar
-        const dayCell = document.querySelector(`[data-date="${date}"]`);
-        if (dayCell) {
-            dayCell.classList.add('booked');
-            dayCell.style.pointerEvents = 'none';
+            // Display success message
+            // A simpler alert
+            alert(`Booking request for ${date} at ${time} sent! I'll be in touch soon. 😊`);
+
+            // Reset form and hide it
+            form.reset();
+            bookingForm.style.display = 'none';
+
+            // Mark the booked date on the calendar
+            const dayCell = document.querySelector(`[data-date="${date}"]`);
+            if (dayCell) {
+                dayCell.classList.add('booked');
+                dayCell.style.pointerEvents = 'none';
+            }
+            
+            // No need to fetch all bookings again, we just marked it
+
+        } catch (error) {
+            console.error("Error adding booking: ", error);
         }
+    });
 
-        // Optionally, reload the bookings
-        await fetchBookings(); 
-
-    } catch (error) {
-        console.error("Error adding booking: ", error);
-    }
-});
-
-    // Fetch and mark booked dates
+    // Fetch and mark existing booked dates
     async function fetchBookings() {
         try {
             const querySnapshot = await getDocs(collection(db, 'bookings'));
@@ -208,7 +227,7 @@ calendarElement.addEventListener('click', function (event) {
         }
     }
 
-        // Add a subtle "Fully booked" badge next to the header controls
+    // Add a subtle "Fully booked" badge next to the header controls
     function addFullyBookedBadge() {
         const header = document.getElementById('calendar-header');
         if (!header || header.querySelector('.fully-booked-badge')) return;
@@ -223,7 +242,9 @@ calendarElement.addEventListener('click', function (event) {
     await generateCalendar(selectedMonth, selectedYear);
 });
 
-// Handle contact form submission
+// =========================
+// Contact Form Submission
+// =========================
 contactForm.addEventListener("submit", async function (e) {
     e.preventDefault();
     const name = document.getElementById("contact-name").value;
@@ -248,38 +269,45 @@ contactForm.addEventListener("submit", async function (e) {
     }
 });
 
+// =========================
 // Slideshow
+// =========================
 let slideIndex = 0;
 function showSlides() {
     const slides = document.getElementsByClassName("mySlides");
+    // Check if slides exist on the page
+    if (slides.length === 0) return; 
+
     for (let i = 0; i < slides.length; i++) {
         slides[i].style.display = "none";
     }
     slideIndex = (slideIndex + 1) % slides.length;
     slides[slideIndex].style.display = "block";
-    setTimeout(showSlides, 200000);
+    setTimeout(showSlides, 200000); // 200 seconds is a long time, just checking
 }
 showSlides();
 
+// =========================
 // Mobile Navbar
+// =========================
+// Run this listener separately, it's fine
 document.addEventListener("DOMContentLoaded", function () {
-    console.log("Script Loaded!"); // Check if this appears in the console
     const menuToggle = document.querySelector(".menu-button");
     const navMenu = document.querySelector(".navbar ul");
     const navLinks = document.querySelectorAll(".navbar ul li a");
 
-    // Ensure both menuToggle and navMenu are available before adding the event listener
     if (menuToggle && navMenu) {
-        console.log("Menu button and nav menu found!");
         menuToggle.addEventListener("click", () => {
-            console.log("Menu button clicked!");
             navMenu.classList.toggle("active");
         });
 
         // Close the menu when a link is clicked
         navLinks.forEach(link => {
             link.addEventListener("click", () => {
-                navMenu.classList.remove("active");
+                // Only remove 'active' if the menu is open
+                if (navMenu.classList.contains("active")) {
+                    navMenu.classList.remove("active");
+                }
             });
         });
 
@@ -290,6 +318,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
 //Redirecting from index.html to a Cleaner URL
-if (window.location.pathname.indexOf('index.html') > -1) {
+if (window.location.pathname.endsWith('index.html')) {
     window.location.replace(window.location.pathname.replace('index.html', ''));
-  }
+}
