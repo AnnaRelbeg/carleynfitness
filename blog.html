@@ -7,497 +7,532 @@
   window.dataLayer = window.dataLayer || [];
   function gtag(){dataLayer.push(arguments);}
   gtag('js', new Date());
-
   gtag('config', 'G-VJSQ9P5NLW');
 </script>
-    <title>CarleyNFitness Blog</title>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    
-    <link rel="icon" href="images/logoG.jpg" type="image/png">
-    
-    <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&display=swap" rel="stylesheet" />
-    
-    <!-- External CSS -->
-    <link rel="stylesheet" href="styles.css" />
-    
-    <!-- AOS Library (Animate on Scroll) -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css" />
-    
-    <!-- FullCalendar CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.2/main.min.css" rel="stylesheet">
-    
-    <!-- FullCalendar JS -->
-    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@3.0.0/dist/fullcalendar.min.js"></script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CarleyNFitness Blog – Fitness Tips, Nutrition &amp; Strength Training</title>
+  <meta name="description" content="Expert fitness tips, nutrition advice and strength training insights from Carley, personal trainer in Milton Keynes at myfitpod.">
 
+  <!-- Open Graph – controls link previews on Facebook, Instagram, WhatsApp etc. -->
+  <!-- TODO: Replace the domain below with your actual website domain -->
+  <meta property="og:type"        content="website" />
+  <meta property="og:title"       content="CarleyNFitness Blog – Fitness Tips &amp; Strength Training" />
+  <meta property="og:description" content="Honest fitness tips, straight-talking nutrition advice and strength training science from your Milton Keynes personal trainer." />
+  <meta property="og:image"       content="https://carleynfitness.co.uk/images/dogweight.png" />
+  <meta property="og:url"         content="https://carleynfitness.co.uk/blog" />
+  <meta property="og:site_name"   content="CarleyNFitness" />
+
+  <!-- Twitter / X Card -->
+  <meta name="twitter:card"        content="summary_large_image" />
+  <meta name="twitter:title"       content="CarleyNFitness Blog" />
+  <meta name="twitter:description" content="Expert fitness tips, nutrition advice and strength training insights from your Milton Keynes personal trainer." />
+  <meta name="twitter:image"       content="https://carleynfitness.co.uk/images/dogweight.png" />
+
+  <link rel="icon" href="images/logoG.jpg" type="image/png">
+
+  <!-- Google Fonts: Montserrat (body) + Playfair Display (headings) -->
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Playfair+Display:ital,wght@0,700;1,700&display=swap" rel="stylesheet" />
+
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css" />
+
+  <!-- Custom cursor: hide default cursor only on this page, on non-touch devices -->
+  <style>
+    @media (hover: hover) {
+      body { cursor: none; }
+      a, button { cursor: none; }
+    }
+  </style>
 </head>
 <body>
 
-    <!-- Navbar Section -->
-    <nav class="navbar">
-        <button class="menu-button" onclick="toggleMenu()">☰</button>
-        <ul>
-            <li><a href="index.html">Home</a></li>
-            <li><a href="index.html#about">About</a></li>
-            <li><a href="index.html#services">Services & Pricing</a></li>
-            <li><a href="index.html#social-media">Let's Connect</a></li>
-            <li><a href="index.html#testimonials">Client Stories</a></li>
-            <li><a href="index.html#free-consultation">Contact</a></li>
-            <li><a href="blog.html">Blog</a></li>
-        </ul>
-    </nav>
+<!-- Custom Cursor (hidden on touch devices via CSS above) -->
+<div id="cursor-dot"></div>
+<div id="cursor-ring"></div>
 
+<!-- Reading Progress Bar -->
+<div id="reading-progress"></div>
 
-  <!-- Move the slideshow-container outside of the main section -->
-  <div class="slideshow-container">
-    <!-- Slides for the image slideshow -->
-    <div class="mySlides fade">
-        <img src="images/Background_big.png" alt="Slideshow Image 1">
-    </div>
-    <div class="mySlides fade">
-        <img src="images/Background_big.png" alt="Slideshow Image 2">
-    </div>
-    <!-- Add more slides as needed -->
-</div>
+<!-- Navbar -->
+<nav class="navbar">
+  <button class="menu-button" aria-label="Toggle menu">☰</button>
+  <ul>
+    <li><a href="index.html">Home</a></li>
+    <li><a href="index.html#about">About</a></li>
+    <li><a href="index.html#services">Services &amp; Pricing</a></li>
+    <li><a href="index.html#social-media">Let's Connect</a></li>
+    <li><a href="index.html#testimonials">Client Stories</a></li>
+    <li><a href="index.html#free-consultation">Contact</a></li>
+    <li><a href="blog.html">Blog</a></li>
+  </ul>
+</nav>
 
+<!-- Blog Hero Header (standalone gradient — no slideshow dependency) -->
+<header class="blog-hero">
+  <div class="blog-hero-content" data-aos="fade-up">
+    <span class="blog-hero-tag">✍️ The Blog</span>
+    <h1>Fitness, Nutrition &amp; Strength</h1>
+    <p>Honest advice, straight-talking science, and practical tips from your Milton Keynes personal trainer.</p>
+  </div>
+</header>
 
+<!-- Blog Articles -->
+<section id="blog" class="section blog">
+  <div class="container">
+    <h2 data-aos="fade-up">Latest Articles</h2>
+    <div class="blog-list">
 
-    <!-- Blog Header -->
-    <header class="header" data-aos="fade-up">
-        <h1>CarleyNFitness Blog</h1>
-        <p>Fitness tips, nutrition advice, and personal stories.</p>
-    </header>
-
-    <!-- Blog Section -->
-    <section id="blog" class="section blog">
-        <div class="container" data-aos="fade-up">
-            <h2>Latest Articles</h2>
-            <div class="blog-list">
-
-                <article class="blog-post" data-aos="fade-up">
-                    <h1>Strong Women, Straightforward Science: Why Strength Training Should Be Part of Your Life</h1>
-                    <br>
-                    <p class="preview-text">
-                      Strength training isn’t just for gym bunnies or bodybuilders. It’s a smart, science-backed way for women to stay strong, mobile, and energised – especially as we age.
-                    </p>
-                    <img src="images/dogweight.png" alt="Woman strength training" class="article-image">
-                    <button class="read-more-btn">Read More</button>
-                  
-                    <div class="full-article">
-                      <p>When it comes to strength training, a lot of women still feel it’s “not for them.” Maybe it feels intimidating, maybe it feels like it belongs to a younger crowd, or maybe it just sounds like something other people do.</p>
-                      <br>
-                      <p>But strength training isn’t about gyms, or lifting the heaviest weight, or chasing a certain look. It’s simply about looking after your body in a way that helps it stay strong, mobile, and resilient at any age.</p>
-                      <br>
-                      <p>And the science behind why it works? It’s actually pretty straightforward.</p>
-                      <br>
-                      <hr>
-                      <br>
-                  
-                      <h3>1. Keeps your muscles working for you</h3>
-                      <br>
-                      <p>Once we hit our 30s, muscle naturally starts to decline – a slow process called sarcopenia. If we don’t do anything to maintain it, it gets harder to do everyday things like carrying shopping, climbing stairs, or even getting up from the floor. Strength training tells your body, “I still need this muscle, thank you,” and helps you keep moving well into later life.</p>
-                      <br>
-                      <hr>
-                      <br>
-                  
-                      <h3>2. Supports your metabolism</h3>
-                      <br>
-                      <p>Muscle burns more energy than fat, even when you’re at rest. This doesn’t mean strength training magically speeds up your metabolism overnight, but it does help your body stay more efficient over time – especially useful as things naturally slow down with age.</p>
-                      <br>
-                      <hr>
-                      <br>
-                  
-                      <h3>3. Keeps bones stronger for longer</h3>
-                      <br>
-                      <p>Women are more at risk of osteoporosis, particularly after menopause when oestrogen drops off. Lifting weights (or even using resistance bands or bodyweight) gives your bones the message to stay strong and dense, reducing the risk of fractures later on.</p>
-                      <br>
-                      <hr>
-                      <br>
-                  
-                      <h3>4. Helps manage hormonal shifts</h3>
-                      <br>
-                      <p>Strength training can support the body during periods of hormonal change—whether that’s perimenopause, menopause, or other phases. It improves insulin sensitivity, helps manage belly fat, and supports more stable energy levels.</p>
-                      <br>
-                      <hr>
-                      <br>
-                  
-                      <h3>5. Improves mood and confidence</h3>
-                      <br>
-                      <p>Plenty of research shows that strength training can lift mood, ease feelings of anxiety, and build confidence. It’s not about becoming a different person – it’s about feeling more comfortable in your own skin, knowing your body is working with you, not against you.</p>
-                      <br>
-                      <hr>
-                      <br>
-                  
-                      <h3>6. Reduces the risk of injuries</h3>
-                      <br>
-                      <p>As we age, things like balance, coordination, and joint stability naturally decline – unless we actively work on them. Strength training helps reduce the risk of falls, aches, and the classic “I pulled something doing the hoovering” moments.</p>
-                      <br>
-                      <hr>
-                      <br>
-                  
-                      <h3>And no, it won’t make you bulky.</h3>
-                      <br>
-                      <p>One of the biggest myths that still pops up is that lifting weights makes women “bulky.” The truth is, women’s bodies simply don’t produce enough testosterone to build muscle in the same way men do. What strength training does do is help you feel stronger, leaner, and more toned – without the bulk.</p>
-                      <br>
-                      <p>For most women, the results are subtle: better shape, firmer muscles, improved posture, and that quiet confidence that comes from feeling strong inside and out.</p>
-                      <br>
-                      <hr>
-                      <br>
-                  
-                      <h3>It doesn’t have to be complicated – or intimidating</h3>
-                      <br>
-                      <p>Strength training isn’t about lifting the heaviest weight in the gym or pushing yourself to exhaustion. It can be done at home, in a gym, or even in the garden with a resistance band or some simple bodyweight movements.</p>
-                      <br>
-                      <p>The key is consistency, not intensity. A couple of sessions a week is enough to make a difference – not just now, but for the long term.</p>
-                      <br>
-                      <hr>
-                      <br>
-                  
-                      <h3>Final thought</h3>
-                      <br>
-                      <p>You don’t need to look a certain way or train like an athlete to benefit from strength training. It’s about building a body that feels capable, balanced, and strong enough to do the things you love – whether that’s running around with your kids, hiking up a hill, or simply feeling more steady on your feet.</p>
-                      <br>
-                      <p>It’s not about being perfect. It’s about looking after yourself, in a way that supports the life you want to live.</p>
-                      <br>
-                  
-                      <!-- Buttons -->
-                      <div class="hero-buttons" data-aos="fade-up" data-aos-delay="400">
-                        <a href="index.html#free-consultation" class="btn-secondary">Explore My Services and Book Your Free Consultation!</a>
-                      </div>
-                  
-                      <div class="share-buttons">
-                        <p>Share this article 📲:</p> <br>
-                        <button class="share-btn facebook" data-platform="facebook">Facebook</button>
-                        <button class="share-btn twitter" data-platform="twitter">Twitter</button>
-                        <button class="share-btn linkedin" data-platform="linkedin">LinkedIn</button>
-                        <button class="share-btn whatsapp" data-platform="whatsapp">WhatsApp</button>
-                      </div>
-                    </div>
-                  </article>
-                <br>                  
-
-                <article class="blog-post" data-aos="fade-up">
-                    <h1>Nutrition Hacks for Fat Loss</h1>
-                    <br>
-                    <p class="preview-text">
-                        Fat loss doesn’t have to be miserable – or biscuit-free. These simple, science-backed hacks are designed to work with your lifestyle, not against it. Tried and tested by real clients (including those hopelessly in love with Hobnobs).
-                    </p>
-                    
-                    <!-- Add an image here -->
-                    <img src="images/FatLoss.jpeg" alt="Healthy food and fitness" class="article-image">
-                    <button class="read-more-btn">Read More</button>
-                    
-                    <div class="full-article">
-                        <p>Let’s face it, fat loss can feel like a minefield. One minute you’re eating clean, the next you’re knee-deep in a packet of Hobnobs wondering what happened.</p>
-                        <br>
-                
-                        <p>Been there. Trained clients through it. I’ve coached people who could write a love letter to Nutella.</p>
-                        <br>
-                
-                        <p>As a Level 4 qualified nutrition coach and personal trainer, I’m here to tell you: you don’t need to cut out carbs, live off lettuce, or apologise for liking chocolate. Fat loss doesn’t have to be miserable. It just needs a strategy that works with your lifestyle, not against it.</p>
-                        <br>
-                
-                        <p>So, here are my top nutrition hacks for fat loss, tried, tested, and sprinkled with a bit of humour (because if we can’t laugh while dieting, what’s even the point?).</p>
-                        <br>
-                
-                        <hr>
-                        <br>
-                
-                        <h3>1. Prioritise Protein Like It’s Your Job</h3>
-                        <br>
-                        <p>Protein: the Beyoncé of your meals, should always be front and centre.</p>
-                        <br>
-                        <p><strong>Why?</strong> Because protein keeps you fuller for longer, supports lean muscle (especially if you’re training), and burns more calories just by being digested.</p>
-                        <br>
-                        <p><strong>Hack it:</strong> Build your meals around protein. Chicken, tofu, prawns, eggs, Greek yoghurt – anything that doesn’t come in a wrapper gets bonus points.</p>
-                        <br>
-                
-                        <hr>
-                        <br>
-                
-                        <h3>2. Use a Smaller Plate (It’s Not Cheating, It’s Psychology)</h3>
-                        <br>
-                        <p>Portion sizes have ballooned. What we call a “standard plate” now could feed a small army.</p>
-                        <br>
-                        <p><strong>Hack it:</strong> Use a side plate. Trick your brain into thinking you’re eating more than you are. Also – chew your food. Your stomach isn’t in a hurry.</p>
-                        <br>
-                
-                        <hr>
-                        <br>
-                
-                        <h3>3. Create a Calorie Buffer (aka The Social Life Saver)</h3>
-                        <br>
-                        <p>Going out for dinner or having a roast? Great! You don’t need to avoid real life for your goals.</p>
-                        <br>
-                        <p><strong>Hack it:</strong> Eat lighter earlier in the day – lean protein, veg, low-cal snacks – so you’ve got more calories to play with later. Like budgeting, but tastier.</p>
-                        <br>
-                        <p>And no, don’t starve yourself all day before brunch. That’s not clever, that’s chaos.</p>
-                        <br>
-                
-                        <hr>
-                        <br>
-                
-                        <h3>4. Don’t Drink Your Calories (Unless It’s Wine… Joking. Sort of.)</h3>
-                        <br>
-                        <p>Lattes, smoothies, juices – they sound healthy but are often packed with calories.</p>
-                        <br>
-                        <p><strong>Hack it:</strong> Stick to water, black coffee, herbal tea, or zero-cal drinks. Save calories for food you actually chew. Your stomach (and jeans) will thank you.</p>
-                        <br>
-                
-                        <hr>
-                        <br>
-                
-                        <h3>5. Add More Fibre (Your Gut Will Throw a Party)</h3>
-                        <br>
-                        <p>Fibre is underrated. It keeps you full, helps digestion, and reduces cravings.</p>
-                        <br>
-                        <p><strong>Hack it:</strong> Pile on the veg, go for wholegrains, and throw beans or lentils into meals. Bonus: you might forget biscuits even exist. (OK, maybe just one.)</p>
-                        <br>
-                
-                        <hr>
-                        <br>
-                
-                        <h3>6. Structure Your Meals, No More ‘Snackcidentally’ Eating Everything</h3>
-                        <br>
-                        <p>Random snacking leads to random results. Structure = sanity.</p>
-                        <br>
-                        <p><strong>Hack it:</strong> Stick to three proper meals and one planned snack. Keeps blood sugar stable and prevents fridge wanderings that end in crisp negotiations.</p>
-                        <br>
-                
-                        <hr>
-                        <br>
-                
-                        <h3>7. Ditch the All-or-Nothing Mentality</h3>
-                        <br>
-                        <p>“I had one biscuit, might as well have five…” Sound familiar?</p>
-                        <br>
-                        <p><strong>Hack it:</strong> One off-plan moment doesn’t ruin progress. What matters is what you do next. Drink some water, eat some veg, carry on. Progress > perfection.</p>
-                        <br>
-                
-                        <hr>
-                        <br>
-                
-                        <h3>Final Thoughts: Fat Loss Doesn’t Have to Be a Grind</h3>
-                        <br>
-                        <p>There’s no magic – just small, smart shifts done consistently. These hacks work because they fit into real life. And if you feel like giving up? I’ve seen clients push through cake-heavy offices, hangovers, and snack drawer temptations. You’re not alone.</p>
-                        <br>
-                        <p>Pick one or two hacks to start. Let them become habits. That’s how you build something that sticks – no detox teas required.</p>
-                        <br>
-                
-                        <p><strong>Need help personalising these hacks? Want someone to keep you accountable without banning pizza?</strong> Drop me a message – let’s make your goals a reality.</p>
-                        <br>
-                        <!-- Buttons -->
-                        <div class="hero-buttons" data-aos="fade-up" data-aos-delay="400">
-                            <a href="index.html#free-consultation" class="btn-secondary">Explore My Services and Book Your Free Consultation!</a>
-                        </div>
-                        <div class="share-buttons">
-                            <p>Share this article 📲:</p> <br>
-                            <button class="share-btn facebook" data-platform="facebook">Facebook</button>
-                            <button class="share-btn twitter" data-platform="twitter">Twitter</button>
-                            <button class="share-btn linkedin" data-platform="linkedin">LinkedIn</button>
-                            <button class="share-btn whatsapp" data-platform="whatsapp">WhatsApp</button>
-                        </div>
-                    </div>
-                </article>
-                <br>
-                
-                <article class="blog-post" data-aos="fade-up">
-                    <h1>Why BMI is the Worst Way to Assess Your Body (and Why We Should All Stop Using It)</h1>
-                    <br>
-                    <p class="preview-text">
-                        Let’s talk about BMI – the Body Mass Index. You know, that little number doctors love to pull out of nowhere to tell you whether you’re “healthy” or “overweight.” But here’s the thing: <strong>BMI is one of the worst ways to measure body composition...</strong>
-                    </p>
-                        <!-- Add an image here -->
-                        <img src="images/BMI_Article.jpeg" alt="Image describing BMI" class="article-image">
-                    <button class="read-more-btn">Read More</button>
-                    
-                    <div class="full-article">
-                        <p>... and yet it’s still used everywhere – from GP health checks to insurance forms to IVF eligibility (yep, more on that nonsense later).</p>
-                        <br>
-                        
-                        <p>If you’ve ever been told you’re overweight despite feeling strong, fit, and healthy, you’re not alone. Let’s break down why BMI is outdated, misleading, and honestly, about as useful as a chocolate teapot.</p>
-                        <br>
-                        
-                        <hr>
-                        <br>
-
-                        <h3>What is BMI, and Why is it So Bad?</h3>
-                        <br>
-                        
-                        <p>BMI was invented in the 1830s (yes, before modern medicine was even a thing) by a mathematician – not a doctor, a mathematician – called Adolphe Quetelet. It’s a simple equation:</p>
-                        <br>
-                        
-                        <p><strong>BMI = weight (kg) ÷ height (m²)</strong></p>
-                        <br>
-                        
-                        <p>Seems straightforward, right? That’s exactly the problem. It only considers your height and weight, <strong>not</strong> your muscle mass, fat percentage, bone density, or even where your body stores fat.</p>
-                        <br>
-                        
-                        <p>Imagine this: you’ve been training hard, lifting weights, feeling amazing, but then you go for a health check and get told you’re “overweight” because your BMI is over 25. Meanwhile, your mate who hasn’t exercised in years but is naturally slim gets a “healthy” BMI. Does that make sense? Absolutely not.</p>
-                        <br>
-                        
-                        <hr>
-                        <br>
-
-                        <h3>The “Overweight” Lie</h3>
-                        <br>
-                        
-                        <p>I can’t tell you how many times I’ve had clients go for routine health checks, feeling great, only to be told they need to “lose weight” because their BMI is over 25. Some of these people are lean, muscular, and healthier than ever, yet suddenly they’re labelled as unhealthy.</p>
-                        <br>
-                        
-                        <p>This can have huge consequences. It messes with people’s confidence, encourages unnecessary dieting, and worst of all, it can make people who are actually healthy feel like they aren’t.</p>
-                        <br>
-                        
-                        <hr>
-                        <br>
-
-                        <h3>BMI and IVF: The Unfair Barrier</h3>
-                        <br>
-                        
-                        <p>Many fertility clinics refuse IVF treatment to people with a BMI over 30, no matter how fit or healthy they actually are. Imagine working hard, eating well, lifting weights, feeling strong – and then being told you can’t even try for a baby because of a meaningless number.</p>
-                        <br>
-                        
-                        <hr>
-                        <br>
-
-                        <h3>So, What Should We Use Instead?</h3>
-                        <br>
-                        
-                        <p>Luckily, there are way better ways to measure health and body composition than BMI.</p>
-                        <br>
-                        
-                        <ul>
-                            <li>Body Fat Percentage – This actually tells you how much of your body is fat vs. muscle.</li>
-                            <li>Waist-to-Hip Ratio – A better indicator of metabolic health and risk of disease.</li>
-                            <li>Strength, Fitness, and Overall Wellbeing – How do you feel? Are you strong? Do you have energy?</li>
-                            <li>DEXA Scans & InBody Scans – If you want a deep dive, these scans show your muscle, fat, and bone density breakdown.</li>
-                        </ul>
-                        <br>
-                        
-                        <hr>
-                        <br>
-
-                        <h3>Final Thoughts</h3>
-                        <br>
-                        
-                        <p>BMI is not a measure of health. It’s an outdated system that ignores muscle mass, body fat percentage, and actual fitness. It labels fit people as overweight and lets unfit people fly under the radar.</p>
-                        <div class="share-buttons">
-                            <p>Share this article 📲:</p> <br>
-                            <button class="share-btn facebook" data-platform="facebook">Facebook</button>
-                            <button class="share-btn twitter" data-platform="twitter">Twitter</button>
-                            <button class="share-btn linkedin" data-platform="linkedin">LinkedIn</button>
-                            <button class="share-btn whatsapp" data-platform="whatsapp">WhatsApp</button>
-                        </div>
-                        
-                    </div>
-                </article>                
-            </div>
+      <!-- ===== Article 1: Strong Women ===== -->
+      <article class="blog-card" data-aos="fade-up">
+        <div class="blog-card-img-wrap">
+          <img src="images/dogweight.png" alt="Woman strength training" class="blog-card-img">
         </div>
-    </section>
+        <div class="blog-card-body">
+          <div class="blog-card-meta">
+            <span class="blog-tag">💪 Strength Training</span>
+            <span class="blog-read-time">⏱ 5 min read</span>
+          </div>
+          <h3>Strong Women, Straightforward Science: Why Strength Training Should Be Part of Your Life</h3>
+          <p class="preview-text">
+            Strength training isn't just for gym bunnies or bodybuilders. It's a smart, science-backed way for women to stay strong, mobile, and energised – especially as we age.
+          </p>
+          <button class="read-more-btn" aria-expanded="false">Read More ↓</button>
 
-    <!-- Footer -->
-    <footer class="footer" data-aos="fade-up">
-        <p>&copy; 2025 CarleyNFitness. Designed by Anna Gebler</a>.</p>
-    </footer>
+          <div class="full-article">
+            <p>When it comes to strength training, a lot of women still feel it's "not for them." Maybe it feels intimidating, maybe it feels like it belongs to a younger crowd, or maybe it just sounds like something other people do.</p>
+            <br>
+            <p>But strength training isn't about gyms, or lifting the heaviest weight, or chasing a certain look. It's simply about looking after your body in a way that helps it stay strong, mobile, and resilient at any age.</p>
+            <br>
+            <p>And the science behind why it works? It's actually pretty straightforward.</p>
+            <br>
+            <hr>
+            <br>
+            <h4>1. Keeps your muscles working for you</h4>
+            <br>
+            <p>Once we hit our 30s, muscle naturally starts to decline – a slow process called sarcopenia. If we don't do anything to maintain it, it gets harder to do everyday things like carrying shopping, climbing stairs, or even getting up from the floor. Strength training tells your body, "I still need this muscle, thank you," and helps you keep moving well into later life.</p>
+            <br>
+            <hr>
+            <br>
+            <h4>2. Supports your metabolism</h4>
+            <br>
+            <p>Muscle burns more energy than fat, even when you're at rest. This doesn't mean strength training magically speeds up your metabolism overnight, but it does help your body stay more efficient over time – especially useful as things naturally slow down with age.</p>
+            <br>
+            <hr>
+            <br>
+            <h4>3. Keeps bones stronger for longer</h4>
+            <br>
+            <p>Women are more at risk of osteoporosis, particularly after menopause when oestrogen drops off. Lifting weights (or even using resistance bands or bodyweight) gives your bones the message to stay strong and dense, reducing the risk of fractures later on.</p>
+            <br>
+            <hr>
+            <br>
+            <h4>4. Helps manage hormonal shifts</h4>
+            <br>
+            <p>Strength training can support the body during periods of hormonal change—whether that's perimenopause, menopause, or other phases. It improves insulin sensitivity, helps manage belly fat, and supports more stable energy levels.</p>
+            <br>
+            <hr>
+            <br>
+            <h4>5. Improves mood and confidence</h4>
+            <br>
+            <p>Plenty of research shows that strength training can lift mood, ease feelings of anxiety, and build confidence. It's not about becoming a different person – it's about feeling more comfortable in your own skin, knowing your body is working with you, not against you.</p>
+            <br>
+            <hr>
+            <br>
+            <h4>6. Reduces the risk of injuries</h4>
+            <br>
+            <p>As we age, things like balance, coordination, and joint stability naturally decline – unless we actively work on them. Strength training helps reduce the risk of falls, aches, and the classic "I pulled something doing the hoovering" moments.</p>
+            <br>
+            <hr>
+            <br>
+            <h4>And no, it won't make you bulky.</h4>
+            <br>
+            <p>One of the biggest myths that still pops up is that lifting weights makes women "bulky." The truth is, women's bodies simply don't produce enough testosterone to build muscle in the same way men do. What strength training does do is help you feel stronger, leaner, and more toned – without the bulk.</p>
+            <br>
+            <p>For most women, the results are subtle: better shape, firmer muscles, improved posture, and that quiet confidence that comes from feeling strong inside and out.</p>
+            <br>
+            <hr>
+            <br>
+            <h4>It doesn't have to be complicated – or intimidating</h4>
+            <br>
+            <p>Strength training isn't about lifting the heaviest weight in the gym or pushing yourself to exhaustion. It can be done at home, in a gym, or even in the garden with a resistance band or some simple bodyweight movements.</p>
+            <br>
+            <p>The key is consistency, not intensity. A couple of sessions a week is enough to make a difference – not just now, but for the long term.</p>
+            <br>
+            <hr>
+            <br>
+            <h4>Final thought</h4>
+            <br>
+            <p>You don't need to look a certain way or train like an athlete to benefit from strength training. It's about building a body that feels capable, balanced, and strong enough to do the things you love – whether that's running around with your kids, hiking up a hill, or simply feeling more steady on your feet.</p>
+            <br>
+            <p>It's not about being perfect. It's about looking after yourself, in a way that supports the life you want to live.</p>
+            <br>
+            <div class="article-cta">
+              <a href="index.html#free-consultation" class="btn-secondary">Explore My Services &amp; Book a Free Consultation</a>
+            </div>
+            <div class="share-buttons">
+              <p class="share-label">Share this article:</p>
+              <div class="share-btn-group">
+                <button class="share-btn facebook"     data-platform="facebook"><span class="share-icon">f</span> Facebook</button>
+                <button class="share-btn whatsapp"     data-platform="whatsapp"><span class="share-icon">💬</span> WhatsApp</button>
+                <button class="share-btn twitter"      data-platform="twitter"><span class="share-icon">𝕏</span> X</button>
+                <button class="share-btn linkedin"     data-platform="linkedin"><span class="share-icon">in</span> LinkedIn</button>
+                <button class="share-btn copy-link"    data-platform="copy"><span class="share-icon">🔗</span> Copy Link</button>
+                <button class="share-btn native-share" data-platform="native" style="display:none;"><span class="share-icon">📤</span> Share</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </article>
 
-    <!-- AOS Scripts -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
-    <script>
-        AOS.init({
-            duration: 1000,
-            once: true
-        });
-    </script>
+      <!-- ===== Article 2: Nutrition Hacks ===== -->
+      <article class="blog-card" data-aos="fade-up">
+        <div class="blog-card-img-wrap">
+          <img src="images/FatLoss.jpeg" alt="Healthy food and fitness" class="blog-card-img">
+        </div>
+        <div class="blog-card-body">
+          <div class="blog-card-meta">
+            <span class="blog-tag">🥗 Nutrition</span>
+            <span class="blog-read-time">⏱ 6 min read</span>
+          </div>
+          <h3>Nutrition Hacks for Fat Loss</h3>
+          <p class="preview-text">
+            Fat loss doesn't have to be miserable – or biscuit-free. These simple, science-backed hacks are designed to work with your lifestyle, not against it. Tried and tested by real clients (including those hopelessly in love with Hobnobs).
+          </p>
+          <button class="read-more-btn" aria-expanded="false">Read More ↓</button>
 
-<!--Hide article & expand article-->
-    <script>
-        document.addEventListener("DOMContentLoaded", function () {
-    const readMoreButtons = document.querySelectorAll(".read-more-btn");
+          <div class="full-article">
+            <p>Let's face it, fat loss can feel like a minefield. One minute you're eating clean, the next you're knee-deep in a packet of Hobnobs wondering what happened.</p>
+            <br>
+            <p>Been there. Trained clients through it. I've coached people who could write a love letter to Nutella.</p>
+            <br>
+            <p>As a Level 4 qualified nutrition coach and personal trainer, I'm here to tell you: you don't need to cut out carbs, live off lettuce, or apologise for liking chocolate. Fat loss doesn't have to be miserable. It just needs a strategy that works with your lifestyle, not against it.</p>
+            <br>
+            <p>So, here are my top nutrition hacks for fat loss, tried, tested, and sprinkled with a bit of humour (because if we can't laugh while dieting, what's even the point?).</p>
+            <br>
+            <hr>
+            <br>
+            <h4>1. Prioritise Protein Like It's Your Job</h4>
+            <br>
+            <p>Protein: the Beyoncé of your meals, should always be front and centre.</p>
+            <br>
+            <p><strong>Why?</strong> Because protein keeps you fuller for longer, supports lean muscle (especially if you're training), and burns more calories just by being digested.</p>
+            <br>
+            <p><strong>Hack it:</strong> Build your meals around protein. Chicken, tofu, prawns, eggs, Greek yoghurt – anything that doesn't come in a wrapper gets bonus points.</p>
+            <br>
+            <hr>
+            <br>
+            <h4>2. Use a Smaller Plate (It's Not Cheating, It's Psychology)</h4>
+            <br>
+            <p>Portion sizes have ballooned. What we call a "standard plate" now could feed a small army.</p>
+            <br>
+            <p><strong>Hack it:</strong> Use a side plate. Trick your brain into thinking you're eating more than you are. Also – chew your food. Your stomach isn't in a hurry.</p>
+            <br>
+            <hr>
+            <br>
+            <h4>3. Create a Calorie Buffer (aka The Social Life Saver)</h4>
+            <br>
+            <p>Going out for dinner or having a roast? Great! You don't need to avoid real life for your goals.</p>
+            <br>
+            <p><strong>Hack it:</strong> Eat lighter earlier in the day – lean protein, veg, low-cal snacks – so you've got more calories to play with later. Like budgeting, but tastier.</p>
+            <br>
+            <p>And no, don't starve yourself all day before brunch. That's not clever, that's chaos.</p>
+            <br>
+            <hr>
+            <br>
+            <h4>4. Don't Drink Your Calories (Unless It's Wine… Joking. Sort of.)</h4>
+            <br>
+            <p>Lattes, smoothies, juices – they sound healthy but are often packed with calories.</p>
+            <br>
+            <p><strong>Hack it:</strong> Stick to water, black coffee, herbal tea, or zero-cal drinks. Save calories for food you actually chew. Your stomach (and jeans) will thank you.</p>
+            <br>
+            <hr>
+            <br>
+            <h4>5. Add More Fibre (Your Gut Will Throw a Party)</h4>
+            <br>
+            <p>Fibre is underrated. It keeps you full, helps digestion, and reduces cravings.</p>
+            <br>
+            <p><strong>Hack it:</strong> Pile on the veg, go for wholegrains, and throw beans or lentils into meals. Bonus: you might forget biscuits even exist. (OK, maybe just one.)</p>
+            <br>
+            <hr>
+            <br>
+            <h4>6. Structure Your Meals, No More 'Snackcidentally' Eating Everything</h4>
+            <br>
+            <p>Random snacking leads to random results. Structure = sanity.</p>
+            <br>
+            <p><strong>Hack it:</strong> Stick to three proper meals and one planned snack. Keeps blood sugar stable and prevents fridge wanderings that end in crisp negotiations.</p>
+            <br>
+            <hr>
+            <br>
+            <h4>7. Ditch the All-or-Nothing Mentality</h4>
+            <br>
+            <p>"I had one biscuit, might as well have five…" Sound familiar?</p>
+            <br>
+            <p><strong>Hack it:</strong> One off-plan moment doesn't ruin progress. What matters is what you do next. Drink some water, eat some veg, carry on. Progress &gt; perfection.</p>
+            <br>
+            <hr>
+            <br>
+            <h4>Final Thoughts: Fat Loss Doesn't Have to Be a Grind</h4>
+            <br>
+            <p>There's no magic – just small, smart shifts done consistently. These hacks work because they fit into real life. And if you feel like giving up? I've seen clients push through cake-heavy offices, hangovers, and snack drawer temptations. You're not alone.</p>
+            <br>
+            <p>Pick one or two hacks to start. Let them become habits. That's how you build something that sticks – no detox teas required.</p>
+            <br>
+            <p><strong>Need help personalising these hacks? Want someone to keep you accountable without banning pizza?</strong> Drop me a message – let's make your goals a reality.</p>
+            <br>
+            <div class="article-cta">
+              <a href="index.html#free-consultation" class="btn-secondary">Explore My Services &amp; Book a Free Consultation</a>
+            </div>
+            <div class="share-buttons">
+              <p class="share-label">Share this article:</p>
+              <div class="share-btn-group">
+                <button class="share-btn facebook"     data-platform="facebook"><span class="share-icon">f</span> Facebook</button>
+                <button class="share-btn whatsapp"     data-platform="whatsapp"><span class="share-icon">💬</span> WhatsApp</button>
+                <button class="share-btn twitter"      data-platform="twitter"><span class="share-icon">𝕏</span> X</button>
+                <button class="share-btn linkedin"     data-platform="linkedin"><span class="share-icon">in</span> LinkedIn</button>
+                <button class="share-btn copy-link"    data-platform="copy"><span class="share-icon">🔗</span> Copy Link</button>
+                <button class="share-btn native-share" data-platform="native" style="display:none;"><span class="share-icon">📤</span> Share</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </article>
 
-    readMoreButtons.forEach(button => {
-        button.addEventListener("click", function () {
-            const fullArticle = this.nextElementSibling;
-            if (fullArticle.style.display === "none" || fullArticle.style.display === "") {
-                fullArticle.style.display = "block";
-                this.textContent = "Read Less";
-            } else {
-                fullArticle.style.display = "none";
-                this.textContent = "Read More";
-            }
-        });
-    });
-});
-    </script>
+      <!-- ===== Article 3: BMI ===== -->
+      <article class="blog-card" data-aos="fade-up">
+        <div class="blog-card-img-wrap">
+          <img src="images/BMI_Article.jpeg" alt="BMI measurement graphic" class="blog-card-img">
+        </div>
+        <div class="blog-card-body">
+          <div class="blog-card-meta">
+            <span class="blog-tag">🏥 Health &amp; Wellness</span>
+            <span class="blog-read-time">⏱ 5 min read</span>
+          </div>
+          <h3>Why BMI is the Worst Way to Assess Your Body (and Why We Should All Stop Using It)</h3>
+          <p class="preview-text">
+            Let's talk about BMI – the Body Mass Index. You know, that little number doctors love to pull out of nowhere to tell you whether you're "healthy" or "overweight." But here's the thing: <strong>BMI is one of the worst ways to measure body composition</strong>…
+          </p>
+          <button class="read-more-btn" aria-expanded="false">Read More ↓</button>
 
-<!--Mobile Navbar-->
+          <div class="full-article">
+            <p>... and yet it's still used everywhere – from GP health checks to insurance forms to IVF eligibility (yep, more on that nonsense later).</p>
+            <br>
+            <p>If you've ever been told you're overweight despite feeling strong, fit, and healthy, you're not alone. Let's break down why BMI is outdated, misleading, and honestly, about as useful as a chocolate teapot.</p>
+            <br>
+            <hr>
+            <br>
+            <h4>What is BMI, and Why is it So Bad?</h4>
+            <br>
+            <p>BMI was invented in the 1830s (yes, before modern medicine was even a thing) by a mathematician – not a doctor, a mathematician – called Adolphe Quetelet. It's a simple equation:</p>
+            <br>
+            <p><strong>BMI = weight (kg) ÷ height (m²)</strong></p>
+            <br>
+            <p>Seems straightforward, right? That's exactly the problem. It only considers your height and weight, <strong>not</strong> your muscle mass, fat percentage, bone density, or even where your body stores fat.</p>
+            <br>
+            <p>Imagine this: you've been training hard, lifting weights, feeling amazing, but then you go for a health check and get told you're "overweight" because your BMI is over 25. Meanwhile, your mate who hasn't exercised in years but is naturally slim gets a "healthy" BMI. Does that make sense? Absolutely not.</p>
+            <br>
+            <hr>
+            <br>
+            <h4>The "Overweight" Lie</h4>
+            <br>
+            <p>I can't tell you how many times I've had clients go for routine health checks, feeling great, only to be told they need to "lose weight" because their BMI is over 25. Some of these people are lean, muscular, and healthier than ever, yet suddenly they're labelled as unhealthy.</p>
+            <br>
+            <p>This can have huge consequences. It messes with people's confidence, encourages unnecessary dieting, and worst of all, it can make people who are actually healthy feel like they aren't.</p>
+            <br>
+            <hr>
+            <br>
+            <h4>BMI and IVF: The Unfair Barrier</h4>
+            <br>
+            <p>Many fertility clinics refuse IVF treatment to people with a BMI over 30, no matter how fit or healthy they actually are. Imagine working hard, eating well, lifting weights, feeling strong – and then being told you can't even try for a baby because of a meaningless number.</p>
+            <br>
+            <hr>
+            <br>
+            <h4>So, What Should We Use Instead?</h4>
+            <br>
+            <p>Luckily, there are way better ways to measure health and body composition than BMI.</p>
+            <br>
+            <ul>
+              <li>Body Fat Percentage – This actually tells you how much of your body is fat vs. muscle.</li>
+              <li>Waist-to-Hip Ratio – A better indicator of metabolic health and risk of disease.</li>
+              <li>Strength, Fitness, and Overall Wellbeing – How do you feel? Are you strong? Do you have energy?</li>
+              <li>DEXA Scans &amp; InBody Scans – If you want a deep dive, these scans show your muscle, fat, and bone density breakdown.</li>
+            </ul>
+            <br>
+            <hr>
+            <br>
+            <h4>Final Thoughts</h4>
+            <br>
+            <p>BMI is not a measure of health. It's an outdated system that ignores muscle mass, body fat percentage, and actual fitness. It labels fit people as overweight and lets unfit people fly under the radar.</p>
+            <br>
+            <div class="article-cta">
+              <a href="index.html#free-consultation" class="btn-secondary">Explore My Services &amp; Book a Free Consultation</a>
+            </div>
+            <div class="share-buttons">
+              <p class="share-label">Share this article:</p>
+              <div class="share-btn-group">
+                <button class="share-btn facebook"     data-platform="facebook"><span class="share-icon">f</span> Facebook</button>
+                <button class="share-btn whatsapp"     data-platform="whatsapp"><span class="share-icon">💬</span> WhatsApp</button>
+                <button class="share-btn twitter"      data-platform="twitter"><span class="share-icon">𝕏</span> X</button>
+                <button class="share-btn linkedin"     data-platform="linkedin"><span class="share-icon">in</span> LinkedIn</button>
+                <button class="share-btn copy-link"    data-platform="copy"><span class="share-icon">🔗</span> Copy Link</button>
+                <button class="share-btn native-share" data-platform="native" style="display:none;"><span class="share-icon">📤</span> Share</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </article>
+
+    </div><!-- /blog-list -->
+  </div><!-- /container -->
+</section>
+
+<!-- Footer -->
+<footer class="footer" data-aos="fade-up">
+  <p>&copy; 2025 CarleyNFitness. Designed by Anna Gebler.</p>
+</footer>
+
+<!-- AOS -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
+<script>
+  AOS.init({ duration: 1000, once: true });
+</script>
+
+<!-- Read More / Read Less (smooth max-height expand) -->
 <script>
 document.addEventListener("DOMContentLoaded", function () {
-    console.log("Script Loaded!"); // Check if this appears in the console
-    const menuToggle = document.querySelector(".menu-button");
-    const navMenu = document.querySelector(".navbar ul");
-    const navLinks = document.querySelectorAll(".navbar ul li a");
-
-    // Ensure both menuToggle and navMenu are available before adding the event listener
-    if (menuToggle && navMenu) {
-        console.log("Menu button and nav menu found!");
-        menuToggle.addEventListener("click", () => {
-            console.log("Menu button clicked!");
-            navMenu.classList.toggle("active");
-        });
-
-        // Close the menu when a link is clicked
-        navLinks.forEach(link => {
-            link.addEventListener("click", () => {
-                navMenu.classList.remove("active");
-            });
-        });
-
-    } else {
-        console.error("Menu button or navMenu not found");
-    }
+  document.querySelectorAll(".read-more-btn").forEach(function (btn) {
+    var article = btn.nextElementSibling;
+    btn.addEventListener("click", function () {
+      var isOpen = this.getAttribute("aria-expanded") === "true";
+      if (isOpen) {
+        article.style.maxHeight = "0";
+        this.textContent = "Read More \u2193";
+        this.setAttribute("aria-expanded", "false");
+        this.closest(".blog-card").scrollIntoView({ behavior: "smooth", block: "start" });
+      } else {
+        article.style.maxHeight = article.scrollHeight + "px";
+        this.textContent = "Read Less \u2191";
+        this.setAttribute("aria-expanded", "true");
+      }
+    });
+  });
 });
 </script>
 
-<!--Share Buttons-->
+<!-- Mobile Navbar -->
 <script>
-    
-    // Social Share function
-    document.addEventListener("DOMContentLoaded", function () {
-        // Function to open the share URL
-        function shareTo(platform) {
-            const pageUrl = encodeURIComponent(window.location.href);
-            const pageTitle = encodeURIComponent(document.title);
-    
-            const shareUrls = {
-                facebook: `https://m.facebook.com/sharer/sharer.php?u=${pageUrl}`,
-                twitter: `https://twitter.com/intent/tweet?url=${pageUrl}&text=${pageTitle}`,
-                linkedin: `https://www.linkedin.com/sharing/share-offsite/?url=${pageUrl}`,
-                whatsapp: `https://api.whatsapp.com/send?text=${pageTitle}%20-%20${pageUrl}`
-            };
-    
-            // Open the share URL if it exists
-            if (shareUrls[platform]) {
-                window.open(shareUrls[platform], "_blank");
-            } else {
-                console.error(`Unsupported platform: ${platform}`);
-            }
-        }
-    
-        // Attach click event listeners to each button
-        document.querySelectorAll(".share-btn").forEach(btn => {
-            btn.addEventListener("click", function () {
-                const platform = this.dataset.platform; // Get platform from button's data attribute
-                shareTo(platform); // Trigger share functionality
-            });
-        });
+document.addEventListener("DOMContentLoaded", function () {
+  var menuToggle = document.querySelector(".menu-button");
+  var navMenu    = document.querySelector(".navbar ul");
+  var navLinks   = document.querySelectorAll(".navbar ul li a");
+  if (menuToggle && navMenu) {
+    menuToggle.addEventListener("click", function () {
+      navMenu.classList.toggle("active");
     });
-
+    navLinks.forEach(function (link) {
+      link.addEventListener("click", function () {
+        navMenu.classList.remove("active");
+      });
+    });
+  }
+});
 </script>
+
+<!-- Share Buttons (includes Copy Link + Web Share API for mobile) -->
 <script>
-    if (window.location.pathname === "/blog.html") {
-      window.location.replace("/blog");
-    }
-  </script>
+document.addEventListener("DOMContentLoaded", function () {
+  // Show native share button where supported (iOS/Android shows Instagram Stories, WhatsApp, etc.)
+  if (navigator.share) {
+    document.querySelectorAll(".native-share").forEach(function (btn) {
+      btn.style.display = "inline-flex";
+    });
+  }
+
+  document.querySelectorAll(".share-btn").forEach(function (btn) {
+    btn.addEventListener("click", async function () {
+      var platform  = this.dataset.platform;
+      var pageUrl   = encodeURIComponent(window.location.href);
+      var pageTitle = encodeURIComponent(document.title);
+      var shareUrls = {
+        facebook: "https://www.facebook.com/sharer/sharer.php?u=" + pageUrl,
+        twitter:  "https://twitter.com/intent/tweet?url=" + pageUrl + "&text=" + pageTitle,
+        linkedin: "https://www.linkedin.com/sharing/share-offsite/?url=" + pageUrl,
+        whatsapp: "https://api.whatsapp.com/send?text=" + pageTitle + "%20-%20" + pageUrl
+      };
+
+      if (platform === "copy") {
+        try {
+          await navigator.clipboard.writeText(window.location.href);
+          var orig = this.innerHTML;
+          this.innerHTML = '<span class="share-icon">\u2713</span> Copied!';
+          var self = this;
+          setTimeout(function () { self.innerHTML = orig; }, 2000);
+        } catch (e) {
+          prompt("Copy this link:", window.location.href);
+        }
+      } else if (platform === "native") {
+        navigator.share({ title: document.title, url: window.location.href }).catch(function () {});
+      } else if (shareUrls[platform]) {
+        window.open(shareUrls[platform], "_blank", "width=600,height=400");
+      }
+    });
+  });
+});
+</script>
+
+<!-- Custom Cursor -->
+<script>
+(function () {
+  var dot  = document.getElementById("cursor-dot");
+  var ring = document.getElementById("cursor-ring");
+  if (!dot || !ring) return;
+
+  var mouseX = 0, mouseY = 0;
+  var ringX  = 0, ringY  = 0;
+
+  document.addEventListener("mousemove", function (e) {
+    mouseX = e.clientX;
+    mouseY = e.clientY;
+    dot.style.transform = "translate(" + (mouseX - 4) + "px," + (mouseY - 4) + "px)";
+  });
+
+  function animateRing() {
+    ringX += (mouseX - ringX) * 0.15;
+    ringY += (mouseY - ringY) * 0.15;
+    ring.style.transform = "translate(" + (ringX - 16) + "px," + (ringY - 16) + "px)";
+    requestAnimationFrame(animateRing);
+  }
+  animateRing();
+
+  document.querySelectorAll("a, button").forEach(function (el) {
+    el.addEventListener("mouseenter", function () { ring.classList.add("hovering"); });
+    el.addEventListener("mouseleave", function () { ring.classList.remove("hovering"); });
+  });
+
+  // Disable on touch
+  document.addEventListener("touchstart", function () {
+    dot.style.display = "none";
+    ring.style.display = "none";
+  }, { once: true });
+})();
+</script>
+
+<!-- Reading Progress Bar -->
+<script>
+(function () {
+  var bar = document.getElementById("reading-progress");
+  if (!bar) return;
+  window.addEventListener("scroll", function () {
+    var scrollTop = window.scrollY || document.documentElement.scrollTop;
+    var docHeight = document.documentElement.scrollHeight - window.innerHeight;
+    bar.style.width = (docHeight > 0 ? (scrollTop / docHeight) * 100 : 0) + "%";
+  });
+})();
+</script>
+
+<script>
+if (window.location.pathname === "/blog.html") {
+  window.location.replace("/blog");
+}
+</script>
 </body>
 </html>

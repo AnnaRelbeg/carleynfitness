@@ -2,103 +2,126 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Sign Up | CarleyNFitness</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>Create Account | CarleyNFitness</title>
   <link rel="stylesheet" href="styles.css" />
-  
-  <!-- Firebase SDK -->
-  <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-app.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-auth.js"></script>
+  <link rel="icon" href="images/logoG.jpg" type="image/png" />
+  <link rel="manifest" href="/manifest.json" />
+  <meta name="theme-color" content="#708090" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+  <meta name="apple-mobile-web-app-title" content="CNFitness" />
+  <link rel="apple-touch-icon" href="images/icon-192.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800&family=Playfair+Display:wght@700&display=swap" rel="stylesheet" />
 </head>
-<body>
-  <nav class="navbar">
-    <ul>
-      <li><a href="index.html">Home</a></li>
-      <li><a href="login.html">Login</a></li>
-    </ul>
-  </nav>
+<body class="portal-body">
 
-  <section class="section" style="max-width: 500px; margin-top: 100px;">
-    <div class="container">
-      <h1>Create Your Client Account</h1>
-      <p>Sign up to access your personal fitness dashboard and bookings.</p>
+  <!-- Hero -->
+  <div class="portal-hero">
+    <a href="index.html">
+      <img src="images/logo.png" alt="CarleyNFitness" class="logo-sm" />
+    </a>
+    <h1>Create your account</h1>
+    <p>Your personal fitness dashboard is waiting for you.</p>
+  </div>
 
-      <form id="signup-form">
-        <label for="signup-email">Email</label>
-        <input type="email" id="signup-email" placeholder="Enter your email" required />
+  <!-- Sign-up card -->
+  <div class="portal-card">
+    <h2>Let's get you set up</h2>
+    <p class="sub">Once you're in, Carley will add your programme and goals to your dashboard.</p>
 
-        <label for="signup-password">Password</label>
-        <input type="password" id="signup-password" placeholder="Enter your password" required />
+    <div class="portal-msg" id="signup-msg"></div>
 
-        <button type="submit" class="btn-primary">Sign Up</button>
-      </form>
+    <form id="signup-form" novalidate>
+      <label for="signup-email">Email address</label>
+      <input type="email" id="signup-email" placeholder="you@email.com" required autocomplete="email" />
 
-      <p id="signup-message" style="margin-top: 15px; color: green;"></p>
-      <p style="margin-top: 10px;">Already have an account? <a href="login.html">Log in here</a>.</p>
+      <label for="signup-password">Choose a password</label>
+      <input type="password" id="signup-password" placeholder="At least 6 characters" required autocomplete="new-password" />
+
+      <button type="submit" class="btn-portal">Create account</button>
+    </form>
+
+    <div class="link-row">
+      Already have an account? <a href="login.html">Sign in here</a>
     </div>
-  </section>
+    <div class="link-row" style="margin-top: 10px;">
+      <a href="index.html">&larr; Back to website</a>
+    </div>
+  </div>
 
-  <footer class="footer">
-    <p>&copy; 2025 CarleyNFitness. Designed by Anna Gebler</p>
-  </footer>
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-app.js";
+  import { getAuth, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-auth.js";
+  import { getFirestore, doc, setDoc } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-firestore.js";
 
-  <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-app.js";
-    import { getAuth, createUserWithEmailAndPassword, signOut } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-auth.js";
-    import { getFirestore, doc, setDoc } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-firestore.js";
+  const firebaseConfig = {
+    apiKey: "AIzaSyDpju8JIedURVxBJgmZ1yBuRzd4CEdFDVY",
+    authDomain: "carleynfitnesscalendar.firebaseapp.com",
+    projectId: "carleynfitnesscalendar",
+    storageBucket: "carleynfitnesscalendar.appspot.com",
+    messagingSenderId: "1013642078015",
+    appId: "1:1013642078015:web:e8bcff9d1559f1c1d5158a"
+  };
 
-    const firebaseConfig = {
-      apiKey: "AIzaSyDpju8JIedURVxBJgmZ1yBuRzd4CEdFDVY",
-      authDomain: "carleynfitnesscalendar.firebaseapp.com",
-      projectId: "carleynfitnesscalendar",
-      storageBucket: "carleynfitnesscalendar.appspot.com",
-      messagingSenderId: "1013642078015",
-      appId: "1:1013642078015:web:e8bcff9d1559f1c1d5158a"
-    };
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+  const db = getFirestore(app);
 
-    const app = initializeApp(firebaseConfig);
-    const auth = getAuth(app);
-    const db = getFirestore(app);
+  const form = document.getElementById("signup-form");
+  const msgEl = document.getElementById("signup-msg");
 
-    const form = document.getElementById("client-form");
-    const responseMsg = document.getElementById("responseMsg");
-    const logoutBtn = document.getElementById("logoutBtn");
+  function showMsg(text, type) {
+    msgEl.textContent = text;
+    msgEl.className = "portal-msg " + type + " show";
+  }
 
-    form.addEventListener("submit", async (e) => {
-      e.preventDefault();
+  form.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    msgEl.className = "portal-msg";
 
-      const email = document.getElementById("email").value.trim();
-      const password = document.getElementById("password").value;
-      const profile = {
-        fullName: document.getElementById("fullName").value.trim(),
-        email: email,
-        goal: document.getElementById("goal").value.trim(),
-        startDate: document.getElementById("startDate").value,
-        currentWeight: parseFloat(document.getElementById("currentWeight").value),
-        targetWeight: parseFloat(document.getElementById("targetWeight").value),
-        notes: document.getElementById("notes").value.trim()
+    const email = document.getElementById("signup-email").value.trim();
+    const password = document.getElementById("signup-password").value;
+
+    if (password.length < 6) {
+      showMsg("Password needs to be at least 6 characters.", "error");
+      return;
+    }
+
+    try {
+      const credential = await createUserWithEmailAndPassword(auth, email, password);
+      const uid = credential.user.uid;
+
+      // Create a blank client profile — Carley fills in the details via admin.html
+      await setDoc(doc(db, "clients", uid), {
+        email,
+        fullName: "",
+        goal: "",
+        startDate: "",
+        notes: "",
+        calorieTarget: null,
+        createdAt: new Date().toISOString()
+      });
+
+      showMsg("Account created! Heading to your dashboard...", "success");
+      setTimeout(() => { window.location.href = "dashboard.html"; }, 1200);
+    } catch (err) {
+      const messages = {
+        "auth/email-already-in-use": "There is already an account with that email. Try logging in instead.",
+        "auth/invalid-email":        "That email address doesn't look right.",
+        "auth/weak-password":        "Password is too short — please use at least 6 characters."
       };
+      showMsg(messages[err.code] || "Something went wrong. Please try again.", "error");
+    }
+  });
+</script>
 
-      try {
-        const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-        const uid = userCredential.user.uid;
-        await setDoc(doc(db, "clients", uid), profile);
-        responseMsg.style.color = "green";
-        responseMsg.textContent = "✅ Account created successfully! Redirecting...";
-        setTimeout(() => {
-          window.location.href = "dashboard.html";
-        }, 1500);
-      } catch (error) {
-        console.error(error);
-        responseMsg.style.color = "red";
-        responseMsg.textContent = "❌ Error: " + (error.message || "Unable to create user");
-      }
-    });
 
-    logoutBtn.addEventListener("click", async () => {
-      await signOut(auth);
-      window.location.href = "index.html";
-    });
-  </script>
+<script>
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => navigator.serviceWorker.register('/sw.js'));
+  }
+</script>
 </body>
 </html>

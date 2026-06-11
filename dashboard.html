@@ -2,61 +2,195 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>My Dashboard</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>My Dashboard | CarleyNFitness</title>
   <link rel="stylesheet" href="styles.css" />
-  <link rel="icon" href="images/CNF_Dashboard.png" type="image/png">
-  <!-- Chart.js kept in case you re-enable graphs later -->
-  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns@3"></script>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/glightbox/3.2.0/css/glightbox.min.css" />
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/glightbox/3.2.0/js/glightbox.min.js"></script>
-  <style>
-    /* Optional: small style for coach notes */
-    .coach-note { margin: 6px 0 10px; font-size: 0.95rem; opacity: 0.9; }
-    .coach-note strong { white-space: nowrap; }
-    #dailySummary li { margin-bottom: 10px; }
-  </style>
+  <link rel="icon" href="images/CNF_Dashboard.png" type="image/png" />
+  <link rel="manifest" href="/manifest.json" />
+  <meta name="theme-color" content="#708090" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="CNFitness" />
+  <link rel="apple-touch-icon" href="images/icon-192.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800&family=Playfair+Display:wght@700&display=swap" rel="stylesheet" />
+
 </head>
-<body>
+<body class="dash-body">
 
-<section class="section" style="max-width: 700px; margin-top: 60px;">
-  <div class="container">
-    <h2>Welcome to Your Fitness Dashboard</h2>
+  <!-- ===================== HOME VIEW ===================== -->
+  <div id="view-home" class="dashboard-wrap">
 
-    <!-- 🔹 Summary Card (kept) -->
-    <div class="dashboard-card" id="summary-card" style="display: none;">
-      <h3>Summary</h3>
-      <p><strong>Name:</strong> <span id="summary-name"></span></p>
-      <p><strong>Goal:</strong> <span id="summary-goal"></span></p>
-      <p><strong>Weight Progress:</strong>
-        <span id="summary-weight"></span>
-      </p>
+    <!-- Hero banner -->
+    <div class="dash-hero">
+      <div class="level-badge">⭐ <span id="level-name">Level 1</span></div>
+      <h1 id="dash-greeting">Hey!</h1>
+      <p class="coach-msg" id="coach-msg">Loading your stats...</p>
+      <div class="xp-bar-wrap">
+        <div class="xp-bar-fill" id="xp-bar" style="width:0%"></div>
+      </div>
+      <div class="xp-labels">
+        <span id="xp-current">0 XP</span>
+        <span id="xp-next">Next level: 200 XP</span>
+      </div>
     </div>
 
-    <!-- 🔹 Coach Carley Weekly Note (separate card) -->
-<div class="dashboard-card" id="coach-card" style="display:none; margin-bottom:16px;">
-  <div style="display:flex; gap:14px; align-items:center;">
-    <img id="coachPhoto" src="images/coachphoto.jpg" alt="Coach Carley"
-         style="width:56px; height:56px; object-fit:cover; border-radius:9999px; flex:0 0 56px;" />
-    <div>
-      <h3 style="margin:0 0 4px;">Coach Carley’s Note</h3>
-      <div id="coachWeeklyNoteTop" class="coach-note" style="margin:0;"></div>
+    <!-- Stats row -->
+    <div class="stats-row">
+      <div class="stat-card-portal">
+        <div class="big-num" id="streak-num">0</div>
+        <div class="label">🔥 Streak</div>
+      </div>
+      <div class="stat-card-portal">
+        <div class="big-num" id="weekly-workouts">0</div>
+        <div class="label">💪 This week</div>
+      </div>
+      <div class="stat-card-portal">
+        <div class="big-num" id="total-xp-display">0</div>
+        <div class="label">⭐ Total XP</div>
+      </div>
     </div>
+
+    <!-- Today's Plan (shown only when today is a scheduled day) -->
+    <div id="todays-plan-wrap" style="display:none;">
+      <div class="dash-card">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
+          <h3 style="margin:0;">📋 Today's Plan</h3>
+          <span id="todays-plan-label" style="font-size:0.78rem;color:#708090;font-weight:600;background:#f0f4f8;padding:3px 10px;border-radius:999px;"></span>
+        </div>
+        <div id="todays-plan-exercises"></div>
+        <button id="btn-plan-done" class="btn-plan-done">Mark today as done ✓</button>
+      </div>
+    </div>
+
+    <!-- 7-day dot calendar -->
+    <div class="week-row" id="week-row"></div>
+
+    <!-- Weekly challenge -->
+    <div class="dash-card">
+      <h3>Weekly Challenge</h3>
+      <div class="challenge-wrap">
+        <div class="challenge-label">
+          <span id="challenge-text">Log 3 workouts this week</span>
+          <span id="challenge-count">0 / 3</span>
+        </div>
+        <div class="challenge-bar">
+          <div class="challenge-fill" id="challenge-fill" style="width:0%"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Quick log buttons -->
+    <div class="quick-actions">
+      <button class="quick-btn" onclick="openModal('modal-workout')">
+        <span class="icon">🏋️</span>
+        <span class="q-title">Log Workout</span>
+        <span class="q-sub">Track your session</span>
+      </button>
+      <button class="quick-btn" onclick="openModal('modal-meal')">
+        <span class="icon">🍽️</span>
+        <span class="q-title">Log Meals</span>
+        <span class="q-sub">Track your macros</span>
+      </button>
+      <button class="quick-btn" onclick="openModal('modal-metrics')">
+        <span class="icon">📊</span>
+        <span class="q-title">Body Metrics</span>
+        <span class="q-sub">Measurements</span>
+      </button>
+
+    </div>
+
+    <!-- Achievements -->
+    <div class="dash-card">
+      <h3>🏆 Achievements</h3>
+      <div class="achievements-grid" id="achievements-grid"></div>
+    </div>
+
+    <!-- 7-day activity log -->
+    <div class="dash-card">
+      <h3>📅 Last 7 Days</h3>
+      <div id="activity-list"></div>
+    </div>
+
   </div>
-</div>
 
 
-    <!-- 🔹 Daily Summary with Coach Notes -->
-    <div class="dashboard-card" id="daily-summary-card" style="display:none;">
-      <h3>🗓️ Daily Summary (last 7 days)</h3>
-      <p id="weeklyHeadline"></p>
-      <ul id="dailySummary" style="list-style:none; padding-left:0;"></ul>
+  <!-- ===================== PROFILE VIEW ===================== -->
+  <div id="view-profile" class="dashboard-wrap" style="display:none; padding-top:0;">
+
+    <div class="dash-hero" style="border-radius:0;">
+      <h1 id="profile-heading" style="font-size:1.3rem;">My Profile</h1>
+      <p style="opacity:0.8; font-size:0.85rem;" id="profile-email-display"></p>
     </div>
 
-    <!-- 🔹 Logs -->
-    <details class="log-section">
-      <summary><strong>🏋️ Workout Log</strong></summary>
+    <form id="profile-form" style="padding:16px;">
+      <div class="dash-card" style="margin:16px 0;">
+        <h3>Your Details</h3>
+
+        <div class="profile-field">
+          <label>Full name</label>
+          <input type="text" id="fullName" readonly />
+        </div>
+        <div class="profile-field">
+          <label>Goal</label>
+          <input type="text" id="goal" placeholder="What are you working towards?" />
+        </div>
+        <div class="profile-field">
+          <label>Daily calorie target (kcal)</label>
+          <input type="number" id="calorieTarget" min="800" max="4000" step="10" placeholder="e.g. 1400" />
+        </div>
+        <div class="profile-field">
+          <label>Start date</label>
+          <input type="date" id="startDate" />
+        </div>
+        <div class="profile-field">
+          <label>Notes from Carley</label>
+          <textarea id="notes" rows="4" readonly style="resize:none;"></textarea>
+        </div>
+        <div class="profile-field" id="workout-plan-wrap" style="display:none;">
+          <label>Your Workout Plan</label>
+          <textarea id="workoutPlan" rows="6" readonly style="resize:none;white-space:pre-wrap;"></textarea>
+        </div>
+
+        <div class="portal-msg" id="profile-msg"></div>
+        <button type="submit" class="btn-portal" style="margin-top:4px;">Save changes</button>
+      </div>
+    </form>
+
+    <div style="padding:0 16px 24px;">
+      <button id="logoutBtn" style="width:100%; background:none; border:1.5px solid #e0e8f0; border-radius:14px; padding:15px; font-family:'Montserrat',sans-serif; font-size:0.95rem; font-weight:700; color:#708090; cursor:pointer;">
+        Log out
+      </button>
+    </div>
+
+  </div>
+
+
+
+
+  <!-- ===================== CHALLENGES VIEW ===================== -->
+  <div id="view-challenges" class="dashboard-wrap" style="display:none; padding-top:0;">
+
+    <div class="dash-hero" style="border-radius:0;">
+      <h1 style="font-size:1.3rem;">Challenges</h1>
+      <p style="opacity:0.8; font-size:0.85rem;">Sign up and take on something new. Every rep counts. 💪</p>
+    </div>
+
+    <div style="padding:16px;" id="challenges-view-list">
+      <p style="color:#aab8c2; font-size:0.88rem;">Loading challenges...</p>
+    </div>
+
+  </div>
+
+
+  <!-- ===================== MODALS ===================== -->
+
+  <!-- Workout Modal -->
+  <div class="modal-overlay" id="modal-workout" onclick="handleOverlayClick(event, 'modal-workout')">
+    <div class="modal-sheet">
+      <div class="modal-handle"></div>
+      <button class="modal-close" onclick="closeModal('modal-workout')">✕</button>
+      <h2 class="modal-title">🏋️ Log Workout</h2>
       <form id="workoutLogForm">
         <label for="workoutDate">Date</label>
         <input type="date" id="workoutDate" required />
@@ -65,119 +199,140 @@
         <select id="workoutType">
           <option>Strength</option>
           <option>Cardio</option>
-          <option>Mobility</option>
+          <option>Mobility / Stretching</option>
+          <option>HIIT</option>
+          <option>Walk / Run</option>
           <option>Other</option>
         </select>
 
-        <label for="duration">Duration (mins)</label>
-        <input type="number" id="duration" min="5" required />
+        <label for="duration">Duration (minutes)</label>
+        <input type="number" id="duration" min="5" max="300" placeholder="e.g. 45" required />
 
         <label for="workoutNotes">Notes (optional)</label>
-        <textarea id="workoutNotes"></textarea>
+        <textarea id="workoutNotes" rows="2" placeholder="How did it go? Any PBs?"></textarea>
 
-        <button class="btn-primary" type="submit">Log Workout</button>
+        <div class="portal-msg" id="workout-msg"></div>
+        <button type="submit" class="btn-submit">Log it</button>
       </form>
-    </details>
+    </div>
+  </div>
 
-    <details class="log-section">
-      <summary><strong>🍽️ Meal Macros Log</strong></summary>
+  <!-- Meal Modal -->
+  <div class="modal-overlay" id="modal-meal" onclick="handleOverlayClick(event, 'modal-meal')">
+    <div class="modal-sheet">
+      <div class="modal-handle"></div>
+      <button class="modal-close" onclick="closeModal('modal-meal')">✕</button>
+      <h2 class="modal-title">🍽️ Log Meals</h2>
       <form id="mealLogForm">
         <label for="mealDate">Date</label>
         <input type="date" id="mealDate" required />
 
-        <label for="calories">Calories</label>
-        <input type="number" id="calories" required />
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
+          <div>
+            <label for="calories">Calories (kcal)</label>
+            <input type="number" id="calories" required placeholder="e.g. 1400" />
+          </div>
+          <div>
+            <label for="protein">Protein (g)</label>
+            <input type="number" id="protein" required placeholder="e.g. 120" />
+          </div>
+          <div>
+            <label for="carbs">Carbs (g)</label>
+            <input type="number" id="carbs" required placeholder="e.g. 150" />
+          </div>
+          <div>
+            <label for="fat">Fat (g)</label>
+            <input type="number" id="fat" required placeholder="e.g. 55" />
+          </div>
+          <div>
+            <label for="fibre">Fibre (g)</label>
+            <input type="number" id="fibre" placeholder="e.g. 28" />
+          </div>
+        </div>
 
-        <label for="protein">Protein (g)</label>
-        <input type="number" id="protein" required />
-
-        <label for="carbs">Carbs (g)</label>
-        <input type="number" id="carbs" required />
-
-        <label for="fat">Fat (g)</label>
-        <input type="number" id="fat" required />
-
-        <label for="fibre">Fibre (g)</label>
-        <input type="number" id="fibre" />
-
-        <button class="btn-primary" type="submit">Log Meal</button>
+        <div class="portal-msg" id="meal-msg"></div>
+        <button type="submit" class="btn-submit">Log it</button>
       </form>
-    </details>
-
-    <!-- 🔧 Profile -->
-    <form id="profile-form">
-      <p><strong>Email:</strong> <span id="user-email"></span></p>
-
-      <details class="profile-section">
-        <summary><strong>📝 Generic Information</strong></summary>
-        <label for="fullName">Full Name</label>
-        <input type="text" id="fullName" readonly />
-
-        <label for="goal">Goal</label>
-        <input type="text" id="goal" />
-
-        <label for="calorieTarget">Calorie Target (kcal)</label>
-        <input type="number" id="calorieTarget" min="800" max="4000" step="10" placeholder="e.g. 1200" />
-
-        <label for="startDate">Goal Start Date</label>
-        <input type="date" id="startDate" />
-        <label for="notes">Notes</label>
-<textarea id="notes"></textarea>
-
-<button type="submit" class="btn-primary">💾 Save Changes</button>
-<p id="responseMsg"></p>
-      </details>
-    </form>
-      <!-- 📊 Body Metrics (kept for profile only; progress bars removed) -->
-      <details class="metrics-section" open>
-  <summary><strong>📊 Body Metrics (daily)</strong></summary>
-
-  <form id="dailyMetricsForm">
-    <div style="display:flex; gap:12px; align-items:end; margin:8px 0 12px;">
-      <div>
-        <label for="metricsDate">Date</label>
-        <input type="date" id="metricsDate" required />
-      </div>
-      <button type="button" id="loadMetricsBtn" class="btn-secondary">Load for date</button>
-      <button type="submit" class="btn-primary">💾 Save Daily Metrics</button>
-      <span id="metricsMsg" style="margin-left:8px; font-size:0.95rem;"></span>
     </div>
-</form>
-    <table class="metrics-table">
-      <thead>
-        <tr>
-          <th>Metric</th>
-          <th>Value</th>
-          <th>Target (profile)</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr><td>Weight (kg/lbs)</td><td><input type="number" id="weight" step="0.1" /></td><td><input type="number" id="targetWeight" step="0.1" /></td></tr>
-        <tr><td>Waist (cm)</td><td><input type="number" id="waist" step="0.1" /></td><td><input type="number" id="targetWaist" step="0.1" /></td></tr>
-        <tr><td>Hip (cm)</td><td><input type="number" id="hip" step="0.1" /></td><td><input type="number" id="targetHip" step="0.1" /></td></tr>
-        <tr><td>Chest (cm)</td><td><input type="number" id="chest" step="0.1" /></td><td><input type="number" id="targetChest" step="0.1" /></td></tr>
-        <tr><td>Thigh (cm)</td><td><input type="number" id="thigh" step="0.1" /></td><td><input type="number" id="targetThigh" step="0.1" /></td></tr>
-        <tr><td>Arm (cm)</td><td><input type="number" id="arm" step="0.1" /></td><td><input type="number" id="targetArm" step="0.1" /></td></tr>
-        <tr><td>Glutes (cm)</td><td><input type="number" id="glutes" step="0.1" /></td><td><input type="number" id="targetGlutes" step="0.1" /></td></tr>
-      </tbody>
-    </table>
-
-  <div id="metricsHistory" style="margin-top:10px;">
-    <h4 style="margin:12px 0 6px;">Recent entries</h4>
-    <ul id="metricsHistoryList" style="list-style:none; padding-left:0; margin:0;"></ul>
   </div>
-</details>
+
+  <!-- Metrics Modal -->
+  <div class="modal-overlay" id="modal-metrics" onclick="handleOverlayClick(event, 'modal-metrics')">
+    <div class="modal-sheet">
+      <div class="modal-handle"></div>
+      <button class="modal-close" onclick="closeModal('modal-metrics')">✕</button>
+      <h2 class="modal-title">📊 Body Metrics</h2>
+
+      <label for="metricsDate">Date</label>
+      <input type="date" id="metricsDate" style="margin-bottom:16px;" />
+
+      <div style="display:flex; gap:8px; margin-bottom:16px;">
+        <button type="button" id="loadMetricsBtn" style="flex:1; background:#eef2f6; border:none; border-radius:10px; padding:11px; font-family:'Montserrat',sans-serif; font-weight:700; font-size:0.82rem; color:#2c3e50; cursor:pointer;">Load for date</button>
+      </div>
+
+      <form id="metricsForm">
+        <div class="metrics-modal-grid">
+          <div class="metric-input-wrap">
+            <label>Weight (kg)</label>
+            <input type="number" id="m-weight" step="0.1" placeholder="e.g. 68.5" />
+          </div>
+          <div class="metric-input-wrap">
+            <label>Waist (cm)</label>
+            <input type="number" id="m-waist" step="0.1" placeholder="e.g. 74" />
+          </div>
+          <div class="metric-input-wrap">
+            <label>Hip (cm)</label>
+            <input type="number" id="m-hip" step="0.1" placeholder="e.g. 96" />
+          </div>
+          <div class="metric-input-wrap">
+            <label>Chest (cm)</label>
+            <input type="number" id="m-chest" step="0.1" placeholder="e.g. 88" />
+          </div>
+          <div class="metric-input-wrap">
+            <label>Thigh (cm)</label>
+            <input type="number" id="m-thigh" step="0.1" placeholder="e.g. 56" />
+          </div>
+          <div class="metric-input-wrap">
+            <label>Arm (cm)</label>
+            <input type="number" id="m-arm" step="0.1" placeholder="e.g. 30" />
+          </div>
+          <div class="metric-input-wrap">
+            <label>Glutes (cm)</label>
+            <input type="number" id="m-glutes" step="0.1" placeholder="e.g. 100" />
+          </div>
+        </div>
+
+        <div class="portal-msg" id="metrics-msg"></div>
+        <button type="submit" class="btn-submit">Save metrics</button>
+      </form>
+
+      <div id="metrics-history" style="margin-top:20px;">
+        <p style="font-size:0.75rem; font-weight:700; color:#708090; text-transform:uppercase; letter-spacing:0.5px; margin-bottom:8px;">Recent entries</p>
+        <div id="metrics-history-list"></div>
+      </div>
+    </div>
+  </div>
 
 
-<div class="photo-upload-section">
-  <h3>📸 Upload Progress Photos</h3>
-  <input type="file" id="photoInput" accept="image/*" />
-  <button id="uploadPhotoBtn" class="btn-primary">Upload Photo</button>
-  <p id="uploadStatus"></p>
-  <div id="photoGallery"></div>
-</div>
 
-<button id="logoutBtn" class="btn-secondary">🚪 Logout</button>
+  <!-- ===================== BOTTOM NAV ===================== -->
+  <nav class="bottom-nav">
+    <button class="bottom-nav-item active" data-view="home">
+      <span class="nav-icon">🏠</span>
+      <span>Home</span>
+    </button>
+
+    <button class="bottom-nav-item" data-view="challenges">
+      <span class="nav-icon">🏆</span>
+      <span>Challenges</span>
+    </button>
+
+    <button class="bottom-nav-item" data-view="profile">
+      <span class="nav-icon">👤</span>
+      <span>Profile</span>
+    </button>
+  </nav>
+
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-app.js";
@@ -185,550 +340,693 @@ import {
   getAuth, onAuthStateChanged, signOut
 } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-auth.js";
 import {
-  getFirestore, doc, getDoc, setDoc, collection, addDoc, getDocs, Timestamp,
-  query, orderBy, limit, arrayUnion
+  getFirestore, doc, getDoc, setDoc, deleteDoc, collection, addDoc, getDocs,
+  Timestamp, query, orderBy, limit, arrayUnion
 } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-firestore.js";
-import {
-  getStorage, ref as storageRef, uploadBytes, getDownloadURL, listAll
-} from "https://www.gstatic.com/firebasejs/9.6.10/firebase-storage.js";
 
-document.addEventListener("DOMContentLoaded", async () => {
-  const firebaseConfig = {
-    apiKey: "AIzaSyDpju8JIedURVxBJgmZ1yBuRzd4CEdFDVY",
-    authDomain: "carleynfitnesscalendar.firebaseapp.com",
-    projectId: "carleynfitnesscalendar",
-    storageBucket: "carleynfitnesscalendar.firebasestorage.app",
-    messagingSenderId: "1013642078015",
-    appId: "1:1013642078015:web:e8bcff9d1559f1c1d5158a"
-  };
+const firebaseConfig = {
+  apiKey: "AIzaSyDpju8JIedURVxBJgmZ1yBuRzd4CEdFDVY",
+  authDomain: "carleynfitnesscalendar.firebaseapp.com",
+  projectId: "carleynfitnesscalendar",
+  storageBucket: "carleynfitnesscalendar.firebasestorage.app",
+  messagingSenderId: "1013642078015",
+  appId: "1:1013642078015:web:e8bcff9d1559f1c1d5158a"
+};
 
-  const app = initializeApp(firebaseConfig);
-  const auth = getAuth(app);
-  const db = getFirestore(app);
-  const storage = getStorage(app);
+const app  = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db   = getFirestore(app);
 
-  const form = document.getElementById("profile-form");
-  const responseMsg = document.getElementById("responseMsg");
-  const logoutBtn = document.getElementById("logoutBtn");
+// ── Helpers ──────────────────────────────────────
+function todayStr() {
+  const d = new Date();
+  return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}`;
+}
+function toDateTS(dateStr) {
+  return Timestamp.fromDate(new Date(dateStr + "T00:00:00"));
+}
+function showMsg(id, text, type) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  el.textContent = text;
+  el.className = "portal-msg " + type + " show";
+}
+function clearMsg(id) {
+  const el = document.getElementById(id);
+  if (el) el.className = "portal-msg";
+}
 
-  const summaryCard = document.getElementById("summary-card");
-  const userEmailDisplay = document.getElementById("user-email");
-  const summaryName = document.getElementById("summary-name");
-  const summaryGoal = document.getElementById("summary-goal");
-  const summaryWeight = document.getElementById("summary-weight");
-
-  const dailySummaryCard = document.getElementById("daily-summary-card");
-  const weeklyHeadline = document.getElementById("weeklyHeadline");
-  const dailySummaryList = document.getElementById("dailySummary");
-
-  const photoInput = document.getElementById("photoInput");
-  const uploadPhotoBtn = document.getElementById("uploadPhotoBtn");
-  const uploadStatus = document.getElementById("uploadStatus");
-  const photoGallery = document.getElementById("photoGallery");
-
-  const metricFields = ["weight", "waist", "hip", "chest", "thigh", "arm", "glutes"];
-
-  // ======= Configurable thresholds for Coach notes =======
-  const PROTEIN_STRONG = 100;     // g
-  const FIBRE_GOOD = 25;          // g
-  const CAL_TARGET = 1200;        // kcal (fallback if no profile target exists)
-  const CAL_TOL = 150;            // ± range considered “on target”
-
-  // Helper: today default for date inputs
-  function todayStr() {
-    const tz = new Date();
-    const yyyy = tz.getFullYear();
-    const mm = String(tz.getMonth() + 1).padStart(2, "0");
-    const dd = String(tz.getDate()).padStart(2, "0");
-    return `${yyyy}-${mm}-${dd}`;
+// ── XP & Level system ────────────────────────────
+const LEVELS = [
+  { name: "Just Starting",  min: 0    },
+  { name: "Building Habits",min: 200  },
+  { name: "Getting Consistent", min: 500  },
+  { name: "Dedicated",      min: 1000 },
+  { name: "Strong & Steady",min: 2000 },
+  { name: "Elite",          min: 4000 }
+];
+function getLevel(xp) {
+  for (let i = LEVELS.length - 1; i >= 0; i--) {
+    if (xp >= LEVELS[i].min) return { index: i, ...LEVELS[i], next: LEVELS[i+1] };
   }
-
-  // Initialise date inputs to today
-  const workoutDateInput = document.getElementById("workoutDate");
-  const mealDateInput = document.getElementById("mealDate");
-  if (workoutDateInput) workoutDateInput.value = todayStr();
-  if (mealDateInput) mealDateInput.value = todayStr();
-
-  function getValue(id) {
-    const val = parseFloat(document.getElementById(id)?.value);
-    return isNaN(val) ? null : val;
+  return { index: 0, ...LEVELS[0], next: LEVELS[1] };
+}
+function updateXPBar(xp) {
+  const level = getLevel(xp);
+  document.getElementById("level-name").textContent = level.name;
+  document.getElementById("total-xp-display").textContent = xp;
+  document.getElementById("xp-current").textContent = xp + " XP";
+  if (level.next) {
+    const pct = Math.min(100, Math.round((xp - level.min) / (level.next.min - level.min) * 100));
+    document.getElementById("xp-bar").style.width = pct + "%";
+    document.getElementById("xp-next").textContent = "Next: " + level.next.min + " XP";
+  } else {
+    document.getElementById("xp-bar").style.width = "100%";
+    document.getElementById("xp-next").textContent = "Max level!";
   }
+}
 
-  async function saveProgress(uid, metrics) {
-    const progressRef = collection(db, "clients", uid, "progress");
-    await addDoc(progressRef, {
-      ...metrics,
-      date: Timestamp.now()
-    });
-  }
+// ── Carley's coach messages ───────────────────────
+const PROTEIN_TARGET = 100; // g
+const CAL_TOL = 200;
 
-  function toDateTS(dateStr) {
-    const d = new Date(dateStr + "T00:00:00");
-    return Timestamp.fromDate(d);
-  }
+function coachMessage(stats) {
+  const { totalWorkouts, highProteinDays, onTargetCalDays, daysWithMeals,
+          avgProtein, avgCalories, calTarget, daysConsidered } = stats;
 
-  // === NEW: Build emoji summary + coach notes ===
-  async function renderDailySummary(uid, days = 7, calorieTargetOverride) {
-  const wRef = collection(db, "clients", uid, "workoutsDaily");
-  const mRef = collection(db, "clients", uid, "mealsDaily");
-  const wSnap = await getDocs(query(wRef, orderBy("dateTS", "desc"), limit(21)));
-  const mSnap = await getDocs(query(mRef, orderBy("dateTS", "desc"), limit(21)));
+  const goodProtein = avgProtein >= PROTEIN_TARGET;
+  const goodCals = calTarget && Math.abs(avgCalories - calTarget) <= CAL_TOL;
 
-  const workoutsByDay = {};
-  wSnap.forEach(d => {
-    const data = d.data() || {};
-    workoutsByDay[d.id] = data.entries || []; // d.id = YYYY-MM-DD
-  });
-
-  const mealsByDay = {};
-  mSnap.forEach(d => {
-    mealsByDay[d.id] = d.data() || {};
-  });
-
-  // Last N calendar days up to today (inclusive)
-  const daysList = [];
-  const today = new Date();
-  for (let i = 0; i < days; i++) {
-    const d = new Date(today);
-    d.setDate(today.getDate() - i);
-    const yyyy = d.getFullYear();
-    const mm = String(d.getMonth() + 1).padStart(2, "0");
-    const dd = String(d.getDate()).padStart(2, "0");
-    daysList.push(`${yyyy}-${mm}-${dd}`);
-  }
-
-  const calTarget = calorieTargetOverride ?? CAL_TARGET;
-
-  // Aggregate stats
-  let totalWorkouts = 0;
-  let totalWorkoutMinutes = 0;
-  let highProteinDays = 0;
-  let fibreGoodDays = 0;
-  let onTargetCalDays = 0;
-  let daysWithMeals = 0;
-
-  const proteinVals = [];
-  const calorieVals = [];
-
-  dailySummaryList.innerHTML = "";
-
-  daysList.forEach(day => {
-    const w = workoutsByDay[day] || [];
-    const m = mealsByDay[day];
-
-    // Emoji line (no per-day notes anymore)
-    const hasWorkout = w.length > 0;
-    const totalMins = w.reduce((s, e) => s + (parseInt(e.duration) || 0), 0);
-    const emojis = [];
-
-    if (hasWorkout) {
-      totalWorkouts += 1;
-      totalWorkoutMinutes += totalMins;
-      emojis.push(`🏋️ ${totalMins}m`);
-    } else {
-      emojis.push(`🏋️—`);
-    }
-
-    if (m && typeof m.calories === "number") {
-      calorieVals.push(m.calories);
-      daysWithMeals += 1;
-      if (Math.abs(m.calories - calTarget) <= CAL_TOL) onTargetCalDays += 1;
-    }
-    if (m && typeof m.protein === "number") {
-      proteinVals.push(m.protein);
-      if (m.protein >= PROTEIN_STRONG) highProteinDays += 1;
-      emojis.push(`🍗 ${m.protein}g${m.protein >= PROTEIN_STRONG ? " 💪" : ""}`);
-    } else {
-      emojis.push("🍗—");
-    }
-
-    if (m && typeof m.fibre === "number" && m.fibre >= FIBRE_GOOD) {
-      fibreGoodDays += 1;
-      emojis.push("🌿");
-    }
-
-    if (m && typeof m.calories === "number") emojis.push(`🍽️ ${m.calories}kcal`);
-    else emojis.push("🍽️—");
-
-    const li = document.createElement("li");
-    li.textContent = `${day}: ${emojis.join("  •  ")}`;
-    dailySummaryList.appendChild(li);
-  });
-
-  const avg = arr => arr.length ? Math.round(arr.reduce((a,b)=>a+b,0) / arr.length) : 0;
-
-  // Headline
-  const headline = `This week: ${totalWorkouts}× 🏋️ • ${totalWorkoutMinutes} mins total • avg 🍗 ${avg(proteinVals)}g • avg 🍽️ ${avg(calorieVals)} kcal`;
-  weeklyHeadline.textContent = headline;
-
-  // Weekly coach note
-  const coachWeekly = coachWeeklyNote({
-    totalWorkouts,
-    totalWorkoutMinutes,
-    highProteinDays,
-    fibreGoodDays,
-    onTargetCalDays,
-    daysWithMeals,
-    avgProtein: avg(proteinVals),
-    avgCalories: avg(calorieVals),
-    daysConsidered: days,
-    calTarget,
-  });
-
-const coachEl = document.getElementById("coachWeeklyNoteTop") || document.getElementById("coachWeeklyNote");
-if (coachEl) coachEl.textContent = coachWeekly;
-
-const coachCard = document.getElementById("coach-card");
-if (coachCard) coachCard.style.display = "block";
-
-const dailySummaryCardEl = document.getElementById("daily-summary-card");
-if (dailySummaryCardEl) dailySummaryCardEl.style.display = "block";
-
-  }
-// One witty, encouraging note for the week-to-date
-function coachWeeklyNote(stats) {
-  const {
-    totalWorkouts, totalWorkoutMinutes,
-    highProteinDays, fibreGoodDays,
-    onTargetCalDays, daysWithMeals,
-    avgProtein, avgCalories,
-    daysConsidered, calTarget
-  } = stats;
-
-  // Quick helpers
-  const goodProtein = avgProtein >= PROTEIN_STRONG;
-  const goodCals = Math.abs(avgCalories - calTarget) <= CAL_TOL;
-
-  // Tiered logic
   if (totalWorkouts >= 5 && goodProtein && goodCals) {
-    return "Coach Carley: If consistency had a face, it’d be yours. Programme directors are asking for your autograph. 💼💪";
+    return "You've absolutely nailed this week. Workouts, protein, calories — all there. I'm so proud of you. Keep going. 🙌";
   }
   if (totalWorkouts >= 4 && (goodProtein || goodCals)) {
-    return "Coach Carley: High-output week. The only thing you’re missing is a victory soundtrack. 🎶";
+    return "Brilliant week. Four sessions in and your nutrition is looking great too. You should feel really good about this. 💪";
   }
   if (totalWorkouts >= 3) {
-    if (goodProtein) return "Coach Carley: Solid training volume and protein to match. Muscles are sending thank-you notes. 📬";
-    if (goodCals)    return "Coach Carley: Training + calorie control = momentum. Keep the cart rolling. 🛒➡️";
-    return "Coach Carley: Three+ sessions in the bag. Let’s pair that with sharper nutrition and go again. 🔁";
+    if (goodProtein) return "Three sessions and your protein's on point — your body is absolutely loving you right now. Proper solid week. 🌟";
+    if (goodCals)    return "Three workouts and your calories are dialled in. That's exactly the combo we're after. Well done you. ✨";
+    return "Three sessions done — brilliant. Let's get the nutrition sharper and things will really start to shift. You've got this. 🎯";
   }
   if (totalWorkouts >= 1) {
-    if (goodProtein || highProteinDays >= Math.ceil(daysConsidered/2)) {
-      return "Coach Carley: Training showed up and protein followed. That’s the duet we like. 🎤";
+    if (goodProtein || highProteinDays >= Math.ceil(daysConsidered / 2)) {
+      return "You showed up and your protein followed. That's the duo we love. Let's build on it. 🎤";
     }
-    if (goodCals || onTargetCalDays >= Math.ceil(daysConsidered/2)) {
-      return "Coach Carley: Calories mostly on target. Add one more workout and it’s chef’s kiss. 👩‍🍳";
+    if (goodCals || onTargetCalDays >= Math.ceil(daysConsidered / 2)) {
+      return "Calories mostly on track — great start. Add another session when you can and we're flying. 👩‍🍳";
     }
-    return "Coach Carley: Spark found. Now we pour it on—two more sessions and the week flips. 🔥";
+    return "You showed up. That's the hardest part — and you did it. Let's build on that this week. 💛";
   }
-
-  // No workouts logged this week
   if (daysWithMeals > 0 && (goodProtein || goodCals)) {
-    return "Coach Carley: Nutrition’s doing the heavy lifting. Your shoes miss you though. 👟";
+    return "Nutrition's being tracked — that's such an underrated habit. Your trainers miss you though. 👟";
+  }
+  return "Hey, no pressure at all. Whenever you're ready, I'm here. Even a 10-minute walk counts — it really does. 😊";
+}
+
+// ── Achievements ─────────────────────────────────
+const ALL_ACHIEVEMENTS = [
+  { id: "first_workout",  label: "First Workout",    icon: "🏋️", condition: (s) => s.totalEverWorkouts >= 1 },
+  { id: "first_meal",     label: "First Log",        icon: "🍽️", condition: (s) => s.totalEverMeals >= 1 },
+  { id: "first_metric",   label: "First Metric",     icon: "📊", condition: (s) => s.totalEverMetrics >= 1 },
+
+  { id: "streak_3",       label: "3-Day Streak",     icon: "🔥", condition: (s) => s.streak >= 3 },
+  { id: "streak_7",       label: "7-Day Streak",     icon: "🔥", condition: (s) => s.streak >= 7 },
+  { id: "workouts_10",    label: "10 Workouts",      icon: "💪", condition: (s) => s.totalEverWorkouts >= 10 },
+  { id: "workouts_25",    label: "25 Workouts",      icon: "🏆", condition: (s) => s.totalEverWorkouts >= 25 },
+  { id: "protein_week",   label: "Protein Week",     icon: "🍗", condition: (s) => s.highProteinDays >= 5 },
+  { id: "xp_500",         label: "500 XP",           icon: "⭐", condition: (s) => s.totalXP >= 500 },
+  { id: "xp_1000",        label: "1000 XP",          icon: "🌟", condition: (s) => s.totalXP >= 1000 },
+];
+
+function renderAchievements(stats) {
+  const grid = document.getElementById("achievements-grid");
+  grid.innerHTML = "";
+  ALL_ACHIEVEMENTS.forEach(a => {
+    const unlocked = a.condition(stats);
+    const el = document.createElement("div");
+    el.className = "achievement" + (unlocked ? " unlocked" : "");
+    el.innerHTML = `<span>${a.icon}</span><span>${a.label}</span>`;
+    el.title = unlocked ? "Unlocked!" : "Keep going!";
+    grid.appendChild(el);
+  });
+}
+
+// ── 7-day dot row ─────────────────────────────────
+function renderWeekRow(workoutsByDay, mealsByDay, metricssByDay) {
+  const row = document.getElementById("week-row");
+  row.innerHTML = "";
+  const dayLetters = ["S","M","T","W","T","F","S"];
+  const today = new Date();
+
+  for (let i = 6; i >= 0; i--) {
+    const d = new Date(today);
+    d.setDate(today.getDate() - i);
+    const key = `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}`;
+    const letter = dayLetters[d.getDay()];
+    const isToday = i === 0;
+    const hasWorkout = !!workoutsByDay[key];
+    const hasMeal = !!mealsByDay[key];
+    const hasMetric = !!metricssByDay[key];
+    const actCount = (hasWorkout ? 1 : 0) + (hasMeal ? 1 : 0) + (hasMetric ? 1 : 0);
+
+    let cls = "week-day ";
+    let emoji = "";
+    if (isToday) cls += "today", emoji = "·";
+    else if (actCount >= 2) cls += "done", emoji = "✓";
+    else if (actCount === 1) cls += "partial", emoji = "·";
+    else cls += "empty", emoji = "○";
+
+    row.innerHTML += `
+      <div class="${cls}">
+        <span class="day-letter">${letter}</span>
+        <div class="day-dot">${emoji}</div>
+      </div>`;
+  }
+}
+
+// ── Activity list (7 days) ─────────────────────────
+function renderActivityList(workoutsByDay, mealsByDay) {
+  const list = document.getElementById("activity-list");
+  list.innerHTML = "";
+  const today = new Date();
+
+  for (let i = 0; i < 7; i++) {
+    const d = new Date(today);
+    d.setDate(today.getDate() - i);
+    const key = `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}`;
+    const label = i === 0 ? "Today" : i === 1 ? "Yesterday" : key;
+
+    const w = workoutsByDay[key];
+    const m = mealsByDay[key];
+    const details = [];
+    if (w && w.entries) {
+      const totalMins = w.entries.reduce((s, e) => s + (parseInt(e.duration) || 0), 0);
+      details.push(`🏋️ ${w.entries.map(e => e.type).join(", ")} — ${totalMins} min`);
+    }
+    if (m) {
+      const parts = [];
+      if (m.calories) parts.push(`${m.calories} kcal`);
+      if (m.protein)  parts.push(`${m.protein}g protein`);
+      if (parts.length) details.push(`🍽️ ${parts.join(" · ")}`);
+    }
+
+    const item = document.createElement("div");
+    item.className = "activity-item";
+    item.innerHTML = `
+      <div class="a-icon">${details.length ? (w ? "🏋️" : "🍽️") : "○"}</div>
+      <div>
+        <span class="a-day">${label}</span>
+        <span class="a-detail">${details.length ? details.join(" &nbsp;·&nbsp; ") : "Nothing logged"}</span>
+      </div>`;
+    list.appendChild(item);
+  }
+}
+
+// ── Streak calculation ────────────────────────────
+function calcStreak(workoutsByDay, mealsByDay, metricssByDay) {
+  let streak = 0;
+  const today = new Date();
+  for (let i = 0; i < 90; i++) {
+    const d = new Date(today);
+    d.setDate(today.getDate() - i);
+    const key = `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}`;
+    const hasActivity = workoutsByDay[key] || mealsByDay[key] || metricssByDay[key];
+    if (hasActivity) streak++;
+    else if (i > 0) break; // allow today to be empty (still building)
+  }
+  return streak;
+}
+
+// ── Main auth & data load ─────────────────────────
+onAuthStateChanged(auth, async (user) => {
+  if (!user) { window.location.href = "login.html"; return; }
+
+  // Profile
+  const docRef  = doc(db, "clients", user.uid);
+  const docSnap = await getDoc(docRef);
+  const profile = docSnap.data() || {};
+
+  const firstName = (profile.fullName || "there").split(" ")[0];
+  document.getElementById("dash-greeting").textContent = "Hey, " + firstName + "!";
+  document.getElementById("profile-heading").textContent = profile.fullName || "My Profile";
+  document.getElementById("profile-email-display").textContent = user.email;
+  document.getElementById("fullName").value = profile.fullName || "";
+  document.getElementById("goal").value = profile.goal || "";
+  document.getElementById("startDate").value = profile.startDate || "";
+  document.getElementById("notes").value = profile.notes || "";
+  document.getElementById("calorieTarget").value = profile.calorieTarget || "";
+  if (profile.workoutPlan) {
+    document.getElementById("workoutPlan").value = profile.workoutPlan;
+    document.getElementById("workout-plan-wrap").style.display = "block";
   }
 
-  // Default nudge
-  return "Coach Carley: Quiet week so far. Consider this your gentle shoulder tap—let’s make today count. 👉";
-}
+  // Fetch last 30 days of activity
+  const wRef = collection(db, "clients", user.uid, "workoutsDaily");
+  const mRef = collection(db, "clients", user.uid, "mealsDaily");
+  const meRef = collection(db, "clients", user.uid, "metricsDaily");
 
-const METRIC_FIELDS = ["weight", "waist", "hip", "chest", "thigh", "arm", "glutes"];
+  const [wSnap, mSnap, meSnap] = await Promise.all([
+    getDocs(query(wRef, orderBy("dateTS", "desc"), limit(90))),
+    getDocs(query(mRef, orderBy("dateTS", "desc"), limit(90))),
+    getDocs(query(meRef, orderBy("dateTS", "desc"), limit(90)))
+  ]);
 
-function metricsDateToday() {
-  const d = new Date();
-  const yyyy = d.getFullYear();
-  const mm = String(d.getMonth() + 1).padStart(2, "0");
-  const dd = String(d.getDate()).padStart(2, "0");
-  return `${yyyy}-${mm}-${dd}`;
-}
+  const workoutsByDay = {};
+  wSnap.forEach(d => { workoutsByDay[d.id] = d.data(); });
+  const mealsByDay = {};
+  mSnap.forEach(d => { mealsByDay[d.id] = d.data(); });
+  const metricssByDay = {};
+  meSnap.forEach(d => { metricssByDay[d.id] = d.data(); });
 
-function readMetricsFromForm() {
-  const result = {};
-  METRIC_FIELDS.forEach(k => {
-    const v = document.getElementById(k)?.value;
-    result[k] = v !== "" && v != null ? parseFloat(v) : null;
+  // This-week stats (Mon–Sun)
+  const now = new Date();
+  const monday = new Date(now);
+  monday.setDate(now.getDate() - ((now.getDay() + 6) % 7));
+  monday.setHours(0,0,0,0);
+
+  let weekWorkouts = 0, totalEverWorkouts = Object.keys(workoutsByDay).length;
+  let totalEverMeals = Object.keys(mealsByDay).length;
+  let totalEverMetrics = Object.keys(metricssByDay).length;
+  let highProteinDays = 0, onTargetCalDays = 0, daysWithMeals = 0;
+  let proteinVals = [], calVals = [];
+
+  Object.entries(workoutsByDay).forEach(([key]) => {
+    const d = new Date(key);
+    if (d >= monday) weekWorkouts++;
   });
-  return result;
-}
 
-function writeMetricsToForm(obj = {}) {
-  METRIC_FIELDS.forEach(k => {
-    const el = document.getElementById(k);
-    if (!el) return;
-    const v = obj[k];
-    el.value = (typeof v === "number" && !Number.isNaN(v)) ? v : "";
-  });
-}
-
-async function saveDailyMetrics(db, uid, dateStr) {
-  const metrics = readMetricsFromForm();
-  const dailyRef = doc(db, "clients", uid, "metricsDaily", dateStr);
-  await setDoc(dailyRef, {
-    date: dateStr,
-    dateTS: toDateTS(dateStr),
-    ...metrics,
-    savedAt: Timestamp.now()
-  }, { merge: true });
-}
-
-async function loadDailyMetrics(db, uid, dateStr) {
-  const dailyRef = doc(db, "clients", uid, "metricsDaily", dateStr);
-  const snap = await getDoc(dailyRef);
-  return snap.exists() ? snap.data() : null;
-}
-
-async function loadRecentMetrics(db, uid, n = 7) {
-  const col = collection(db, "clients", uid, "metricsDaily");
-  const qs = await getDocs(query(col, orderBy("dateTS", "desc"), limit(n)));
-  const out = [];
-  qs.forEach(docu => out.push({ id: docu.id, ...docu.data() }));
-  return out;
-}
-
-    
-
-  onAuthStateChanged(auth, async (user) => {
-    if (!user) return window.location.href = "login.html";
-    userEmailDisplay.textContent = user.email;
-
-    const docRef = doc(db, "clients", user.uid);
-    const docSnap = await getDoc(docRef);
-    const data = docSnap.data() || {};
-
-    // Populate profile
-    document.getElementById("fullName").value = data.fullName || "";
-    document.getElementById("goal").value = data.goal || "";
-    document.getElementById("startDate").value = data.startDate || "";
-    document.getElementById("notes").value = data.notes || "";
-    document.getElementById("calorieTarget").value =
-      typeof data.calorieTarget === "number" ? data.calorieTarget : "";
-
-// === Daily Body Metrics ===
-const metricsDateInput = document.getElementById("metricsDate");
-const metricsMsg = document.getElementById("metricsMsg");
-const loadMetricsBtn = document.getElementById("loadMetricsBtn");
-const dailyMetricsForm = document.getElementById("dailyMetricsForm");
-
-if (metricsDateInput) metricsDateInput.value = metricsDateToday();
-
-// Load for date button
-if (loadMetricsBtn) {
-  loadMetricsBtn.addEventListener("click", async () => {
-    const dateStr = metricsDateInput.value || metricsDateToday();
-    const rec = await loadDailyMetrics(db, user.uid, dateStr);
-    if (rec) {
-      writeMetricsToForm(rec);
-      metricsMsg.textContent = `📅 Loaded metrics for ${dateStr}`;
-      metricsMsg.style.color = "inherit";
-    } else {
-      writeMetricsToForm({});
-      metricsMsg.textContent = `ℹ️ No metrics saved for ${dateStr} (fields cleared).`;
-      metricsMsg.style.color = "inherit";
+  const calTarget = profile.calorieTarget || 1400;
+  const last7 = [];
+  for (let i = 0; i < 7; i++) {
+    const d = new Date(now);
+    d.setDate(now.getDate() - i);
+    last7.push(`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}`);
+  }
+  last7.forEach(key => {
+    const m = mealsByDay[key];
+    if (m) {
+      daysWithMeals++;
+      if (typeof m.calories === "number") { calVals.push(m.calories); if (Math.abs(m.calories - calTarget) <= 200) onTargetCalDays++; }
+      if (typeof m.protein === "number")  { proteinVals.push(m.protein); if (m.protein >= PROTEIN_TARGET) highProteinDays++; }
     }
   });
-}
+  const avg = arr => arr.length ? Math.round(arr.reduce((a,b) => a+b, 0) / arr.length) : 0;
 
-// Save daily metrics (submit)
-if (dailyMetricsForm) {
-  dailyMetricsForm.addEventListener("submit", async (e) => {
+  // XP
+  const totalXP = (totalEverWorkouts * 50) + (totalEverMeals * 30) + (totalEverMetrics * 20);
+  updateXPBar(totalXP);
+
+  // Streak
+  const streak = calcStreak(workoutsByDay, mealsByDay, metricssByDay);
+  document.getElementById("streak-num").textContent = streak;
+  document.getElementById("weekly-workouts").textContent = weekWorkouts;
+
+  // Weekly challenge
+  const challengeTarget = 3;
+  const pct = Math.min(100, Math.round(weekWorkouts / challengeTarget * 100));
+  document.getElementById("challenge-count").textContent = weekWorkouts + " / " + challengeTarget;
+  document.getElementById("challenge-fill").style.width = pct + "%";
+
+  // Coach message
+  document.getElementById("coach-msg").textContent = coachMessage({
+    totalWorkouts: weekWorkouts, highProteinDays, onTargetCalDays,
+    daysWithMeals, avgProtein: avg(proteinVals), avgCalories: avg(calVals),
+    calTarget, daysConsidered: 7
+  });
+
+  // Today's plan — shown before week row as priority
+  renderTodaysPlan(user, profile, workoutsByDay);
+
+  // 7-day dots + activity list
+  renderWeekRow(workoutsByDay, mealsByDay, metricssByDay);
+  renderActivityList(workoutsByDay, mealsByDay);
+
+  // Achievements
+  renderAchievements({ totalEverWorkouts, totalEverMeals, totalEverMetrics,
+    streak, highProteinDays, totalXP });
+
+  // ── Log Workout ──
+  document.getElementById("workoutDate").value = todayStr();
+  document.getElementById("workoutLogForm").addEventListener("submit", async (e) => {
     e.preventDefault();
-    const dateStr = metricsDateInput.value || metricsDateToday();
-    try {
-      await saveDailyMetrics(db, user.uid, dateStr);
-      metricsMsg.textContent = "✅ Daily metrics saved!";
-      metricsMsg.style.color = "green";
-      // Refresh recent history list
-      await renderRecentMetricsHistory();
-    } catch (err) {
-      console.error(err);
-      metricsMsg.textContent = "❌ Error saving daily metrics.";
-      metricsMsg.style.color = "red";
-    }
-  });
-}
-
-// Show last 7 entries under the form
-async function renderRecentMetricsHistory() {
-  const listEl = document.getElementById("metricsHistoryList");
-  if (!listEl) return;
-  listEl.innerHTML = "";
-  const rows = await loadRecentMetrics(db, user.uid, 7);
-  rows.forEach(r => {
-    const parts = [];
-    if (typeof r.weight === "number") parts.push(`⚖️ ${r.weight}`);
-    if (typeof r.waist === "number")  parts.push(`📏 ${r.waist}`);
-    if (typeof r.hip === "number")    parts.push(`🧵 hip ${r.hip}`);
-    const li = document.createElement("li");
-    li.textContent = `${r.id}: ${parts.length ? parts.join(" • ") : "—"}`;
-    listEl.appendChild(li);
-  });
-}
-await renderRecentMetricsHistory();
-
-
-
-    // Keep metrics in profile (no progress bars)
-    metricFields.forEach(metric => {
-      const input = document.getElementById(metric);
-      const targetInput = document.getElementById(`target${metric.charAt(0).toUpperCase()}${metric.slice(1)}`);
-      if (input) input.value = data[metric] ?? "";
-      if (targetInput) targetInput.value = data[`target${metric.charAt(0).toUpperCase()}${metric.slice(1)}`] ?? "";
-    });
-
-    summaryCard.style.display = "block";
-    summaryName.textContent = data.fullName || "Unknown";
-    summaryGoal.textContent = data.goal || "None";
-    if (data.weight && data.targetWeight) {
-      const diff = (data.weight - data.targetWeight).toFixed(1);
-      summaryWeight.textContent = `${data.weight}kg → ${data.targetWeight}kg (${diff}kg to go)`;
-    } else {
-      summaryWeight.textContent = "N/A";
-    }
-
-    // === 🏋️ Workout Log (per calendar day) ===
-    const workoutForm = document.getElementById("workoutLogForm");
-    if (workoutForm) {
-      workoutForm.addEventListener("submit", async (e) => {
-        e.preventDefault();
-        const dateStr = document.getElementById("workoutDate").value || todayStr();
-
-        const log = {
-          type: document.getElementById("workoutType").value,
-          duration: parseInt(document.getElementById("duration").value),
-          notes: document.getElementById("workoutNotes").value || "",
-          loggedAt: Timestamp.now()
-        };
-
-        // Save under workoutsDaily/{YYYY-MM-DD} with entries array
-        const dailyRef = doc(db, "clients", user.uid, "workoutsDaily", dateStr);
-        await setDoc(dailyRef, {
-          date: dateStr,
-          dateTS: toDateTS(dateStr),
-          entries: arrayUnion(log)
-        }, { merge: true });
-
-        alert("✅ Workout logged!");
-        await renderDailySummary(user.uid, 7, data.calorieTarget);
-      });
-    }
-
-    // === 🍽️ Meal Macros Log (per calendar day) ===
-    document.getElementById("mealLogForm").addEventListener("submit", async (e) => {
-      e.preventDefault();
-      const dateStr = document.getElementById("mealDate").value || todayStr();
-      const log = {
-        date: dateStr,
-        dateTS: toDateTS(dateStr),
-        calories: parseInt(document.getElementById("calories").value),
-        protein: parseInt(document.getElementById("protein").value),
-        carbs: parseInt(document.getElementById("carbs").value),
-        fat: parseInt(document.getElementById("fat").value),
-        fibre: document.getElementById("fibre").value ? parseInt(document.getElementById("fibre").value) : null,
-        loggedAt: Timestamp.now()
-      };
-
-      // Save/overwrite the day's macros
-      const dailyRef = doc(db, "clients", user.uid, "mealsDaily", dateStr);
-      await setDoc(dailyRef, log, { merge: true });
-
-      alert("✅ Meal macros logged!");
-      await renderDailySummary(user.uid, 7, data.calorieTarget);
-    });
-
-    // Profile save (kept; progress bars removed)
-    form.addEventListener("submit", async (e) => {
-      e.preventDefault();
-
-      const ctRaw = document.getElementById("calorieTarget").value;
-      const ct = ctRaw ? parseInt(ctRaw) : null;
-      const profile = {
-        fullName: document.getElementById("fullName").value,
-        email: user.email,
-        goal: document.getElementById("goal").value,
-        startDate: document.getElementById("startDate").value,
-        notes: document.getElementById("notes").value,
-        calorieTarget: ct
-      };
-
-      const previousStartDate = data.startDate || "";
-      const goalStartDate = profile.startDate;
-      const goalDateChanged = previousStartDate !== goalStartDate;
-
-      const metrics = {};
-      metricFields.forEach(metric => {
-        const val = getValue(metric);
-        metrics[metric] = val;
-        profile[metric] = val;
-
-        const cap = metric.charAt(0).toUpperCase() + metric.slice(1);
-        const targetKey = `target${cap}`;
-        const startingKey = `starting${cap}`;
-
-        profile[targetKey] = getValue(targetKey);
-        profile[startingKey] = goalDateChanged ? val : (data[startingKey] ?? val);
-      });
-
-      try {
-        await setDoc(docRef, profile, { merge: true });
-        await saveProgress(user.uid, metrics);
-        responseMsg.textContent = "✅ Profile updated!";
-        responseMsg.style.color = "green";
-        await renderDailySummary(user.uid, 7, profile.calorieTarget);
-      } catch (err) {
-        console.error(err);
-        responseMsg.textContent = "❌ Error saving profile.";
-        responseMsg.style.color = "red";
-      }
-    });
-
-    // Photos
-    async function loadPhotos(uid) {
-      photoGallery.innerHTML = "";
-      const listRef = storageRef(storage, `clients/${uid}/photos`);
-      try {
-        const res = await listAll(listRef);
-        for (const item of res.items) {
-          const url = await getDownloadURL(item);
-          const a = document.createElement("a");
-          a.href = url;
-          a.className = "glightbox";
-          a.dataset.gallery = "progress-photos";
-          a.innerHTML = `<img src="${url}" alt="Progress photo" class="photo-thumb"/>`;
-          photoGallery.appendChild(a);
-        }
-        GLightbox({ selector: ".glightbox" });
-      } catch (err) {
-        console.warn("No photos yet:", err.message);
-      }
-    }
-
-    document.getElementById("uploadPhotoBtn").addEventListener("click", async () => {
-      if (!photoInput.files.length) return;
-      const file = photoInput.files[0];
-      const fileRef = storageRef(storage, `clients/${user.uid}/photos/${Date.now()}_${file.name}`);
-
-      try {
-        await uploadBytes(fileRef, file);
-        uploadStatus.textContent = "✅ Photo uploaded!";
-        uploadStatus.style.color = "green";
-        await loadPhotos(user.uid);
-      } catch (err) {
-        console.error(err);
-        uploadStatus.textContent = "❌ Upload failed!";
-        uploadStatus.style.color = "red";
-      }
-    });
-
-    await loadPhotos(user.uid);
-
-    // Initial summary load
-    await renderDailySummary(user.uid, 7, data.calorieTarget);
+    clearMsg("workout-msg");
+    const dateStr = document.getElementById("workoutDate").value;
+    const log = {
+      type:     document.getElementById("workoutType").value,
+      duration: parseInt(document.getElementById("duration").value),
+      notes:    document.getElementById("workoutNotes").value.trim(),
+      loggedAt: Timestamp.now()
+    };
+    const ref = doc(db, "clients", user.uid, "workoutsDaily", dateStr);
+    await setDoc(ref, { date: dateStr, dateTS: toDateTS(dateStr), entries: arrayUnion(log) }, { merge: true });
+    showMsg("workout-msg", "Workout logged! +50 XP 🎉", "success");
+    document.getElementById("workoutLogForm").reset();
+    document.getElementById("workoutDate").value = todayStr();
+    setTimeout(() => { closeModal("modal-workout"); location.reload(); }, 1200);
   });
 
-  logoutBtn.addEventListener("click", async () => {
+  // ── Log Meal ──
+  document.getElementById("mealDate").value = todayStr();
+  document.getElementById("mealLogForm").addEventListener("submit", async (e) => {
+    e.preventDefault();
+    clearMsg("meal-msg");
+    const dateStr = document.getElementById("mealDate").value;
+    const log = {
+      date: dateStr, dateTS: toDateTS(dateStr),
+      calories: parseInt(document.getElementById("calories").value),
+      protein:  parseInt(document.getElementById("protein").value),
+      carbs:    parseInt(document.getElementById("carbs").value),
+      fat:      parseInt(document.getElementById("fat").value),
+      fibre:    document.getElementById("fibre").value ? parseInt(document.getElementById("fibre").value) : null,
+      loggedAt: Timestamp.now()
+    };
+    const ref = doc(db, "clients", user.uid, "mealsDaily", dateStr);
+    await setDoc(ref, log, { merge: true });
+    showMsg("meal-msg", "Meals logged! +30 XP 🎉", "success");
+    document.getElementById("mealLogForm").reset();
+    document.getElementById("mealDate").value = todayStr();
+    setTimeout(() => { closeModal("modal-meal"); location.reload(); }, 1200);
+  });
+
+  // ── Log Metrics ──
+  document.getElementById("metricsDate").value = todayStr();
+  document.getElementById("loadMetricsBtn").addEventListener("click", async () => {
+    const dateStr = document.getElementById("metricsDate").value || todayStr();
+    const snap = await getDoc(doc(db, "clients", user.uid, "metricsDaily", dateStr));
+    const fields = ["weight","waist","hip","chest","thigh","arm","glutes"];
+    const data = snap.exists() ? snap.data() : {};
+    fields.forEach(f => {
+      const el = document.getElementById("m-" + f);
+      if (el) el.value = (typeof data[f] === "number") ? data[f] : "";
+    });
+    if (!snap.exists()) showMsg("metrics-msg", "No saved metrics for this date.", "error");
+    else clearMsg("metrics-msg");
+    await renderMetricsHistory(user.uid);
+  });
+
+  document.getElementById("metricsForm").addEventListener("submit", async (e) => {
+    e.preventDefault();
+    clearMsg("metrics-msg");
+    const dateStr = document.getElementById("metricsDate").value || todayStr();
+    const fields = ["weight","waist","hip","chest","thigh","arm","glutes"];
+    const metrics = { date: dateStr, dateTS: toDateTS(dateStr), savedAt: Timestamp.now() };
+    fields.forEach(f => {
+      const v = document.getElementById("m-" + f)?.value;
+      metrics[f] = (v !== "" && v != null) ? parseFloat(v) : null;
+    });
+    await setDoc(doc(db, "clients", user.uid, "metricsDaily", dateStr), metrics, { merge: true });
+    showMsg("metrics-msg", "Metrics saved! +20 XP 🎉", "success");
+    await renderMetricsHistory(user.uid);
+    setTimeout(() => { closeModal("modal-metrics"); }, 1500);
+  });
+
+  await renderMetricsHistory(user.uid);
+
+  // ── Profile save ──
+  document.getElementById("profile-form").addEventListener("submit", async (e) => {
+    e.preventDefault();
+    clearMsg("profile-msg");
+    const updated = {
+      goal:          document.getElementById("goal").value.trim(),
+      calorieTarget: parseFloat(document.getElementById("calorieTarget").value) || null,
+      startDate:     document.getElementById("startDate").value,
+    };
+    await setDoc(docRef, updated, { merge: true });
+    showMsg("profile-msg", "Saved!", "success");
+  });
+
+  // ── Challenges ──
+  await loadChallenges(user, profile);
+
+  // ── Logout ──
+  document.getElementById("logoutBtn").addEventListener("click", async () => {
     await signOut(auth);
     window.location.href = "index.html";
   });
 });
+
+// ── Today's Plan ──────────────────────────────────
+function getYouTubeId(url) {
+  if (!url) return null;
+  const m = url.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/|youtube\.com\/embed\/)([^&?/\s]+)/);
+  return m ? m[1] : null;
+}
+
+function renderTodaysPlan(user, profile, workoutsByDay) {
+  const plan = profile.workoutPlanV2;
+  if (!plan || !plan.days || plan.days.length === 0) return;
+
+  const today = new Date().toLocaleDateString('en-US', { weekday: 'long' });
+  const todayPlan = plan.days.find(d => d.day === today);
+  if (!todayPlan || !todayPlan.exercises || todayPlan.exercises.length === 0) return;
+
+  const todayKey = todayStr();
+  const alreadyDone = !!(workoutsByDay[todayKey]?.planCompleted);
+
+  // Show the card
+  document.getElementById("todays-plan-wrap").style.display = "";
+  document.getElementById("todays-plan-label").textContent = todayPlan.label || today;
+
+  // Render exercises
+  const container = document.getElementById("todays-plan-exercises");
+  container.innerHTML = "";
+  todayPlan.exercises.forEach((ex, i) => {
+    const ytId = getYouTubeId(ex.videoUrl);
+    const hasVideo = !!ex.videoUrl;
+    const badges = [];
+    if (ex.sets) badges.push(`${ex.sets} sets`);
+    if (ex.reps) badges.push(ex.reps);
+    if (ex.rest) badges.push(`Rest: ${ex.rest}`);
+
+    const item = document.createElement("div");
+    item.className = "plan-ex-item";
+    item.innerHTML = `
+      <div class="plan-ex-item-name">${ex.name}</div>
+      ${ex.notes ? `<div class="plan-ex-item-meta">${ex.notes}</div>` : ""}
+      <div class="plan-ex-item-badges">
+        ${badges.map(b => `<span class="plan-ex-badge">${b}</span>`).join("")}
+      </div>
+      ${hasVideo ? `
+        <button class="plan-video-btn" data-idx="${i}">▶ Watch demo</button>
+        <div class="plan-video-embed" id="plan-vid-${i}">
+          ${ytId
+            ? `<iframe src="https://www.youtube.com/embed/${ytId}" allowfullscreen loading="lazy"></iframe>`
+            : `<a href="${ex.videoUrl}" target="_blank" rel="noopener" class="plan-video-link">Open video link ↗</a>`}
+        </div>` : ""}
+    `;
+    container.appendChild(item);
+  });
+
+  // Video toggle handlers
+  container.querySelectorAll(".plan-video-btn").forEach(btn => {
+    btn.addEventListener("click", () => {
+      const embed = document.getElementById("plan-vid-" + btn.dataset.idx);
+      const open = embed.classList.toggle("open");
+      btn.textContent = open ? "▼ Hide demo" : "▶ Watch demo";
+    });
+  });
+
+  // Mark as done button
+  const doneBtn = document.getElementById("btn-plan-done");
+  if (alreadyDone) {
+    doneBtn.textContent = "Completed today ✓";
+    doneBtn.classList.add("done");
+    doneBtn.disabled = true;
+  } else {
+    doneBtn.addEventListener("click", async () => {
+      doneBtn.disabled = true;
+      doneBtn.textContent = "Saving…";
+      await setDoc(doc(db, "clients", user.uid, "workoutsDaily", todayKey), {
+        date: todayKey,
+        dateTS: toDateTS(todayKey),
+        planCompleted: true,
+        planCompletedAt: Timestamp.now()
+      }, { merge: true });
+      doneBtn.textContent = "Completed today ✓";
+      doneBtn.classList.add("done");
+    });
+  }
+}
+
+// ── Challenges ────────────────────────────────────
+async function loadChallenges(user, profile) {
+  const listEl = document.getElementById("challenges-view-list");
+
+  function challengeStatus(ch) {
+    const today = new Date().toISOString().slice(0, 10);
+    if (ch.endDate && ch.endDate < today) return "ended";
+    if (ch.startDate && ch.startDate > today) return "upcoming";
+    return "active";
+  }
+  function typeBadge(type) {
+    return `<span class="ch-type-badge ${(type||"").toLowerCase()}">${type || "General"}</span>`;
+  }
+  function statusBadge(status) {
+    const labels = { active: "Active", upcoming: "Upcoming", ended: "Ended" };
+    return `<span class="ch-status-badge ${status}">${labels[status] || status}</span>`;
+  }
+  function fmtDate(d) {
+    if (!d) return "?";
+    const [y, m, day] = d.split("-");
+    return `${day}/${m}/${y}`;
+  }
+
+  try {
+    const snap = await getDocs(collection(db, "challenges"));
+    if (snap.empty) {
+      listEl.innerHTML = "<p style='color:#aab8c2;font-size:0.88rem;margin:0;'>No challenges yet — check back soon!</p>";
+      return;
+    }
+
+    const order = { active: 0, upcoming: 1, ended: 2 };
+    const challenges = [];
+    snap.forEach(d => challenges.push({ id: d.id, ...d.data() }));
+    challenges.sort((a, b) => order[challengeStatus(a)] - order[challengeStatus(b)]);
+
+    // Check which challenges the user is signed up for
+    const signupChecks = await Promise.all(
+      challenges.map(ch => getDoc(doc(db, "challenges", ch.id, "signups", user.uid)))
+    );
+    const signedUpSet = new Set(
+      challenges.filter((_, i) => signupChecks[i].exists()).map(ch => ch.id)
+    );
+
+    listEl.innerHTML = "";
+    challenges.forEach(ch => {
+      const status = challengeStatus(ch);
+      const isSignedUp = signedUpSet.has(ch.id);
+      const ended = status === "ended";
+
+      const card = document.createElement("div");
+      card.className = "dash-challenge-card";
+      card.innerHTML = `
+        <div style="margin-bottom:8px;">${typeBadge(ch.type)} ${statusBadge(status)}</div>
+        <h3 style="margin:0 0 6px;color:#2c3e50;font-size:1rem;">${ch.title}</h3>
+        ${ch.description ? `<p style="color:#708090;font-size:0.85rem;margin:0 0 8px;line-height:1.5;">${ch.description}</p>` : ""}
+        <div style="font-size:0.76rem;color:#aab8c2;margin-bottom:4px;">📅 ${fmtDate(ch.startDate)} – ${fmtDate(ch.endDate)}</div>
+        <div id="ch-msg-${ch.id}" class="portal-msg" style="margin-top:10px;"></div>
+        ${ended
+          ? `<button class="btn-ch-join" disabled style="margin-top:12px;">Challenge ended</button>`
+          : isSignedUp
+            ? `<button class="btn-ch-joined" data-id="${ch.id}">✓ Signed up — withdraw</button>`
+            : `<button class="btn-ch-join" data-id="${ch.id}">Join challenge</button>`}
+      `;
+      listEl.appendChild(card);
+    });
+
+    // Sign up / withdraw handlers
+    listEl.querySelectorAll(".btn-ch-join[data-id]").forEach(btn => {
+      btn.addEventListener("click", async () => {
+        const id = btn.dataset.id;
+        btn.disabled = true;
+        try {
+          await setDoc(doc(db, "challenges", id, "signups", user.uid), {
+            uid:        user.uid,
+            fullName:   profile.fullName || "",
+            email:      user.email,
+            signedUpAt: new Date().toISOString()
+          });
+          const msgEl = document.getElementById("ch-msg-" + id);
+          msgEl.textContent = "You're in! Good luck. 🎉";
+          msgEl.className = "portal-msg success show";
+          btn.className = "btn-ch-joined";
+          btn.dataset.id = id;
+          btn.textContent = "✓ Signed up — withdraw";
+          btn.disabled = false;
+          // Swap handler to withdraw
+          btn.replaceWith(btn.cloneNode(true)); // triggers re-attach below
+          await loadChallenges(user, profile);
+        } catch (err) {
+          btn.disabled = false;
+          const msgEl = document.getElementById("ch-msg-" + id);
+          msgEl.textContent = "Something went wrong. Please try again.";
+          msgEl.className = "portal-msg error show";
+        }
+      });
+    });
+
+    listEl.querySelectorAll(".btn-ch-joined[data-id]").forEach(btn => {
+      btn.addEventListener("click", async () => {
+        const id = btn.dataset.id;
+        if (!confirm("Withdraw from this challenge?")) return;
+        btn.disabled = true;
+        try {
+          await deleteDoc(doc(db, "challenges", id, "signups", user.uid));
+          await loadChallenges(user, profile);
+        } catch (err) {
+          btn.disabled = false;
+        }
+      });
+    });
+
+  } catch (err) {
+    console.error("loadChallenges error:", err);
+    listEl.innerHTML = `<p style='color:#c0392b;font-size:0.88rem;'>Could not load challenges: ${err.code || err.message}</p>`;
+  }
+}
+
+// ── Metrics history render ────────────────────────
+async function renderMetricsHistory(uid) {
+  const listEl = document.getElementById("metrics-history-list");
+  if (!listEl) return;
+  const col = collection(db, "clients", uid, "metricsDaily");
+  const snap = await getDocs(query(col, orderBy("dateTS", "desc"), limit(7)));
+  listEl.innerHTML = "";
+  snap.forEach(d => {
+    const r = d.data();
+    const parts = [];
+    if (typeof r.weight === "number") parts.push("⚖️ " + r.weight);
+    if (typeof r.waist  === "number") parts.push("📏 " + r.waist);
+    if (typeof r.hip    === "number") parts.push("🧵 " + r.hip);
+    const el = document.createElement("div");
+    el.className = "metrics-history-item";
+    el.innerHTML = `<strong>${d.id}</strong> <span>${parts.length ? parts.join(" · ") : "—"}</span>`;
+    listEl.appendChild(el);
+  });
+}
+
+
 </script>
 
+<script>
+// ── View switching (bottom nav) ───────────────────
+const views = { home: "view-home", challenges: "view-challenges", profile: "view-profile" };
+
+document.querySelectorAll(".bottom-nav-item[data-view]").forEach(btn => {
+  btn.addEventListener("click", () => {
+    const target = btn.dataset.view;
+    document.querySelectorAll(".bottom-nav-item").forEach(b => b.classList.remove("active"));
+    btn.classList.add("active");
+    Object.entries(views).forEach(([key, id]) => {
+      document.getElementById(id).style.display = (key === target) ? "" : "none";
+    });
+    window.scrollTo(0, 0);
+  });
+});
+
+// ── Modal helpers ─────────────────────────────────
+function openModal(id) {
+  document.getElementById(id).classList.add("open");
+  document.body.style.overflow = "hidden";
+}
+function closeModal(id) {
+  document.getElementById(id).classList.remove("open");
+  document.body.style.overflow = "";
+}
+function handleOverlayClick(e, id) {
+  if (e.target === document.getElementById(id)) closeModal(id);
+}
+// Expose globally for onclick attributes
+window.openModal = openModal;
+window.closeModal = closeModal;
+window.handleOverlayClick = handleOverlayClick;
+</script>
+
+
+<script>
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => navigator.serviceWorker.register('/sw.js'));
+  }
+</script>
 </body>
 </html>

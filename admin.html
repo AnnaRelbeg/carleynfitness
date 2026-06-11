@@ -3,67 +3,182 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Admin – Set Up Client</title>
+  <title>Admin | CarleyNFitness</title>
   <link rel="stylesheet" href="styles.css" />
-  <link rel="icon" href="images/CNF_Admin.png" type="image/png">
+  <link rel="icon" href="images/CNF_Admin.png" type="image/png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800&family=Playfair+Display:wght@700&display=swap" rel="stylesheet" />
 </head>
-<body>
-  <section class="section" style="max-width: 600px; margin-top: 100px;">
-    <div class="container">
-    <h1 id="carley-status"></h1>
+<body class="portal-body">
 
-      <h2>Create New Client Account</h2>
-      <form id="client-form">
-        <label for="email">Client Email</label>
-        <input type="email" id="email" required placeholder="Client Email" />
+  <div class="admin-wrap">
 
-        <label for="password">Temporary Password</label>
-        <input type="password" id="password" required placeholder="Temporary Password" />
-
-        <label for="fullName">Full Name</label>
-        <input type="text" id="fullName" required />
-
-        <label for="goal">Goal</label>
-        <input type="text" id="goal" />
-
-        <label for="startDate">Start Date</label>
-        <input type="date" id="startDate" />
-
-        <label for="currentWeight">Current Weight (kg)</label>
-        <input type="number" id="currentWeight" step="0.1" />
-
-        <label for="targetWeight">Target Weight (kg)</label>
-        <input type="number" id="targetWeight" step="0.1" />
-
-        <label for="notes">Notes</label>
-        <textarea id="notes"></textarea>
-
-        <button type="submit" class="btn-primary">Create Client</button>
-        <p id="responseMsg"></p>
-      </form>
-
-      <br>
-      <button id="logoutBtn" class="btn-secondary">Log out and return to website</button>
+    <!-- Header -->
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:24px;">
+      <div>
+        <div class="level-badge" style="background:#eef2f6; color:#708090; border-color:#d0dbe6; margin-bottom:6px;">Admin</div>
+        <h1 style="margin:0; color:#2c3e50; font-family:'Playfair Display',serif; font-size:1.5rem;">Hey Carley 👋</h1>
+        <p style="margin:4px 0 0; color:#708090; font-size:0.88rem;" id="admin-email"></p>
+      </div>
+      <button id="logoutBtn" style="background:none; border:1.5px solid #e0e8f0; border-radius:12px; padding:10px 16px; cursor:pointer; font-family:'Montserrat',sans-serif; font-size:0.85rem; color:#708090;">Log out</button>
     </div>
-  </section>
+
+    <!-- Create client (collapsible) -->
+    <div class="admin-section">
+      <div class="section-toggle" id="create-toggle">
+        <div>
+          <h2 style="margin:0 0 2px;">Create a new client account</h2>
+          <p class="admin-sub" style="margin:0;">Tap to set up a portal for someone new.</p>
+        </div>
+        <span class="toggle-chevron" id="create-chevron">＋</span>
+      </div>
+
+      <div id="create-body" style="display:none; margin-top:20px;">
+        <div class="portal-msg" id="create-msg"></div>
+
+        <form id="client-form">
+          <div class="admin-form-row">
+            <div>
+              <label for="client-email">Client email</label>
+              <input type="email" id="client-email" required placeholder="client@email.com" />
+            </div>
+            <div>
+              <label for="client-password">Temporary password</label>
+              <input type="password" id="client-password" required placeholder="Min 6 characters" />
+            </div>
+          </div>
+
+          <label for="fullName">Full name</label>
+          <input type="text" id="fullName" required placeholder="e.g. Sarah Jones" />
+
+          <div class="admin-form-row">
+            <div>
+              <label for="goal">Goal</label>
+              <input type="text" id="goal" placeholder="e.g. Lose 10kg by June" />
+            </div>
+            <div>
+              <label for="startDate">Start date</label>
+              <input type="date" id="startDate" />
+            </div>
+          </div>
+
+          <div class="admin-form-row">
+            <div>
+              <label for="currentWeight">Current weight (kg)</label>
+              <input type="number" id="currentWeight" step="0.1" placeholder="e.g. 72.5" />
+            </div>
+            <div>
+              <label for="targetWeight">Target weight (kg)</label>
+              <input type="number" id="targetWeight" step="0.1" placeholder="e.g. 62.0" />
+            </div>
+          </div>
+
+          <div class="admin-form-row">
+            <div>
+              <label for="calorieTarget">Daily calorie target</label>
+              <input type="number" id="calorieTarget" step="10" placeholder="e.g. 1400" />
+            </div>
+            <div>
+              <label for="proteinTarget">Protein target (g)</label>
+              <input type="number" id="proteinTarget" step="1" placeholder="e.g. 120" />
+            </div>
+          </div>
+
+          <label for="workoutPlan">Workout plan</label>
+          <textarea id="workoutPlan" rows="3" placeholder="e.g. Mon: Upper body strength — Squat 3x8, Push press 3x10..."></textarea>
+
+          <label for="notes">Coach notes (visible to client)</label>
+          <textarea id="notes" rows="3" placeholder="Anything you want the client to see on their dashboard..."></textarea>
+
+          <button type="submit" class="btn-portal" style="margin-top:4px;">Create client account</button>
+        </form>
+      </div>
+    </div>
+
+    <!-- Create challenge (collapsible) -->
+    <div class="admin-section">
+      <div class="section-toggle" id="challenge-toggle">
+        <div>
+          <h2 style="margin:0 0 2px;">Create a challenge</h2>
+          <p class="admin-sub" style="margin:0;">Tap to set up a new strength or conditioning challenge.</p>
+        </div>
+        <span class="toggle-chevron" id="challenge-chevron">＋</span>
+      </div>
+
+      <div id="challenge-body" style="display:none; margin-top:20px;">
+        <div class="portal-msg" id="challenge-create-msg"></div>
+
+        <form id="challenge-form">
+          <label for="ch-title">Challenge title</label>
+          <input type="text" id="ch-title" required placeholder="e.g. 30-Day Squat Challenge" />
+
+          <div class="admin-form-row">
+            <div>
+              <label for="ch-type">Type</label>
+              <select id="ch-type">
+                <option value="Strength">Strength</option>
+                <option value="Conditioning">Conditioning</option>
+                <option value="Hybrid">Hybrid</option>
+                <option value="Nutrition">Nutrition</option>
+                <option value="Mindset">Mindset</option>
+              </select>
+            </div>
+            <div style="display:flex;gap:8px;">
+              <div style="flex:1;">
+                <label for="ch-start">Start date</label>
+                <input type="date" id="ch-start" required />
+              </div>
+              <div style="flex:1;">
+                <label for="ch-end">End date</label>
+                <input type="date" id="ch-end" required />
+              </div>
+            </div>
+          </div>
+
+          <label for="ch-desc">Description</label>
+          <textarea id="ch-desc" rows="3" placeholder="What does this challenge involve? What's the goal?"></textarea>
+
+          <button type="submit" class="btn-portal" style="margin-top:4px;">Create challenge</button>
+        </form>
+      </div>
+    </div>
+
+    <!-- Challenges list -->
+    <div class="admin-section">
+      <h2>Challenges</h2>
+      <p class="admin-sub">All active, upcoming, and past challenges — and who's signed up.</p>
+      <div id="challenges-list">
+        <p style="color:#aab8c2; font-size:0.88rem;">Loading...</p>
+      </div>
+    </div>
+
+    <!-- Top performers -->
+    <div class="admin-section">
+      <h2>Top performers</h2>
+      <p class="admin-sub">Your most consistent and active clients, ranked by total activity logged.</p>
+      <div id="top-performers">
+        <p style="color:#aab8c2; font-size:0.88rem;">Loading...</p>
+      </div>
+    </div>
+
+    <!-- Client list -->
+    <div class="admin-section">
+      <h2>Your clients</h2>
+      <p class="admin-sub">Everyone currently set up on the portal.</p>
+      <div id="client-list">
+        <p style="color:#aab8c2; font-size:0.88rem;">Loading...</p>
+      </div>
+    </div>
+
+  </div>
 
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-app.js";
   import {
-    getAuth,
-    createUserWithEmailAndPassword,
-    onAuthStateChanged,
-    signOut
+    getAuth, createUserWithEmailAndPassword, onAuthStateChanged, signOut
   } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-auth.js";
   import {
-    getFirestore,
-    doc,
-    getDoc,
-    setDoc,
-    collection,
-    query,
-    where,
-    getDocs
+    getFirestore, doc, getDoc, setDoc, addDoc, deleteDoc, collection, getDocs, query, where
   } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-firestore.js";
 
   const firebaseConfig = {
@@ -79,64 +194,550 @@
   const auth = getAuth(app);
   const db = getFirestore(app);
 
-  const form = document.getElementById("client-form");
-  const responseMsg = document.getElementById("responseMsg");
-  const logoutBtn = document.getElementById("logoutBtn");
+  const createMsg = document.getElementById("create-msg");
 
-  // 1. Pre-fill if Carley is logged in
-  onAuthStateChanged(auth, async (user) => {
-    if (user && user.email === "carleynfitness@gmail.com") {
-      document.getElementById("email").value = user.email;
-      document.getElementById("fullName").value = "Carley (Admin)";
+  function showMsg(text, type) {
+    createMsg.textContent = text;
+    createMsg.className = "portal-msg " + type + " show";
+  }
+
+  // Collapsible create form
+  document.getElementById("create-toggle").addEventListener("click", () => {
+    const body = document.getElementById("create-body");
+    const chevron = document.getElementById("create-chevron");
+    const open = body.style.display !== "none";
+    body.style.display = open ? "none" : "block";
+    chevron.textContent = open ? "＋" : "－";
+    chevron.classList.toggle("open", !open);
+  });
+
+  // Collapsible create challenge form
+  document.getElementById("challenge-toggle").addEventListener("click", () => {
+    const body = document.getElementById("challenge-body");
+    const chevron = document.getElementById("challenge-chevron");
+    const open = body.style.display !== "none";
+    body.style.display = open ? "none" : "block";
+    chevron.textContent = open ? "＋" : "－";
+    chevron.classList.toggle("open", !open);
+  });
+
+  // Helpers
+  function challengeStatus(ch) {
+    const today = new Date().toISOString().slice(0, 10);
+    if (ch.endDate && ch.endDate < today) return "ended";
+    if (ch.startDate && ch.startDate > today) return "upcoming";
+    return "active";
+  }
+  function typeBadge(type) {
+    return `<span class="ch-type-badge ${(type||"").toLowerCase()}">${type || "General"}</span>`;
+  }
+  function statusBadge(status) {
+    const labels = { active: "Active", upcoming: "Upcoming", ended: "Ended" };
+    return `<span class="ch-status-badge ${status}">${labels[status] || status}</span>`;
+  }
+
+  // Create challenge
+  document.getElementById("challenge-form").addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const msgEl = document.getElementById("challenge-create-msg");
+    msgEl.className = "portal-msg";
+    const title = document.getElementById("ch-title").value.trim();
+    const type  = document.getElementById("ch-type").value;
+    const start = document.getElementById("ch-start").value;
+    const end   = document.getElementById("ch-end").value;
+    const desc  = document.getElementById("ch-desc").value.trim();
+    if (end < start) {
+      msgEl.textContent = "End date must be after start date.";
+      msgEl.className = "portal-msg error show";
+      return;
+    }
+    try {
+      await addDoc(collection(db, "challenges"), {
+        title, type, startDate: start, endDate: end, description: desc,
+        createdAt: new Date().toISOString()
+      });
+      msgEl.textContent = "Challenge created!";
+      msgEl.className = "portal-msg success show";
+      document.getElementById("challenge-form").reset();
+      await loadChallenges();
+    } catch (err) {
+      msgEl.textContent = err.message;
+      msgEl.className = "portal-msg error show";
     }
   });
 
-  form.addEventListener("submit", async (e) => {
-    e.preventDefault();
-
-    const email = document.getElementById("email").value.trim();
-    const password = document.getElementById("password").value;
-    const profile = {
-      fullName: document.getElementById("fullName").value.trim(),
-      email,
-      goal: document.getElementById("goal").value.trim(),
-      startDate: document.getElementById("startDate").value,
-      currentWeight: parseFloat(document.getElementById("currentWeight").value),
-      targetWeight: parseFloat(document.getElementById("targetWeight").value),
-      notes: document.getElementById("notes").value.trim()
-    };
-
+  // Load and display challenges
+  async function loadChallenges() {
+    const listEl = document.getElementById("challenges-list");
     try {
-      // 2. Prevent duplicate registration
-      const existingQuery = query(collection(db, "clients"), where("email", "==", email));
-      const existingSnap = await getDocs(existingQuery);
-      if (!existingSnap.empty) {
-        responseMsg.style.color = "red";
-        responseMsg.textContent = "⚠️ This email is already registered. Try logging in instead.";
+      const snap = await getDocs(collection(db, "challenges"));
+      if (snap.empty) {
+        listEl.innerHTML = "<p style='color:#aab8c2;font-size:0.88rem;'>No challenges yet — create one above!</p>";
         return;
       }
 
-      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-      const uid = userCredential.user.uid;
+      // Sort: active first, then upcoming, then ended
+      const order = { active: 0, upcoming: 1, ended: 2 };
+      const challenges = [];
+      snap.forEach(d => challenges.push({ id: d.id, ...d.data() }));
+      challenges.sort((a, b) => order[challengeStatus(a)] - order[challengeStatus(b)]);
+
+      listEl.innerHTML = "";
+      for (const ch of challenges) {
+        const status = challengeStatus(ch);
+        const signupsSnap = await getDocs(collection(db, "challenges", ch.id, "signups"));
+        const signupCount = signupsSnap.size;
+        const signupNames = [];
+        signupsSnap.forEach(d => signupNames.push(d.data().fullName || d.data().email || d.id));
+
+        const card = document.createElement("div");
+        card.className = "challenge-mgmt-card";
+        card.innerHTML = `
+          <div class="challenge-mgmt-header">
+            <div style="flex:1;min-width:0;">
+              <div style="margin-bottom:6px;">${typeBadge(ch.type)} ${statusBadge(status)}</div>
+              <div style="font-weight:700;color:#2c3e50;font-size:0.92rem;margin-bottom:2px;">${ch.title}</div>
+              <div style="font-size:0.76rem;color:#aab8c2;">${ch.startDate || "?"} → ${ch.endDate || "?"}</div>
+              ${ch.description ? `<div style="font-size:0.8rem;color:#708090;margin-top:5px;">${ch.description}</div>` : ""}
+            </div>
+            <div style="display:flex;flex-direction:column;align-items:flex-end;gap:6px;flex-shrink:0;">
+              <button class="challenge-expand-btn" data-id="${ch.id}">
+                ${signupCount} participant${signupCount !== 1 ? "s" : ""} ▾
+              </button>
+              <button class="challenge-delete-btn" data-id="${ch.id}" title="Delete challenge">🗑️</button>
+            </div>
+          </div>
+          <div class="challenge-signups-list" id="signups-${ch.id}">
+            ${signupCount === 0
+              ? "<p style='color:#aab8c2;font-size:0.82rem;'>No one signed up yet.</p>"
+              : signupNames.map(n => `<div class="client-list-item" style="padding:7px 0;"><span>${n}</span></div>`).join("")}
+          </div>
+        `;
+        listEl.appendChild(card);
+      }
+
+      // Expand/collapse signup list
+      listEl.querySelectorAll(".challenge-expand-btn").forEach(btn => {
+        btn.addEventListener("click", () => {
+          const el = document.getElementById("signups-" + btn.dataset.id);
+          el.classList.toggle("open");
+          btn.textContent = el.classList.contains("open")
+            ? btn.textContent.replace("▾", "▴")
+            : btn.textContent.replace("▴", "▾");
+        });
+      });
+
+      // Delete challenge
+      listEl.querySelectorAll(".challenge-delete-btn").forEach(btn => {
+        btn.addEventListener("click", async () => {
+          if (!confirm("Delete this challenge? This cannot be undone.")) return;
+          const id = btn.dataset.id;
+          const sSnap = await getDocs(collection(db, "challenges", id, "signups"));
+          await Promise.all(sSnap.docs.map(d => deleteDoc(d.ref)));
+          await deleteDoc(doc(db, "challenges", id));
+          await loadChallenges();
+        });
+      });
+
+    } catch (err) {
+      console.error("loadChallenges error:", err.code, err.message);
+      listEl.innerHTML = `<p style='color:#c0392b;font-size:0.88rem;'>Could not load challenges: ${err.code || err.message}</p>`;
+    }
+  }
+
+  // Guard: only Carley can be here
+  onAuthStateChanged(auth, async (user) => {
+    if (!user || user.email !== "carleynfitness@gmail.com") {
+      window.location.href = "login.html";
+      return;
+    }
+    document.getElementById("admin-email").textContent = user.email;
+    await Promise.all([loadClients(), loadChallenges()]);
+  });
+
+  // Create client
+  document.getElementById("client-form").addEventListener("submit", async (e) => {
+    e.preventDefault();
+    createMsg.className = "portal-msg";
+
+    const email    = document.getElementById("client-email").value.trim();
+    const password = document.getElementById("client-password").value;
+
+    // Check for duplicate email in clients collection
+    const existing = await getDocs(query(collection(db, "clients"), where("email", "==", email)));
+    if (!existing.empty) {
+      showMsg("There is already a client with that email address.", "error");
+      return;
+    }
+
+    try {
+      const credential = await createUserWithEmailAndPassword(auth, email, password);
+      const uid = credential.user.uid;
+
+      const profile = {
+        email,
+        fullName:      document.getElementById("fullName").value.trim(),
+        goal:          document.getElementById("goal").value.trim(),
+        startDate:     document.getElementById("startDate").value,
+        notes:         document.getElementById("notes").value.trim(),
+        workoutPlan:   document.getElementById("workoutPlan").value.trim(),
+        calorieTarget: parseFloat(document.getElementById("calorieTarget").value) || null,
+        proteinTarget: parseFloat(document.getElementById("proteinTarget").value) || null,
+        weight:        parseFloat(document.getElementById("currentWeight").value) || null,
+        targetWeight:  parseFloat(document.getElementById("targetWeight").value) || null,
+        createdAt:     new Date().toISOString()
+      };
+
       await setDoc(doc(db, "clients", uid), profile);
-      responseMsg.style.color = "green";
-      responseMsg.textContent = "✅ Account created successfully! Redirecting...";
-      setTimeout(() => {
-        window.location.href = "dashboard.html";
-      }, 1500);
-    } catch (error) {
-      console.error(error);
-      responseMsg.style.color = "red";
-      responseMsg.textContent = "❌ Error: " + (error.message || "Unable to create user");
+      showMsg("Client account created successfully!", "success");
+      document.getElementById("client-form").reset();
+      await loadClients();
+    } catch (err) {
+      const messages = {
+        "auth/email-already-in-use": "A Firebase account already exists with that email.",
+        "auth/invalid-email":        "That email address is not valid.",
+        "auth/weak-password":        "Password must be at least 6 characters."
+      };
+      showMsg(messages[err.code] || err.message, "error");
     }
   });
 
-  logoutBtn.addEventListener("click", async () => {
+  // Load and display clients
+  async function loadClients() {
+    const listEl = document.getElementById("client-list");
+    const topEl  = document.getElementById("top-performers");
+    try {
+      const snap = await getDocs(collection(db, "clients"));
+      if (snap.empty) {
+        listEl.innerHTML = "<p style='color:#aab8c2;font-size:0.88rem;'>No clients yet.</p>";
+        topEl.innerHTML  = "<p style='color:#aab8c2;font-size:0.88rem;'>No clients yet.</p>";
+        return;
+      }
+
+      const clients = [];
+      snap.forEach(docu => {
+        const d = docu.data();
+        if (d.email === "carleynfitness@gmail.com") return;
+        clients.push({ uid: docu.id, ...d });
+      });
+
+      // Fetch activity counts per client from subcollections
+      const withCounts = await Promise.all(clients.map(async (c) => {
+        const [workouts, meals, metrics] = await Promise.all([
+          getDocs(collection(db, "clients", c.uid, "workoutsDaily")),
+          getDocs(collection(db, "clients", c.uid, "mealsDaily")),
+          getDocs(collection(db, "clients", c.uid, "metricsDaily"))
+        ]);
+        return {
+          ...c,
+          workoutCount:  workouts.size,
+          mealCount:     meals.size,
+          metricCount:   metrics.size,
+          totalActivity: workouts.size + meals.size + metrics.size
+        };
+      }));
+
+      // Render full client list
+      listEl.innerHTML = "";
+      withCounts.forEach(d => {
+        const item = document.createElement("div");
+        item.className = "client-list-item";
+        const safeName = (d.fullName || "Client").replace(/'/g, "\\'");
+        item.innerHTML = `
+          <div>
+            <div style="font-weight:700">${d.fullName || "Unnamed"}</div>
+            <div class="client-meta">${d.email || ""} ${d.goal ? "· " + d.goal : ""}</div>
+          </div>
+          <div style="display:flex;gap:8px;align-items:center;flex-shrink:0;">
+            <div class="client-meta">${d.startDate || ""}</div>
+            <button class="btn-edit-plan" data-uid="${d.uid}" data-name="${safeName}">Edit plan</button>
+          </div>
+        `;
+        listEl.appendChild(item);
+      });
+      listEl.querySelectorAll(".btn-edit-plan").forEach(btn => {
+        btn.addEventListener("click", () => openPlanModal(btn.dataset.uid, btn.dataset.name));
+      });
+
+      // Render top performers (top 3 by total activity)
+      const top = [...withCounts]
+        .sort((a, b) => b.totalActivity - a.totalActivity)
+        .slice(0, 3)
+        .filter(c => c.totalActivity > 0);
+
+      if (top.length === 0) {
+        topEl.innerHTML = "<p style='color:#aab8c2;font-size:0.88rem;'>No activity logged yet — check back once your clients start using the portal.</p>";
+        return;
+      }
+
+      topEl.innerHTML = "";
+      const medals = ["🥇", "🥈", "🥉"];
+      const maxActivity = top[0].totalActivity;
+      top.forEach((c, i) => {
+        const pct = Math.round((c.totalActivity / maxActivity) * 100);
+        const card = document.createElement("div");
+        card.className = "performer-card";
+        card.innerHTML = `
+          <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px;">
+            <span style="font-size:1.3rem;">${medals[i]}</span>
+            <div>
+              <div style="font-weight:700;color:#2c3e50;font-size:0.92rem;">${c.fullName || "Unnamed"}</div>
+              <div style="color:#708090;font-size:0.76rem;">${c.goal || "No goal set"}</div>
+            </div>
+          </div>
+          <div style="display:flex;gap:14px;font-size:0.76rem;color:#708090;margin-bottom:8px;">
+            <span>💪 ${c.workoutCount} workouts</span>
+            <span>🥗 ${c.mealCount} meals</span>
+            <span>📊 ${c.metricCount} check-ins</span>
+          </div>
+          <div style="background:#e8eef4;border-radius:999px;height:5px;overflow:hidden;">
+            <div style="background:linear-gradient(90deg,#708090,#2c3e50);height:100%;width:${pct}%;border-radius:999px;"></div>
+          </div>
+        `;
+        topEl.appendChild(card);
+      });
+
+    } catch (err) {
+      console.error("loadClients error:", err.code, err.message);
+      listEl.innerHTML = `<p style='color:#c0392b;font-size:0.88rem;'>Could not load clients: ${err.code || err.message}</p>`;
+    }
+  }
+
+  // ── Workout Plan Builder ──────────────────────────────
+  const EXERCISE_GROUPS = {
+    "Strength – Lower Body": [
+      "Back Squat","Front Squat","Goblet Squat","Deadlift","Romanian Deadlift",
+      "Sumo Deadlift","Hip Thrust","Glute Bridge","Lunge","Reverse Lunge",
+      "Bulgarian Split Squat","Step-Up","Leg Press","Leg Curl","Leg Extension",
+      "Nordic Curl","Calf Raise"
+    ],
+    "Strength – Upper Body": [
+      "Bench Press","Incline Bench Press","Dumbbell Chest Press","Overhead Press",
+      "Push Press","Dumbbell Shoulder Press","Barbell Row","Dumbbell Row",
+      "Cable Row","Pull-Up","Chin-Up","Lat Pulldown","Face Pull",
+      "Bicep Curl","Hammer Curl","Tricep Dip","Skull Crusher",
+      "Tricep Pushdown","Lateral Raise","Front Raise","Rear Delt Fly"
+    ],
+    "Core & Stability": [
+      "Plank","Side Plank","Dead Bug","Bird Dog","Russian Twist",
+      "Ab Wheel Rollout","Hollow Hold","Pallof Press","Cable Crunch",
+      "Hanging Leg Raise","V-Up","Flutter Kicks"
+    ],
+    "Conditioning": [
+      "Burpees","Jump Squats","Box Jumps","Kettlebell Swing",
+      "Sled Push","Sled Pull","Battle Ropes","Sprint Intervals",
+      "Rowing Machine","Assault Bike","Jump Rope","Mountain Climbers",
+      "Bear Crawl","Farmer's Carry","Sandbag Carry","Wall Balls"
+    ]
+  };
+
+  const ALL_EXERCISES_FLAT = Object.values(EXERCISE_GROUPS).flat();
+  const WEEKDAYS = ["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"];
+
+  function buildExerciseSelectHTML(selected) {
+    let html = `<option value="_custom"${!selected || !ALL_EXERCISES_FLAT.includes(selected) ? " selected" : ""}>Custom…</option>`;
+    for (const [group, list] of Object.entries(EXERCISE_GROUPS)) {
+      html += `<optgroup label="${group}">`;
+      list.forEach(ex => {
+        html += `<option${ex === selected ? " selected" : ""}>${ex}</option>`;
+      });
+      html += `</optgroup>`;
+    }
+    return html;
+  }
+
+  function createExerciseRow(ex) {
+    ex = ex || {};
+    const isCustom = ex.name && !ALL_EXERCISES_FLAT.includes(ex.name);
+    const row = document.createElement("div");
+    row.className = "plan-exercise-row";
+    row.innerHTML = `
+      <div class="plan-ex-top-row">
+        <div class="plan-ex-name-wrap">
+          <label class="plan-ex-field-label">Exercise</label>
+          <select class="plan-ex-select">${buildExerciseSelectHTML(isCustom ? null : ex.name)}</select>
+          <input type="text" class="plan-ex-custom-input" placeholder="Type exercise name…" value="${isCustom ? (ex.name||"") : ""}"${isCustom ? "" : ' style="display:none;"'} />
+        </div>
+        <button type="button" class="plan-remove-ex-btn" title="Remove exercise">✕</button>
+      </div>
+      <div class="plan-ex-details-grid">
+        <div class="plan-ex-detail-cell">
+          <label class="plan-ex-field-label">Sets</label>
+          <input type="number" placeholder="3" min="1" max="20" value="${ex.sets||""}" />
+        </div>
+        <div class="plan-ex-detail-cell">
+          <label class="plan-ex-field-label">Reps / time</label>
+          <input type="text" placeholder="e.g. 8–10" value="${ex.reps||""}" />
+        </div>
+        <div class="plan-ex-detail-cell">
+          <label class="plan-ex-field-label">Rest</label>
+          <input type="text" placeholder="e.g. 90s" value="${ex.rest||""}" />
+        </div>
+      </div>
+      <div class="plan-ex-secondary">
+        <div>
+          <label class="plan-ex-field-label">Coach notes</label>
+          <input type="text" class="plan-ex-notes-input" placeholder="e.g. Keep chest up, control the descent" value="${(ex.notes||"").replace(/"/g,'&quot;')}" />
+        </div>
+        <div class="plan-ex-video-wrap">
+          <label class="plan-ex-field-label">Instruction video URL</label>
+          <input type="url" class="plan-ex-video-input" placeholder="Paste a YouTube or video link (optional)" value="${ex.videoUrl||""}" />
+        </div>
+      </div>
+    `;
+    return row;
+  }
+
+  function createDayBlock(d) {
+    d = d || {};
+    const block = document.createElement("div");
+    block.className = "plan-day-block";
+    block.innerHTML = `
+      <div class="plan-day-header">
+        <select class="plan-day-select">
+          ${WEEKDAYS.map(day => `<option${day === d.day ? " selected" : ""}>${day}</option>`).join("")}
+        </select>
+        <input type="text" class="plan-day-label-input" placeholder="Session label (e.g. Upper Body)" value="${d.label||""}" />
+        <button type="button" class="plan-remove-day-btn" title="Remove day">🗑️</button>
+      </div>
+      <div class="plan-day-body">
+        <div class="plan-exercises-list"></div>
+        <button type="button" class="btn-add-exercise-btn">
+          <span style="font-size:1rem;line-height:1;">＋</span> Add exercise
+        </button>
+      </div>
+    `;
+    const exList = block.querySelector(".plan-exercises-list");
+    (d.exercises || []).forEach(ex => exList.appendChild(createExerciseRow(ex)));
+    return block;
+  }
+
+  function getPlanData() {
+    const days = [];
+    document.querySelectorAll(".plan-day-block").forEach(block => {
+      const exercises = [];
+      block.querySelectorAll(".plan-exercise-row").forEach(row => {
+        const sel = row.querySelector(".plan-ex-select").value;
+        const name = sel === "_custom"
+          ? row.querySelector(".plan-ex-custom-input").value.trim()
+          : sel;
+        if (!name) return;
+        const inputs = row.querySelectorAll(".plan-ex-details-grid input");
+        exercises.push({
+          name,
+          sets:     parseInt(inputs[0].value) || null,
+          reps:     inputs[1].value.trim(),
+          rest:     inputs[2].value.trim(),
+          notes:    row.querySelector(".plan-ex-notes-input").value.trim(),
+          videoUrl: row.querySelector(".plan-ex-video-input").value.trim()
+        });
+      });
+      days.push({
+        day:       block.querySelector(".plan-day-select").value,
+        label:     block.querySelector(".plan-day-label-input").value.trim(),
+        exercises
+      });
+    });
+    return { days, updatedAt: new Date().toISOString() };
+  }
+
+  let planClientUid = null;
+
+  async function openPlanModal(uid, name) {
+    planClientUid = uid;
+    document.getElementById("plan-client-label").textContent = "Editing plan for " + name;
+    document.getElementById("plan-save-msg").className = "portal-msg";
+    const container = document.getElementById("plan-days-container");
+    container.innerHTML = "";
+    const snap = await getDoc(doc(db, "clients", uid));
+    const plan = snap.exists() ? (snap.data().workoutPlanV2 || null) : null;
+    if (plan && plan.days && plan.days.length > 0) {
+      plan.days.forEach(d => container.appendChild(createDayBlock(d)));
+    }
+    document.getElementById("plan-modal-overlay").classList.add("open");
+  }
+
+  function closePlanModal() {
+    document.getElementById("plan-modal-overlay").classList.remove("open");
+    planClientUid = null;
+  }
+
+  // Modal event delegation
+  const planOverlay = document.getElementById("plan-modal-overlay");
+  planOverlay.addEventListener("click", e => {
+    if (e.target === planOverlay) { closePlanModal(); return; }
+    if (e.target.closest(".plan-remove-day-btn")) {
+      e.target.closest(".plan-day-block").remove(); return;
+    }
+    if (e.target.closest(".btn-add-exercise-btn")) {
+      const block = e.target.closest(".plan-day-block");
+      block.querySelector(".plan-exercises-list").appendChild(createExerciseRow(null)); return;
+    }
+    if (e.target.closest(".plan-remove-ex-btn")) {
+      e.target.closest(".plan-exercise-row").remove(); return;
+    }
+  });
+  planOverlay.addEventListener("change", e => {
+    if (e.target.classList.contains("plan-ex-select")) {
+      const isCustom = e.target.value === "_custom";
+      const customInput = e.target.closest(".plan-exercise-row").querySelector(".plan-ex-custom-input");
+      customInput.style.display = isCustom ? "" : "none";
+      if (isCustom) customInput.focus();
+    }
+  });
+  document.getElementById("plan-close-btn").addEventListener("click", closePlanModal);
+  document.getElementById("btn-add-day").addEventListener("click", () => {
+    document.getElementById("plan-days-container").appendChild(createDayBlock(null));
+  });
+  document.getElementById("btn-save-plan").addEventListener("click", async () => {
+    if (!planClientUid) return;
+    const msgEl = document.getElementById("plan-save-msg");
+    msgEl.className = "portal-msg";
+    try {
+      await setDoc(doc(db, "clients", planClientUid), { workoutPlanV2: getPlanData() }, { merge: true });
+      msgEl.textContent = "Plan saved!";
+      msgEl.className = "portal-msg success show";
+      setTimeout(closePlanModal, 1000);
+    } catch (err) {
+      msgEl.textContent = "Error saving: " + (err.message || err.code);
+      msgEl.className = "portal-msg error show";
+    }
+  });
+
+  // Logout
+  document.getElementById("logoutBtn").addEventListener("click", async () => {
     await signOut(auth);
     window.location.href = "index.html";
   });
 </script>
 
+
+<!-- ── Workout Plan Builder Modal ── -->
+<div id="plan-modal-overlay" class="plan-modal-overlay">
+  <div class="plan-modal-inner">
+
+    <div class="plan-modal-header">
+      <div>
+        <h2 style="margin:0 0 3px;font-family:'Playfair Display',serif;color:#2c3e50;font-size:1.15rem;">📋 Workout Plan</h2>
+        <p id="plan-client-label" style="color:#708090;font-size:0.83rem;margin:0;"></p>
+      </div>
+      <button id="plan-close-btn" class="plan-close-btn">✕</button>
+    </div>
+
+    <div class="plan-modal-scroll">
+      <div id="plan-days-container"></div>
+      <button id="btn-add-day" class="btn-add-day-btn">
+        <span style="font-size:1.1rem;line-height:1;">＋</span> Add training day
+      </button>
+    </div>
+
+    <div class="plan-modal-footer">
+      <div class="portal-msg" id="plan-save-msg" style="margin-bottom:10px;"></div>
+      <button id="btn-save-plan" class="btn-portal" style="width:100%;margin:0;">Save plan</button>
+    </div>
+
+  </div>
+</div>
 
 </body>
 </html>

@@ -12,13 +12,28 @@
 </script>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Private 1:1 Personal Training Milton Keynes (myfitpod) | Build Strength, Get Confident & Feel Amazing!</title>
-  <meta name="description" content="Looking for the best women's personal trainer in Milton Keynes? Train in your own private 1:1 studio at myfitpod, completely focused and distraction-free. Carley specialises in strength training, nutrition-coaching, and pre/post-natal fitness. Book a session today!">
+  <title>Women's Personal Trainer Milton Keynes | Strength, Injury Recovery &amp; Pre/Postnatal | CarleyNFitness</title>
+  <meta name="description" content="Expert women's personal trainer in Milton Keynes (myfitpod private studio). Specialising in strength & conditioning, injury rehabilitation, pre & postnatal fitness. Online coaching available UK-wide. Book your free consultation today!">
+  <link rel="canonical" href="https://carleynfitness.co.uk/" />
   <link rel="icon" href="images/logoG.jpg" type="image/png">
 
-  <!-- Google Fonts -->
+  <!-- Open Graph (Facebook, Instagram, WhatsApp previews) -->
+  <meta property="og:type"        content="website" />
+  <meta property="og:title"       content="Women's Personal Trainer Milton Keynes | CarleyNFitness" />
+  <meta property="og:description" content="Private 1:1 personal training in Milton Keynes (myfitpod) – strength, injury recovery & pre/postnatal fitness. Book a free consultation." />
+  <meta property="og:image"       content="https://carleynfitness.co.uk/images/myfitpod-mk-2.webp" />
+  <meta property="og:url"         content="https://carleynfitness.co.uk/" />
+  <meta property="og:site_name"   content="CarleyNFitness" />
+
+  <!-- Twitter / X Card -->
+  <meta name="twitter:card"        content="summary_large_image" />
+  <meta name="twitter:title"       content="Women's Personal Trainer Milton Keynes | CarleyNFitness" />
+  <meta name="twitter:description" content="Expert personal training for women – strength, injury recovery & pre/postnatal coaching at myfitpod, Milton Keynes." />
+  <meta name="twitter:image"       content="https://carleynfitness.co.uk/images/myfitpod-mk-2.webp" />
+
+  <!-- Google Fonts: Montserrat (body) + Playfair Display (headings) -->
   <link
-    href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&display=swap"
+    href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Playfair+Display:ital,wght@0,700;1,700&display=swap"
     rel="stylesheet"
   />
 
@@ -33,12 +48,104 @@
   <link href="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.2/main.min.css" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/fullcalendar@3.0.0/dist/fullcalendar.min.js"></script>
 
+  <!-- Custom cursor: hide default cursor on non-touch devices -->
+  <style>
+    @media (hover: hover) {
+      body { cursor: none; }
+      a, button { cursor: none; }
+    }
+  </style>
+
+  <!-- Structured Data: LocalBusiness + Person (boosts Google/Copilot ranking) -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "LocalBusiness",
+        "@id": "https://carleynfitness.co.uk/#business",
+        "name": "CarleyNFitness – Personal Training",
+        "description": "Expert women's personal trainer in Milton Keynes, specialising in strength training, injury rehabilitation, and pre/postnatal fitness coaching at myfitpod private studio.",
+        "url": "https://carleynfitness.co.uk",
+        "logo": "https://carleynfitness.co.uk/images/logo.png",
+        "image": "https://carleynfitness.co.uk/images/myfitpod-mk-2.webp",
+        "priceRange": "££",
+        "address": {
+          "@type": "PostalAddress",
+          "streetAddress": "Kiln Lane",
+          "addressLocality": "Milton Keynes",
+          "addressRegion": "Buckinghamshire",
+          "addressCountry": "GB"
+        },
+        "sameAs": ["https://www.instagram.com/carleynfitness"],
+        "hasOfferCatalog": {
+          "@type": "OfferCatalog",
+          "name": "Personal Training Services",
+          "itemListElement": [
+            {
+              "@type": "Offer",
+              "itemOffered": {
+                "@type": "Service",
+                "name": "1:1 Personal Training for Women",
+                "description": "Private one-to-one personal training in Milton Keynes – strength & conditioning, injury rehabilitation, and pre/postnatal fitness."
+              }
+            },
+            {
+              "@type": "Offer",
+              "itemOffered": {
+                "@type": "Service",
+                "name": "Pre & Postnatal Fitness Coaching",
+                "description": "Safe, certified pre and postnatal personal training and fitness coaching for new mums and mums-to-be in Milton Keynes."
+              }
+            },
+            {
+              "@type": "Offer",
+              "itemOffered": {
+                "@type": "Service",
+                "name": "Injury Rehabilitation Training",
+                "description": "Expert personal training supporting recovery after injury, designed to rebuild strength and confidence safely."
+              }
+            },
+            {
+              "@type": "Offer",
+              "itemOffered": {
+                "@type": "Service",
+                "name": "Online Coaching",
+                "description": "Tailored online fitness and nutrition coaching available UK-wide."
+              }
+            }
+          ]
+        }
+      },
+      {
+        "@type": "Person",
+        "@id": "https://carleynfitness.co.uk/#carley",
+        "name": "Carley",
+        "jobTitle": "Personal Trainer & Nutrition Coach",
+        "description": "Certified personal trainer with 4+ years experience. Specialises in women's fitness, strength & conditioning, injury rehabilitation, and pre/postnatal training in Milton Keynes.",
+        "worksFor": { "@id": "https://carleynfitness.co.uk/#business" },
+        "knowsAbout": [
+          "Women's Fitness", "Strength Training", "Injury Rehabilitation",
+          "Pre-natal Fitness", "Postnatal Fitness", "Nutrition Coaching", "Powerlifting"
+        ]
+      }
+    ]
+  }
+  </script>
+
 </head>
 <body>
 
+<!-- Custom Cursor (hidden on touch devices via CSS) -->
+<div id="cursor-dot"></div>
+<div id="cursor-ring"></div>
+
+<!-- Reading Progress Bar -->
+<div id="reading-progress"></div>
+
   <!-- Navbar (Fixed at the Top) -->
   <nav class="navbar">
-    <button class="menu-button" onclick="toggleMenu()">☰</button>
+    <button class="menu-button" aria-label="Open menu">☰</button>
     <ul>
       <li><a href="#about">About</a></li>
       <li><a href="#services">Services & Pricing</a></li>
@@ -54,10 +161,10 @@
   <div class="slideshow-container">
     <!-- Slides for the image slideshow -->
     <div class="mySlides fade">
-        <img src="images/Background_big.webp" alt="Slideshow Image 1">
+        <img src="images/Background.png" alt="Slideshow Image 1">
     </div>
     <div class="mySlides fade">
-        <img src="images/Background_big.webp" alt="Slideshow Image 2">
+        <img src="images/Background.png" alt="Slideshow Image 2">
     </div>
     <!-- Add more slides as needed -->
 </div>
@@ -93,10 +200,10 @@
             <h3>1:1 Personal Training</h3>
           </div>
         </a>
-        <a href="#online-coaching" class="offering-link">
+        <a href="login.html" class="offering-link">
           <div class="offering-box">
-            <span class="emoji">📲</span>
-            <h3>Online Coaching</h3>
+            <span class="emoji">💪</span>
+            <h3>The Strength Lab</h3>
           </div>
         </a>
         <a href="#nutrition-coaching" class="offering-link">
@@ -104,11 +211,12 @@
             <span class="emoji">🥗</span>
             <h3>Nutrition Coaching</h3>
           </div>
-          <a href="blog.html" class="offering-link">
-            <div class="offering-box">
-              <span class="emoji">📖</span>
-              <h3>Dive Into My Blog</h3>
-            </div>
+        </a>
+        <a href="blog.html" class="offering-link">
+          <div class="offering-box">
+            <span class="emoji">📖</span>
+            <h3>Dive Into My Blog</h3>
+          </div>
         </a>
       </div>
 
@@ -120,13 +228,39 @@
     </div>
   </header>
 
+  <!-- Stats / Credentials Bar -->
+  <section class="stats-section" aria-label="Credentials and specialisations" data-aos="fade-up">
+    <div class="stats-container">
+      <div class="stat-item" data-aos="fade-up" data-aos-delay="100">
+        <span class="stat-number" data-target="5">0</span><span class="stat-suffix">+</span>
+        <p>Years Coaching</p>
+      </div>
+      <div class="stat-item" data-aos="fade-up" data-aos-delay="200">
+        <span class="stat-icon">🤰</span>
+        <p>Pre &amp; Postnatal<br>Certified</p>
+      </div>
+      <div class="stat-item" data-aos="fade-up" data-aos-delay="300">
+        <span class="stat-icon">🏥</span>
+        <p>Injury<br>Rehabilitation</p>
+      </div>
+      <div class="stat-item" data-aos="fade-up" data-aos-delay="400">
+        <span class="stat-icon">⭐</span>
+        <p>5-Star<br>Rated</p>
+      </div>
+      <div class="stat-item" data-aos="fade-up" data-aos-delay="500">
+        <span class="stat-icon">🏋️</span>
+        <p>Strength &amp;<br>Conditioning</p>
+      </div>
+    </div>
+  </section>
+
   <!-- About Section -->
   <section id="about" class="section about" data-aos="fade-up">
     <div class="container">
       <h2>About Me</h2>
       <p>
         Hi👋, <br> <br>
-        I’m Carley! With 4+ years of experience in fitness coaching, I specialise
+        I’m Carley! With 5+ years of experience in fitness coaching, I specialise
         in helping clients achieve their goals sustainably and confidently. I
         hold certifications in Strength &amp; Conditioning, Nutrition Coaching,
         and Pre/Postnatal Training.
@@ -212,7 +346,7 @@
       <h2 data-aos="fade-up">Services & Pricing</h2>
       <div class="service-list">
         <!-- Personal Training -->
-        <div class="service-item" id="personal-training" data-aos="fade-up" data-aos-delay="100">
+        <div class="service-item" id="personal-training" data-aos="fade-right" data-aos-delay="100">
           <h3>🏋️ 1:1 Personal Training – Strength & Performance Coaching</h3>
           <p>
             Unlock your full potential with expert coaching designed for YOUR goals! <br>
@@ -236,7 +370,7 @@
           </div>
         </div>
         <!-- Online Coaching -->
-        <div class="service-item" id="online-coaching" data-aos="fade-up" data-aos-delay="200">
+        <div class="service-item" id="online-coaching" data-aos="fade-left" data-aos-delay="100">
           <h3>📲 Online Coaching – Tailored Fitness & Nutrition at Your Fingertips</h3>
           <p>
             Get results on YOUR terms, wherever you are, with expert guidance from a dedicated coach. <br>
@@ -260,7 +394,7 @@
           </div>
         </div>
         <!-- Nutrition Coaching -->
-        <div class="service-item" id="nutrition-coaching" data-aos="fade-up" data-aos-delay="300">
+        <div class="service-item" id="nutrition-coaching" data-aos="fade-right" data-aos-delay="100">
           <h3>🥗 Nutrition Coaching – Personalised Meal Plans to Fuel Your Success</h3>
           <p>
             Whether you're looking to fuel your workouts, improve your body composition, or simply eat healthier, I’m here to help you achieve it. <br>
@@ -284,7 +418,7 @@
         </div>
 
         <!-- PT Packages -->
-        <div class="service-item" id="PT-packages" data-aos="fade-up" data-aos-delay="300">
+        <div class="service-item" id="PT-packages" data-aos="fade-left" data-aos-delay="100">
           <h3>🏆 PT Packages – More Sessions, More Results, More Savings!</h3>
           <p>
             <h4>🥈 Silver Package – (4 sessions)</h4>
@@ -408,11 +542,10 @@
     </div>
 </section>
 
-  <section id="testimonials" class="section testimonials" data-aos="fade-up">
+  <section id="testimonials" class="section testimonials" data-aos="zoom-in">
     <h2>Client Stories</h2>
     <div class="google-review">
       <div class="review-header">
-        <img src="images/B.webp" alt="Profile Picture" class="profile-pic">
         <div class="review-details">
           <p class="reviewe-name">Becki Monk</p>
           <p class="review-stars">⭐⭐⭐⭐⭐</p>
@@ -423,7 +556,6 @@
       </div>
       <br>  
       <div class="review-header">
-          <img src="images/T.webp" alt="Profile Picture" class="profile-pic">
           <div class="review-details">
             <p class="reviewe-name">Tanya Morris</p>
             <p class="review-stars">⭐⭐⭐⭐⭐</p>
@@ -437,7 +569,6 @@
         </div>
         <br>
         <div class="review-header">
-          <img src="images/L.webp" alt="Profile Picture" class="profile-pic">
           <div class="review-details">
             <p class="reviewe-name">Lara Pye</p>
             <p class="review-stars">⭐⭐⭐⭐⭐</p>
@@ -448,7 +579,6 @@
         </div>
         <br>
         <div class="review-header">
-          <img src="images/J.webp" alt="Profile Picture" class="profile-pic">
           <div class="review-details">
             <p class="reviewe-name">Jade Evans-Scott</p>
             <p class="review-stars">⭐⭐⭐⭐⭐</p>
@@ -469,6 +599,11 @@
     <h2>Contact</h2>
     <p>Have questions or ready to get started? Let’s talk!</p>
     <form id="contactForm">
+      <!-- Anti-spam honeypot: hidden from users, bots fill it in -->
+      <div class="hp-field" aria-hidden="true">
+        <label for="hp-website">Website</label>
+        <input type="text" id="hp-website" name="hp-website" tabindex="-1" autocomplete="off">
+      </div>
       <input type="text" id="contact-name" placeholder="Your Name" required />
       <input type="email" id="contact-email" placeholder="Your Email" required />
       <textarea id="contact-message" placeholder="Your Message" required></textarea>
@@ -479,17 +614,20 @@
       <!-- Links that will be revealed after submission -->
       <div id="socialLinks" style="display: none;">
         <p>Want to reach me quickly? Send me a message via:</p>
-        <a href="https://www.instagram.com/carleynfitness" **target="_blank" rel="noopener noreferrer"**>Instagram</a>
+        <a href="https://www.instagram.com/carleynfitness" target="_blank" rel="noopener noreferrer">Instagram</a>
         <br>
-        <a href="https://m.me/carleynfitness" **target="_blank" rel="noopener noreferrer"**>Messenger</a>
+        <a href="https://m.me/carleynfitness" target="_blank" rel="noopener noreferrer">Messenger</a>
         <br>
       </div>
 </section>
 
 
+  <!-- Scroll to Top Button -->
+  <button class="scroll-top-btn" id="scroll-top" aria-label="Scroll to top">↑</button>
+
   <!-- Footer -->
   <footer class="footer" data-aos="fade-up">
-    <p>&copy; 2025 CarleyNFitness. Designed by Anna Gebler</a>.</p>
+    <p>&copy; 2025 CarleyNFitness. Designed by Anna Gebler.</p>
   </footer>
 
   <!-- AOS Scripts -->
@@ -503,5 +641,103 @@
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.2/main.min.js"></script> 
   <script type="module" src="script.js"></script>
+
+  <!-- Custom Cursor -->
+  <script>
+  (function () {
+    var dot  = document.getElementById("cursor-dot");
+    var ring = document.getElementById("cursor-ring");
+    if (!dot || !ring) return;
+    var mouseX = 0, mouseY = 0, ringX = 0, ringY = 0;
+    document.addEventListener("mousemove", function (e) {
+      mouseX = e.clientX; mouseY = e.clientY;
+      dot.style.transform = "translate(" + (mouseX - 4) + "px," + (mouseY - 4) + "px)";
+    });
+    function animateRing() {
+      ringX += (mouseX - ringX) * 0.15;
+      ringY += (mouseY - ringY) * 0.15;
+      ring.style.transform = "translate(" + (ringX - 16) + "px," + (ringY - 16) + "px)";
+      requestAnimationFrame(animateRing);
+    }
+    animateRing();
+    document.querySelectorAll("a, button").forEach(function (el) {
+      el.addEventListener("mouseenter", function () { ring.classList.add("hovering"); });
+      el.addEventListener("mouseleave", function () { ring.classList.remove("hovering"); });
+    });
+    document.addEventListener("touchstart", function () {
+      dot.style.display = "none"; ring.style.display = "none";
+    }, { once: true });
+  })();
+  </script>
+
+  <!-- Reading Progress Bar -->
+  <script>
+  (function () {
+    var bar = document.getElementById("reading-progress");
+    if (!bar) return;
+    window.addEventListener("scroll", function () {
+      var scrollTop = window.scrollY || document.documentElement.scrollTop;
+      var docHeight = document.documentElement.scrollHeight - window.innerHeight;
+      bar.style.width = (docHeight > 0 ? (scrollTop / docHeight) * 100 : 0) + "%";
+    });
+  })();
+  </script>
+
+  <!-- Navbar scroll effect -->
+  <script>
+  (function () {
+    var navbar = document.querySelector(".navbar");
+    if (!navbar) return;
+    window.addEventListener("scroll", function () {
+      if (window.scrollY > 60) navbar.classList.add("scrolled");
+      else navbar.classList.remove("scrolled");
+    });
+  })();
+  </script>
+
+  <!-- Animated stats counter -->
+  <script>
+  (function () {
+    function animateCounter(el) {
+      var target = parseInt(el.getAttribute("data-target"), 10);
+      var duration = 1400;
+      var start = null;
+      function step(ts) {
+        if (!start) start = ts;
+        var progress = Math.min((ts - start) / duration, 1);
+        el.textContent = Math.floor(progress * target);
+        if (progress < 1) requestAnimationFrame(step);
+        else el.textContent = target;
+      }
+      requestAnimationFrame(step);
+    }
+    var observer = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (entry.isIntersecting) {
+          animateCounter(entry.target);
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.5 });
+    document.querySelectorAll(".stat-number[data-target]").forEach(function (el) {
+      observer.observe(el);
+    });
+  })();
+  </script>
+
+  <!-- Scroll-to-top button -->
+  <script>
+  (function () {
+    var btn = document.getElementById("scroll-top");
+    if (!btn) return;
+    window.addEventListener("scroll", function () {
+      if (window.scrollY > 400) btn.classList.add("visible");
+      else btn.classList.remove("visible");
+    });
+    btn.addEventListener("click", function () {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    });
+  })();
+  </script>
 </body>
 </html>

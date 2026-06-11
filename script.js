@@ -28,6 +28,9 @@ const db = getFirestore(app);
 // Get the contact form (it's outside the calendar logic)
 const contactForm = document.getElementById("contactForm");
 
+// Anti-spam: record when the page loaded (used for timing check)
+const _formLoadTime = Date.now();
+
 // =========================
 // Calendar Initialization
 // =========================
@@ -247,25 +250,50 @@ document.addEventListener('DOMContentLoaded', async function () {
 // =========================
 contactForm.addEventListener("submit", async function (e) {
     e.preventDefault();
+
+    const responseMsg = document.getElementById("responseMessage");
+
+    // --- Anti-spam check 1: honeypot ---
+    // Bots fill every field; real users never see or touch this one
+    const honeypot = document.getElementById("hp-website");
+    if (honeypot && honeypot.value.trim() !== "") {
+        // Silently pretend it worked so the bot thinks it succeeded
+        responseMsg.textContent = "Message sent successfully!😊";
+        contactForm.reset();
+        return;
+    }
+
+    // --- Anti-spam check 2: timing ---
+    // Legitimate users take at least a few seconds to type their message
+    if (Date.now() - _formLoadTime < 3000) {
+        responseMsg.textContent = "Please take a moment to fill in the form.";
+        return;
+    }
+
+    // --- Anti-spam check 3: rate limiting ---
+    // One submission per 60 seconds from the same browser
+    const lastSent = localStorage.getItem("_cnf_contact_last");
+    if (lastSent && Date.now() - Number(lastSent) < 60000) {
+        responseMsg.textContent = "Please wait a moment before sending another message.";
+        return;
+    }
+
     const name = document.getElementById("contact-name").value;
     const email = document.getElementById("contact-email").value;
     const message = document.getElementById("contact-message").value;
 
     try {
-        // Add the message to Firestore
         await addDoc(collection(db, "contactMessages"), { name, email, message, timestamp: new Date() });
 
-        // Display the success message
-        document.getElementById("responseMessage").textContent = "Message sent successfully!😊";
+        // Record this submission time for rate limiting
+        localStorage.setItem("_cnf_contact_last", Date.now().toString());
 
-        // Show the social media links
+        responseMsg.textContent = "Message sent successfully!😊";
         document.getElementById("socialLinks").style.display = "block";
-
-        // Reset the form
         contactForm.reset();
     } catch (error) {
         console.error("Error sending message:", error);
-        document.getElementById("responseMessage").textContent = "Failed to send message. Try again!";
+        responseMsg.textContent = "Failed to send message. Try again!";
     }
 });
 
